@@ -1,0 +1,22 @@
+---
+
+#-------------------------------------------------------------------------------
+# FSTAB
+#-------------------------------------------------------------------------------
+
+fstab_host:
+  - filesystem: '/dev/sdb1'
+    state: 'true'
+    mountpoint: '/data'
+    type: 'ext4'
+    dump: 0
+    pass: 0
+    comment: 'Persistent Data'
+
+#-------------------------------------------------------------------------------
+# IPTABLES
+#-------------------------------------------------------------------------------
+
+iptables_filter_group:
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'tcp', ports: {'8333'}, comment: 'BTC: From any'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', ports: {'8333'}, comment: 'BTC: To any'}

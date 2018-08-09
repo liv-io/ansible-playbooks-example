@@ -1,0 +1,80 @@
+---
+
+#-------------------------------------------------------------------------------
+# ALL
+#-------------------------------------------------------------------------------
+
+# Bootstrap
+- hosts: all
+  tasks:
+    - name: group create 'ansible_distribution_major_version'
+      group_by:
+        key: "{{ansible_distribution_major_version}}"
+
+- hosts: '7'
+  become: 'yes'
+  gather_facts: False
+  roles:
+
+# Pre
+- hosts: all
+  become: 'yes'
+  roles:
+    - role: shell
+    - role: bash
+    - role: user
+    - role: yum
+
+# Main
+- hosts: all
+  become: 'yes'
+  roles:
+    - role: auditd
+    - role: avahi
+    - role: bind_tools
+    - role: colordiff
+    - role: common
+    - role: coreutils
+    - role: diffutils
+    - role: dstat
+    - role: file
+    - role: findutils
+    - role: firewalld
+    - role: fstab
+    - role: gnu_grep
+    - role: gnu_sed
+    - role: hostname
+    - role: hosts
+    - role: htop
+    - role: iftop
+    - role: issue
+    - role: less
+    - role: locale
+    - role: lsof
+    - role: motd
+    - role: net_tools
+    - role: network_manager
+    - role: ntpd
+    - role: openssh
+    - role: resolver
+    - role: root
+    - role: rsync
+    - role: selinux
+    - role: sudo
+    - role: sysctl
+    - role: sysstat
+    - role: systemd
+    - role: tcpdump
+    - role: telnet
+    - role: timezone
+    - role: tmux
+    - role: unzip
+    - role: vim
+    - role: wget
+    - role: zip
+
+# Post
+- hosts: all
+  become: 'yes'
+  roles:
+    - role: iptables

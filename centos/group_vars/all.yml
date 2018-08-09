@@ -1,0 +1,143 @@
+---
+
+#-------------------------------------------------------------------------------
+# BASH
+#-------------------------------------------------------------------------------
+
+bash_tmout: 'disable'
+
+#-------------------------------------------------------------------------------
+# GROUP
+#-------------------------------------------------------------------------------
+
+group_all:
+  - {name: 'example', state: 'true', gid: '1000'}
+
+#-------------------------------------------------------------------------------
+# IPTABLES
+#-------------------------------------------------------------------------------
+
+iptables_filter_all:
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'icmp', code: 'network-unreachable', comment: 'ICMP network unreachable: From any'}
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'icmp', code: 'host-unreachable', comment: 'ICMP host unreachable: From any'}
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'icmp', code: 'protocol-unreachable', comment: 'ICMP protocol unreachable: From any'}
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'icmp', code: 'port-unreachable', comment: 'ICMP port unreachable: From any'}
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'icmp', code: 'source-quench', comment: 'ICMP source quench: From any'}
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'icmp', code: 'echo-request', comment: 'ICMP echo request: From any'}
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'tcp', sources: {'10.0.0.0/8'}, ports: {'22'}, comment: 'SSH: From RFC1918'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'icmp', code: 'network-unreachable', comment: 'ICMP network unreachable: To any'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'icmp', code: 'host-unreachable', comment: 'ICMP host unreachable: To any'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'icmp', code: 'protocol-unreachable', comment: 'ICMP protocol unreachable: To any'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'icmp', code: 'port-unreachable', comment: 'ICMP port unreachable: To any'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'icmp', code: 'source-quench', comment: 'ICMP source quench: To any'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'icmp', code: 'echo-request', comment: 'ICMP echo request: To any'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.0.0.11', '10.0.0.12'}, ports: {'53'}, comment: 'DNS: To h_ns01, h_ns02'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'udp', destinations: {'10.0.0.11', '10.0.0.12'}, ports: {'53'}, comment: 'DNS: To h_ns01, h_ns02'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'udp', destinations: {'10.0.0.13', '10.0.0.14', '10.0.0.15', '10.0.0.16'}, ports: {'123'}, comment: 'NTP: To h_ntp01, h_ntp02, h_ntp03, h_ntp04'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.0.0.17'}, ports: {'smtp'}, comment: 'SMTP: To h_mail'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', ports: {'10.0.0.18'}, comment: 'HTTP(S): To h_proxy'}
+
+#-------------------------------------------------------------------------------
+# NANO
+#-------------------------------------------------------------------------------
+
+nano_state: 'remove'
+
+#-------------------------------------------------------------------------------
+# NTPD
+#-------------------------------------------------------------------------------
+
+ntpd_state: 'cronjob'
+
+ntpd_server:
+  - {server: {'ntp01.example.com'}, option: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'Server: h_ntp01'}
+  - {server: {'ntp02.example.com'}, option: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'Server: h_ntp02'}
+  - {server: {'ntp03.example.com'}, option: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'Server: h_ntp03'}
+  - {server: {'ntp04.example.com'}, option: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'Server: h_ntp04'}
+
+ntpd_monitor_mail_recipient: ["admin@example.com"]
+
+ntpd_monitor_mail_sender: "root@example.com"
+
+ntpd_monitor_mail_state: 'true'
+
+#-------------------------------------------------------------------------------
+# OPENSMTPD
+#-------------------------------------------------------------------------------
+
+opensmtpd_accept_all:
+  - {config: {'accept for local alias <aliases> deliver to mbox'}, comment: 'Accept: Aliases'}
+  - {config: {'accept for any relay via smtp://mail.example.com'}, comment: 'Accept: Relay'}
+
+#-------------------------------------------------------------------------------
+# OPENSSH
+#-------------------------------------------------------------------------------
+
+openssh_allow_users: ['example']
+
+openssh_password_authentication: 'no'
+
+#-------------------------------------------------------------------------------
+# RESOLVER
+#-------------------------------------------------------------------------------
+
+resolver_domain: 'example.com'
+
+resolver_nameserver: 
+  - {server: '10.0.0.11', comment: 'Server: h_ns01'}
+  - {server: '10.0.0.12', comment: 'Server: h_ns02'}
+
+resolver_search: ['example.com']
+
+#-------------------------------------------------------------------------------
+# SHELL
+#-------------------------------------------------------------------------------
+
+shell_ftp_proxy: 'http://proxy.example.com:3128'
+
+shell_http_proxy: 'http://proxy.example.com:3128'
+
+#-------------------------------------------------------------------------------
+# SUDO
+#-------------------------------------------------------------------------------
+
+sudo_all:
+  - {name: 'root', state: 'true', order: '10', comment: 'root', config: {'root ALL=(ALL) ALL'}}
+  - {name: 'example', state: 'true', order: '50', comment: 'example', config: {'example ALL=(root) NOPASSWD: ALL'}}
+
+#-------------------------------------------------------------------------------
+# ROOT
+#-------------------------------------------------------------------------------
+
+root_password: '$2b$10$Jua/9rgOstNEVRKz11ncGO1EG.Z1krMLkOurJe4jNHVEU0UZV4fI6'
+
+#-------------------------------------------------------------------------------
+# TIMEZONE
+#-------------------------------------------------------------------------------
+
+timezone_timezone: 'Europe/Zurich'
+
+#-------------------------------------------------------------------------------
+# USER
+#-------------------------------------------------------------------------------
+
+user_all:
+  - name: 'example'
+    state: 'true'
+    comment: 'example'
+    uid: '1000'
+    group: 'example'
+    groups: ['wheel']
+    groups_append: 'true'
+    password: '$2b$10$6cmx3Y2CaKFoAwqWmKXxtOCD0FWgPZ.QWor2m9W8U.m5E7ygTCb..'
+    password_update: 'true'
+    shell: '/bin/bash'
+    authorized_key:
+      - state: 'true'
+        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDR/DO2YFGGs7Qle7Dt2pxsqveVsiXeHVZd2vpjSqKFd7psEZ53BOmAdRoaK/VZvuj+RPjmfJCYDKAxoVxCIL9l2hkfv35e6YRDT0gh0wely37zIFrOineyufYEIOVtgHKKjr88ZP641z9oLgT7xNPKNqhTat5sOdB5cAEf+0q8uFLzcBEdQpTePQmigl4Cp7RL3YHtEDXfDRqlNiAsCd5/YKabDW1rVMksbGQSynOrFyjtkQw5Th+xUZe7uBU08wQEFWXGJacbCEME568UBzbOoqbsuxvD41QggGOI3CQC1QPtXUweFFtc0iwxfwSX4IpTuqIa/7RJRepzPpOf8PsHj135h1SYXZ5fxtnL2/yTfwmaCJb7iUqpJzfyJyndLgdbCtB/JccOUWxSBkA+hU4UVZS5AVN/n+oyGGB7hKt6vk2xRwV47iV+HPdcbaGPqxBOynpAKtWEtMXFxOa/rCh0i9ZDAkj7wxPaje8nbNdQS8O5yrLquXIwOSwyeyKN2yDFGRSiD3In+BilqbmA8N8o/2ZaRKSjjmH7Jpm+F+AR9lAi3M8aj4Ic444/zKO4EbzntyumzG59FPTO3KS67JemixJelKIJMFnOwSpoLMOSfpnVS0LTdVy3mkwQjwEgFXZtMeg4F3o0AO80E5/sjR9sd4zMTLwJHCO+tQVgQzSGYw== example@example.com'
+
+#-------------------------------------------------------------------------------
+# YUM
+#-------------------------------------------------------------------------------
+
+yum_proxy: 'http://proxy.example.com:3128'
