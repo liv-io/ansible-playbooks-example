@@ -1,0 +1,166 @@
+---
+
+#-------------------------------------------------------------------------------
+# BASH
+#-------------------------------------------------------------------------------
+
+bash_tmout: 'disable'
+
+#-------------------------------------------------------------------------------
+# GROUP
+#-------------------------------------------------------------------------------
+
+group_all:
+  - {name: 'example', state: 'true', gid: '1000'}
+
+#-------------------------------------------------------------------------------
+# NANO
+#-------------------------------------------------------------------------------
+
+nano_state: 'remove'
+
+#-------------------------------------------------------------------------------
+# NTPD
+#-------------------------------------------------------------------------------
+
+ntpd_state: 'cronjob'
+
+ntpd_server:
+  - {server: {'ntp01.example.com'}, option: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'Server: h_ntp01'}
+  - {server: {'ntp02.example.com'}, option: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'Server: h_ntp02'}
+  - {server: {'ntp03.example.com'}, option: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'Server: h_ntp03'}
+  - {server: {'ntp04.example.com'}, option: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'Server: h_ntp04'}
+
+ntpd_monitor_mail_recipient: ["admin@example.com"]
+
+ntpd_monitor_mail_sender: "root@example.com"
+
+ntpd_monitor_mail_state: 'true'
+
+#-------------------------------------------------------------------------------
+# OPENSMTPD
+#-------------------------------------------------------------------------------
+
+opensmtpd_accept_all:
+  - {config: {'accept for local alias <aliases> deliver to mbox'}, comment: 'Accept: Aliases'}
+  - {config: {'accept for any relay via smtp://mail.example.com'}, comment: 'Accept: Relay'}
+
+#-------------------------------------------------------------------------------
+# OPENSSH
+#-------------------------------------------------------------------------------
+
+openssh_allow_users: ['example']
+
+openssh_password_authentication: 'no'
+
+#-------------------------------------------------------------------------------
+# PERIODIC
+#-------------------------------------------------------------------------------
+
+periodic_daily_output: '/dev/null'
+
+periodic_monthly_output: '/dev/null'
+
+periodic_weekly_output: '/dev/null'
+
+#-------------------------------------------------------------------------------
+# FREEBSD_PF
+#-------------------------------------------------------------------------------
+
+freebsd_pf_macros_all:
+  - {name: 'n_dmz', value: '10.0.0.0/24', comment: 'Network: dmz network'}
+  - {name: 'n_int', value: '10.0.1.0/24', comment: 'Network: int network'}
+  - {name: 'h_fw', value: '10.0.0.1', comment: 'Host: firewall'}
+  - {name: 'h_ns01', value: '10.0.0.11', comment: 'Host: name server'}
+  - {name: 'h_ns02', value: '10.0.0.12', comment: 'Host: name server'}
+  - {name: 'h_ntp01', value: '10.0.0.13', comment: 'Host: ntp server'}
+  - {name: 'h_ntp02', value: '10.0.0.14', comment: 'Host: ntp server'}
+  - {name: 'h_ntp03', value: '10.0.0.15', comment: 'Host: ntp server'}
+  - {name: 'h_ntp04', value: '10.0.0.16', comment: 'Host: ntp server'}
+  - {name: 'h_forward', value: '10.0.0.17', comment: 'Host: forward proxy'}
+  - {name: 'h_reverse', value: '10.0.0.18', comment: 'Host: reverse proxy'}
+  - {name: 'h_web', value: '10.0.0.19', comment: 'Host: web server'}
+
+freebsd_pf_filters_all:
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', state: '$default_udp', comment: 'ICMP Echo Reply: From any'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', state: '$default_udp', comment: 'ICMP Destination Unreachable: From any'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', state: '$default_udp', comment: 'ICMP Source Quench: From any'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_dmz', '$n_int'}, destinations: {'any'}, ports: {'ssh'}, state: '$default_tcp', comment: 'SSH: From n_dmz, n_int'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', state: '$default_udp', comment: 'ICMP Destination Unreachable: To any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', state: '$default_udp', comment: 'ICMP Source Quench: To any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', state: '$default_udp', comment: 'ICMP Echo Request: To any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$n_dmz', '$n_int'}, ports: {'ssh'}, state: '$default_tcp', comment: 'SSH: To n_dmz, n_int'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'domain'}, state: '$default_tcp', comment: 'DNS: To dns servers'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'domain'}, state: '$default_udp', comment: 'DNS: To dns servers'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_ntp01', '$h_ntp02', '$h_ntp03', '$h_ntp04'}, ports: {'ntp'}, state: '$default_udp', comment: 'NTP: To ntp servers'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_forward'}, ports: {'3128'} , state: '$default_tcp', comment: 'HTTP(S): To forward proxy'}
+
+#-------------------------------------------------------------------------------
+# OPENBSD_PF
+#-------------------------------------------------------------------------------
+
+openbsd_pf_macros_all:
+  - {name: 'n_dmz', value: '10.0.0.0/24', comment: 'Network: dmz network'}
+  - {name: 'n_int', value: '10.0.1.0/24', comment: 'Network: int network'}
+  - {name: 'h_fw', value: '10.0.0.1', comment: 'Host: firewall'}
+  - {name: 'h_ns01', value: '10.0.0.11', comment: 'Host: name server'}
+  - {name: 'h_ns02', value: '10.0.0.12', comment: 'Host: name server'}
+  - {name: 'h_ntp01', value: '10.0.0.13', comment: 'Host: ntp server'}
+  - {name: 'h_ntp02', value: '10.0.0.14', comment: 'Host: ntp server'}
+  - {name: 'h_ntp03', value: '10.0.0.15', comment: 'Host: ntp server'}
+  - {name: 'h_ntp04', value: '10.0.0.16', comment: 'Host: ntp server'}
+  - {name: 'h_forward', value: '10.0.0.17', comment: 'Host: forward proxy'}
+  - {name: 'h_reverse', value: '10.0.0.18', comment: 'Host: reverse proxy'}
+  - {name: 'h_web', value: '10.0.0.19', comment: 'Host: web server'}
+
+openbsd_pf_filters_all:
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', state: '$default_udp', comment: 'ICMP Echo Reply: From any'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', state: '$default_udp', comment: 'ICMP Destination Unreachable: From any'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', state: '$default_udp', comment: 'ICMP Source Quench: From any'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_dmz', '$n_int'}, destinations: {'any'}, ports: {'ssh'}, state: '$default_tcp', comment: 'SSH: From n_dmz, n_int'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', state: '$default_udp', comment: 'ICMP Destination Unreachable: To any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', state: '$default_udp', comment: 'ICMP Source Quench: To any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', state: '$default_udp', comment: 'ICMP Echo Request: To any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$n_dmz', '$n_int'}, ports: {'ssh'}, state: '$default_tcp', comment: 'SSH: To n_dmz, n_int'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'domain'}, state: '$default_tcp', comment: 'DNS: To dns servers'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'domain'}, state: '$default_udp', comment: 'DNS: To dns servers'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_ntp01', '$h_ntp02', '$h_ntp03', '$h_ntp04'}, ports: {'ntp'}, state: '$default_udp', comment: 'NTP: To ntp servers'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_forward'}, ports: {'3128'} , state: '$default_tcp', comment: 'HTTP(S): To forward proxy'}
+
+#-------------------------------------------------------------------------------
+# POSTFIX
+#-------------------------------------------------------------------------------
+
+postfix_fallback_relay: '[mail.example.com]'
+
+postfix_relayhost: '[mail.example.com]'
+
+postfix_root_mail_address: 'root@example.com'
+
+#-------------------------------------------------------------------------------
+# RESOLVER
+#-------------------------------------------------------------------------------
+
+resolver_domain: 'example.com'
+
+resolver_nameserver:
+  - {server: '10.0.0.11', comment: 'h_ns01'}
+  - {server: '10.0.0.12', comment: 'h_ns02'}
+
+resolver_search: ['example.com']
+
+#-------------------------------------------------------------------------------
+# SHELL
+#-------------------------------------------------------------------------------
+
+shell_ftp_proxy: 'http://forward.example.com:3128'
+
+shell_http_proxy: 'http://forward.example.com:3128'
+
+#-------------------------------------------------------------------------------
+# SUDO
+#-------------------------------------------------------------------------------
+
+sudo_all:
+  - {name: 'root', state: 'true', order: '10', comment: 'root', config: {'root ALL=(ALL) ALL'}}
+  - {name: 'example', state: 'true', order: '50', comment: 'example', config: {'example ALL=(root) NOPASSWD: ALL'}}

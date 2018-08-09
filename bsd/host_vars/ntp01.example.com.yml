@@ -1,0 +1,34 @@
+---
+
+#-------------------------------------------------------------------------------
+# MOTD
+#-------------------------------------------------------------------------------
+
+motd_host_description: 'NTP Server'
+
+#-------------------------------------------------------------------------------
+# NTP
+#-------------------------------------------------------------------------------
+
+ntp_state: 'remove'
+
+#-------------------------------------------------------------------------------
+# OPENNTPD
+#-------------------------------------------------------------------------------
+
+openntpd_server:
+  - {server: {'162.23.41.55'}, type: 'single', comment: 'Server: Federal Institute of Metrology METAS'}
+  - {server: {'162.23.41.56'}, type: 'single', comment: 'Server: Federal Institute of Metrology METAS'}
+  - {server: {'162.23.41.10'}, type: 'single', comment: 'Server: Federal Institute of Metrology METAS'}
+  - {server: {'192.33.96.102'}, type: 'single', comment: 'Server: Swiss Federal Institute of Technology Zurich'}
+
+openntpd_listen:
+  - {config: {'10.0.0.13'}, comment: 'Listen: Host IP address'}
+
+#-------------------------------------------------------------------------------
+# OPENBSD_PF
+#-------------------------------------------------------------------------------
+
+openbsd_pf_filters_host:
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$n_dmz', '$n_int'}, ports: {'ntp'}, state: '$default_udp', comment: 'NTP: From n_dmz, n_int'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'any'}, ports: {'ntp'}, state: '$default_udp', comment: 'NTP: To any'}

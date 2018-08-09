@@ -1,0 +1,89 @@
+---
+
+#-------------------------------------------------------------------------------
+# FREEBSD_PF
+#-------------------------------------------------------------------------------
+
+freebsd_pf_gateway_ipv4_state: 'true'
+
+freebsd_pf_macros_host:
+  - {name: 'i_int', value: 're2', comment: 'Interface: internal'}
+  - {name: 'i_dmz', value: 're1', comment: 'Interface: demilitarized zone'}
+  - {name: 'i_wan', value: 're0', comment: 'Interface: wan'}
+  - {name: 'a_2', value: '1.1.1.2', comment: 'Address: 1.1.1.2'}
+  - {name: 'a_3', value: '1.1.1.3', comment: 'Address: 1.1.1.3'}
+  - {name: 'a_4', value: '1.1.1.4', comment: 'Address: 1.1.1.4'}
+
+freebsd_pf_translations_host:
+  - {action: 'nonat', interfaces: {'$i_int'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'$i_int'}, destinations: {'$n_dmz', '$n_int'}, comment: 'NONAT: For i_int'}
+  - {action: 'nat', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'$h_ns01'}, destinations: {'any'}, map: '$a_3', comment: 'SNAT: From h_ns01 to 1.1.1.3'}
+  - {action: 'nat', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'$h_ns02'}, destinations: {'any'}, map: '$a_4', comment: 'SNAT: From h_ns02 to 1.1.1.4'}
+  - {action: 'nat', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'$n_int', '$n_dmz'}, destinations: {'any'}, map: '$a_2', comment: 'SNAT: From n_dmz to 1.1.1.2'}
+  - {action: 'rdr', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'53'}, rdr: '$h_ns01', comment: 'DNAT/DNS: From any to name server'}
+  - {action: 'rdr', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$a_4'}, ports: {'53'}, rdr: '$h_ns02', comment: 'DNAT/DNS: From any to name server'}
+  - {action: 'rdr', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$a_2'}, ports: {'80', '443'}, rdr: '$h_reverse', comment: 'DNAT/HTTP(S): From any to reverse proxy'}
+
+freebsd_pf_filters_host:
+  - {action: 'pass', direction: 'in', interfaces: {'$i_int'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'any'}, ports: {'22'}, state: '$default_tcp', comment: 'SSH: From i_int to any'}
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'53'}, state: '$default_tcp', comment: 'DNS: From i_wan to name server'}
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'53'}, state: '$default_udp', comment: 'DNS: From i_wan to name server'}
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_int'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'any'}, ports: {'53'}, state: '$default_tcp', comment: 'DNS: From i_dmz, i_int to any'}
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_int'}, version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'any'}, ports: {'53'}, state: '$default_udp', comment: 'DNS: From i_dmz, i_int to any'}
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_reverse'}, ports: {'80', '443'}, state: '$default_tcp', comment: 'HTTP(S): From i_wan to reverse proxy'}
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_int'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'any'}, ports: {'80', '443'}, state: '$default_tcp', comment: 'HTTP(S): From i_dmz, i_int to any'}
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_int'}, version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'any'}, ports: {'123'}, state: '$default_udp', comment: 'NTP: From From i_dmz, i_int to any'}
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_int'}, version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_ntp'}, ports: {'123'}, state: '$default_udp', comment: 'NTP: From i_dmz, i_int to ntp server'}
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_int'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_forward'}, ports: {'3128'}, state: '$default_tcp', comment: 'Squid: From i_dmz, i_int to forward proxy'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_int', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'any'}, ports: {'domain'}, state: '$default_tcp', comment: 'DNS: To n_dmz, n_int'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_int', '$i_dmz'}, version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'any'}, ports: {'domain'}, state: '$default_udp', comment: 'DNS: To n_dmz, n_int'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz', '$i_int'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'any'}, state: '$default_tcp', comment: 'Outgoing: From any to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz', '$i_int'}, version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'any'}, state: '$default_udp', comment: 'Outgoing: From any to any'}
+
+#-------------------------------------------------------------------------------
+# FREEBSD_RC
+#-------------------------------------------------------------------------------
+
+freebsd_rc_host:
+  - name: 'ifconfig_re0'
+    value: 'inet 1.1.1.2 netmask 255.255.255.248'
+    state: 'true'
+    comment: 'Define primary IP address'
+
+  - name: 'defaultrouter'
+    value: '1.1.1.1'
+    state: 'true'
+    comment: 'Define gateway'
+
+  - name: 'ifconfig_re0_alias3'
+    value: 'inet 1.1.1.3 netmask 255.255.255.248'
+    state: 'true'
+    comment: 'Define alias IP address'
+
+  - name: 'ifconfig_re0_alias4'
+    value: 'inet 1.1.1.4 netmask 255.255.255.248'
+    state: 'true'
+    comment: 'Define alias IP address'
+
+  - name: 'ifconfig_re1'
+    value: 'inet 10.0.0.1 netmask 255.255.255.0'
+    state: 'true'
+    comment: 'Define secondary IP address'
+
+  - name: 'ifconfig_re2'
+    value: 'inet 10.0.1.1 netmask 255.255.255.0'
+    state: 'true'
+    comment: 'Define tertiary IP address'
+
+#-------------------------------------------------------------------------------
+# MOTD
+#-------------------------------------------------------------------------------
+
+motd_host_description: 'Firewall'
+
+#-------------------------------------------------------------------------------
+# OPENSSH
+#-------------------------------------------------------------------------------
+
+openssh_listen_address:
+  - '127.0.0.1'
+  - '10.0.0.1'

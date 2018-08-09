@@ -1,0 +1,51 @@
+---
+
+#-------------------------------------------------------------------------------
+# HTTPD
+#-------------------------------------------------------------------------------
+
+httpd_vhost:
+  - name: 'example.com'
+    alias: ['web.example.com', 'www.example.com']
+    state: 'true'
+    port: '80'
+    server_admin: 'admin@example.com'
+    document_root: '/data/example.com/web'
+    hsts_state: 'true'
+    custom_config:
+      - comment: 'Redirect'
+        config:
+          - 'Redirect permanent /  https://example.com/'
+
+  - name: 'example.com'
+    alias: ['web.example.com', 'www.example.com']
+    state: 'true'
+    port: '443'
+    server_admin: 'admin@example.com'
+    document_root: '/data/example.com/web'
+    hsts_state: 'true'
+    ssl_state: 'true'
+    ssl_protocol: ['-ALL', '+TLSv1.2']
+    ssl_certificate_file: '/etc/pki/example/web.example.com.crt'
+    ssl_certificate_key_file: '/etc/pki/example/web.example.com.key'
+    ssl_certificate_chain_file: '/etc/pki/example/ca.example.com.crt'
+    custom_config:
+      - comment: 'Document Root'
+        config:
+          - '<Directory /data/example.com/web>'
+          - '  AllowOverride None'
+          - '  Require all granted'
+          - '</Directory>'
+
+#-------------------------------------------------------------------------------
+# MOTD
+#-------------------------------------------------------------------------------
+
+motd_host_description: 'Web Server'
+
+#-------------------------------------------------------------------------------
+# OPENBSD_PF
+#-------------------------------------------------------------------------------
+
+openbsd_pf_filters_host:
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_dmz', '$n_int'}, destinations: {'any'}, ports: {'http', 'https'}, state: '$default_tcp', comment: 'HTTP(S): From n_dmz, n_int'}

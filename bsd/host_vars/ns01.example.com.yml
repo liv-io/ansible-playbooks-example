@@ -1,0 +1,17 @@
+---
+
+#-------------------------------------------------------------------------------
+# MOTD
+#-------------------------------------------------------------------------------
+
+motd_host_description: 'Name Server 01'
+
+#-------------------------------------------------------------------------------
+# OPENBSD_PF
+#-------------------------------------------------------------------------------
+
+openbsd_pf_filters_host:
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'any'}, ports: {'domain'}, state: '$default_tcp', comment: 'DNS: From any'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'any'}, ports: {'domain'}, state: '$default_udp', comment: 'DNS: From any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'any'}, ports: {'domain'}, state: '$default_tcp', comment: 'DNS: To any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'any'}, ports: {'domain'}, state: '$default_udp', comment: 'DNS: To any'}
