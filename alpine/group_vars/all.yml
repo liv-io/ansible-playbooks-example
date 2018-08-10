@@ -1,0 +1,88 @@
+---
+
+#-------------------------------------------------------------------------------
+# BASH
+#-------------------------------------------------------------------------------
+
+bash_tmout: 'disable'
+
+#-------------------------------------------------------------------------------
+# NTP
+#-------------------------------------------------------------------------------
+
+busybox_ntpd_state: 'cronjob'
+
+busybox_ntpd_server:
+  - 'ntp01.example.com'
+  - 'ntp02.example.com'
+  - 'ntp03.example.com'
+  - 'ntp04.example.com'
+
+busybox_ntpd_monitor_mail_recipient: ["admin@example.com"]
+
+busybox_ntpd_monitor_mail_sender: "root@example.com"
+
+busybox_ntpd_monitor_mail_state: 'true'
+
+#-------------------------------------------------------------------------------
+# GROUP
+#-------------------------------------------------------------------------------
+
+group_all:
+  - {name: 'example', state: 'true', gid: '1000'}
+
+#-------------------------------------------------------------------------------
+# MOTD
+#-------------------------------------------------------------------------------
+
+motd_host_description: "Please add 'group_var' or 'host_var' file"
+
+#-------------------------------------------------------------------------------
+# NANO
+#-------------------------------------------------------------------------------
+
+nano_state: 'remove'
+
+#-------------------------------------------------------------------------------
+# OPENSMTPD
+#-------------------------------------------------------------------------------
+
+opensmtpd_accept_all:
+  - {config: {'accept for local alias <aliases> deliver to mbox'}, comment: 'Accept: Aliases'}
+  - {config: {'accept for any relay via smtp://mail.example.com'}, comment: 'Accept: Relay'}
+
+#-------------------------------------------------------------------------------
+# OPENSSH
+#-------------------------------------------------------------------------------
+
+openssh_allow_users: ['example']
+
+openssh_password_authentication: 'no'
+
+#-------------------------------------------------------------------------------
+# RESOLVER
+#-------------------------------------------------------------------------------
+
+resolver_domain: 'example.com'
+
+resolver_nameserver:
+  - {server: '10.0.0.11', comment: 'h_ns01'}
+  - {server: '10.0.0.12', comment: 'h_ns02'}
+
+resolver_search: ['example.com']
+
+#-------------------------------------------------------------------------------
+# SHELL
+#-------------------------------------------------------------------------------
+
+shell_ftp_proxy: 'http://proxy.example.com:3128'
+
+shell_http_proxy: 'http://proxy.example.com:3128'
+
+#-------------------------------------------------------------------------------
+# SUDO
+#-------------------------------------------------------------------------------
+
+sudo_all:
+  - {name: 'root', state: 'true', order: '10', comment: 'root', config: {'root ALL=(ALL) ALL'}}
+  - {name: 'example', state: 'true', order: '50', comment: 'example', config: {'example ALL=(root) NOPASSWD: ALL'}}
