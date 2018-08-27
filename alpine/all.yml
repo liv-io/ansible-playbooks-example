@@ -86,9 +86,6 @@
     - role: vim
     - role: wget
     - role: zip
-  environment:
-    http_proxy: 'http://proxy.example.com:3128'
-    ftp_proxy: 'http://proxy.example.com:3128'
 
 # Post
 - hosts: all
@@ -96,6 +93,3 @@
   roles:
 # TODO: Create Ansible role
 #   - role: iptables
-  environment:
-    http_proxy: 'http://proxy.example.com:3128'
-    ftp_proxy: 'http://proxy.example.com:3128'
