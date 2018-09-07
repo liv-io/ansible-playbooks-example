@@ -17,6 +17,7 @@
   roles:
   environment:
     http_proxy: 'http://proxy.example.com:3128'
+    https_proxy: 'http://proxy.example.com:3128'
     ftp_proxy: 'http://proxy.example.com:3128'
 
 # Pre
@@ -29,6 +30,7 @@
     - role: yum
   environment:
     http_proxy: 'http://proxy.example.com:3128'
+    https_proxy: 'http://proxy.example.com:3128'
     ftp_proxy: 'http://proxy.example.com:3128'
 
 # Main
@@ -78,9 +80,17 @@
     - role: vim
     - role: wget
     - role: zip
+  environment:
+    http_proxy: 'http://proxy.example.com:3128'
+    https_proxy: 'http://proxy.example.com:3128'
+    ftp_proxy: 'http://proxy.example.com:3128'
 
 # Post
 - hosts: all
   become: 'yes'
   roles:
     - role: iptables
+  environment:
+    http_proxy: 'http://proxy.example.com:3128'
+    https_proxy: 'http://proxy.example.com:3128'
+    ftp_proxy: 'http://proxy.example.com:3128'
