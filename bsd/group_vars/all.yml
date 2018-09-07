@@ -157,6 +157,8 @@ shell_ftp_proxy: 'http://forward.example.com:3128'
 
 shell_http_proxy: 'http://forward.example.com:3128'
 
+shell_https_proxy: 'http://forward.example.com:3128'
+
 #-------------------------------------------------------------------------------
 # SUDO
 #-------------------------------------------------------------------------------

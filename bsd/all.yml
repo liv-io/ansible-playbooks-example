@@ -21,6 +21,7 @@
     - role: user
   environment:
     http_proxy: 'http://forward.example.com:3128'
+    https_proxy: 'http://forward.example.com:3128'
     ftp_proxy: 'http://forward.example.com:3128'
 
 - hosts: OpenBSD
@@ -32,6 +33,7 @@
     - role: user
   environment:
     http_proxy: 'http://forward.example.com:3128'
+    https_proxy: 'http://forward.example.com:3128'
     ftp_proxy: 'http://forward.example.com:3128'
 
 # Pre
@@ -42,6 +44,7 @@
     - role: bash
   environment:
     http_proxy: 'http://forward.example.com:3128'
+    https_proxy: 'http://forward.example.com:3128'
     ftp_proxy: 'http://forward.example.com:3128'
 
 # Main
@@ -86,6 +89,10 @@
     - role: vim
     - role: wget
     - role: zip
+  environment:
+    http_proxy: 'http://forward.example.com:3128'
+    https_proxy: 'http://forward.example.com:3128'
+    ftp_proxy: 'http://forward.example.com:3128'
 
 # Post
 - hosts: all
@@ -93,3 +100,7 @@
   roles:
     - role: freebsd_pf
     - role: openbsd_pf
+  environment:
+    http_proxy: 'http://forward.example.com:3128'
+    https_proxy: 'http://forward.example.com:3128'
+    ftp_proxy: 'http://forward.example.com:3128'
