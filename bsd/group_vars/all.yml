@@ -38,14 +38,6 @@ ntpd_monitor_mail_sender: "root@example.com"
 ntpd_monitor_mail_state: 'true'
 
 #-------------------------------------------------------------------------------
-# OPENSMTPD
-#-------------------------------------------------------------------------------
-
-opensmtpd_accept_all:
-  - {config: {'accept for local alias <aliases> deliver to mbox'}, comment: 'Accept: Aliases'}
-  - {config: {'accept for any relay via smtp://mail.example.com'}, comment: 'Accept: Relay'}
-
-#-------------------------------------------------------------------------------
 # OPENSSH
 #-------------------------------------------------------------------------------
 

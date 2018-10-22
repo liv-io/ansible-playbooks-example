@@ -76,7 +76,6 @@
     - role: nano
     - role: netcat
     - role: ntpd
-    - role: opensmtpd
     - role: openssh
     - role: passwd
     - role: resolver
