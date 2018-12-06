@@ -49,6 +49,7 @@
     - role: findutils
     - role: firewalld
     - role: fstab
+    - role: fstrim
     - role: gnu_grep
     - role: gnu_sed
     - role: hostname
