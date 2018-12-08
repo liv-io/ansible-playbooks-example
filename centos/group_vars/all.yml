@@ -55,13 +55,11 @@ nano_state: 'remove'
 # NTPD
 #-------------------------------------------------------------------------------
 
-ntpd_state: 'cronjob'
-
 ntpd_server:
-  - {server: {'ntp01.example.com'}, option: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'Server: h_ntp01'}
-  - {server: {'ntp02.example.com'}, option: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'Server: h_ntp02'}
-  - {server: {'ntp03.example.com'}, option: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'Server: h_ntp03'}
-  - {server: {'ntp04.example.com'}, option: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'Server: h_ntp04'}
+  - {address: 'ntp01.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp01'}
+  - {address: 'ntp02.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp02'}
+  - {address: 'ntp03.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp03'}
+  - {address: 'ntp04.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp04'}
 
 ntpd_monitor_mail_recipient: ["admin@example.com"]
 
