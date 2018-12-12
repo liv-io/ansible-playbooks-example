@@ -109,7 +109,7 @@ shell_https_proxy: 'http://proxy.example.com:3128'
 # SUDO
 #-------------------------------------------------------------------------------
 
-sudo_all:
+sudo_config_all:
   - {name: 'root', state: 'true', order: '10', comment: 'root', config: {'root ALL=(ALL) ALL'}}
   - {name: 'example', state: 'true', order: '50', comment: 'example', config: {'example ALL=(root) NOPASSWD: ALL'}}
 
