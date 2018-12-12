@@ -18,7 +18,7 @@ docker_https_proxy: 'http://proxy.example.com:3128'
 # GROUP
 #-------------------------------------------------------------------------------
 
-group_all:
+group_config_all:
   - {name: 'example', state: 'true', gid: '1000'}
 
 #-------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ timezone_timezone: 'Europe/Zurich'
 # USER
 #-------------------------------------------------------------------------------
 
-user_all:
+user_config_all:
   - name: 'example'
     state: 'true'
     comment: 'example'
