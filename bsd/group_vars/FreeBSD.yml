@@ -10,7 +10,7 @@ root_password: '$2b$10$Jua/9rgOstNEVRKz11ncGO1EG.Z1krMLkOurJe4jNHVEU0UZV4fI6'
 # USER
 #-------------------------------------------------------------------------------
 
-user_all:
+user_config_all:
   - name: 'example'
     state: 'true'
     comment: 'example'

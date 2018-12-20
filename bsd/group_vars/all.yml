@@ -10,7 +10,7 @@ bash_tmout: 'disable'
 # GROUP
 #-------------------------------------------------------------------------------
 
-group_all:
+group_config_all:
   - {name: 'example', state: 'true', gid: '1000'}
 
 #-------------------------------------------------------------------------------
@@ -120,24 +120,14 @@ openbsd_pf_filters_all:
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_forward'}, ports: {'3128'} , state: '$default_tcp', comment: 'HTTP(S): To forward proxy'}
 
 #-------------------------------------------------------------------------------
-# POSTFIX
-#-------------------------------------------------------------------------------
-
-postfix_fallback_relay: '[mail.example.com]'
-
-postfix_relayhost: '[mail.example.com]'
-
-postfix_root_mail_address: 'root@example.com'
-
-#-------------------------------------------------------------------------------
 # RESOLVER
 #-------------------------------------------------------------------------------
 
 resolver_domain: 'example.com'
 
 resolver_nameserver:
-  - {server: '10.0.0.11', comment: 'h_ns01'}
-  - {server: '10.0.0.12', comment: 'h_ns02'}
+  - {address: '10.0.0.11', comment: 'h_ns01'}
+  - {address: '10.0.0.12', comment: 'h_ns02'}
 
 resolver_search: ['example.com']
 
@@ -155,6 +145,6 @@ shell_https_proxy: 'http://forward.example.com:3128'
 # SUDO
 #-------------------------------------------------------------------------------
 
-sudo_all:
+sudo_config_all:
   - {name: 'root', state: 'true', order: '10', comment: 'root', config: {'root ALL=(ALL) ALL'}}
   - {name: 'example', state: 'true', order: '50', comment: 'example', config: {'example ALL=(root) NOPASSWD: ALL'}}

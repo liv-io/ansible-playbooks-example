@@ -17,13 +17,14 @@ ntp_state: 'remove'
 #-------------------------------------------------------------------------------
 
 openntpd_server:
-  - {server: {'162.23.41.55'}, type: 'single', comment: 'Server: Federal Institute of Metrology METAS'}
-  - {server: {'162.23.41.56'}, type: 'single', comment: 'Server: Federal Institute of Metrology METAS'}
-  - {server: {'162.23.41.10'}, type: 'single', comment: 'Server: Federal Institute of Metrology METAS'}
-  - {server: {'192.33.96.102'}, type: 'single', comment: 'Server: Swiss Federal Institute of Technology Zurich'}
+  - {address: '162.23.41.55', comment: 'Federal Institute of Metrology METAS'}
+  - {address: '162.23.41.56', comment: 'Federal Institute of Metrology METAS'}
+  - {address: '162.23.41.10', comment: 'Federal Institute of Metrology METAS'}
+  - {address: '192.33.96.102', comment: 'Swiss Federal Institute of Technology Zurich'}
+  - {address: '192.33.96.102', comment: 'Swiss Federal Institute of Technology Zurich'}
 
 openntpd_listen:
-  - {config: {'10.0.0.13'}, comment: 'Listen: Host IP address'}
+  - {config: {'10.0.0.13'}, comment: 'Host IP address'}
 
 #-------------------------------------------------------------------------------
 # OPENBSD_PF
