@@ -4,7 +4,7 @@
 # FSTAB
 #-------------------------------------------------------------------------------
 
-fstab_host:
+fstab_config_group:
   - filesystem: '/dev/sdb1'
     state: 'true'
     mountpoint: '/data'

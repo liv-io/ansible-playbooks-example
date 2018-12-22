@@ -90,8 +90,8 @@ openssh_password_authentication: 'no'
 resolver_domain: 'example.com'
 
 resolver_nameserver: 
-  - {server: '10.0.0.11', comment: 'Server: h_ns01'}
-  - {server: '10.0.0.12', comment: 'Server: h_ns02'}
+  - {address: '10.0.0.11', comment: 'Server: h_ns01'}
+  - {address: '10.0.0.12', comment: 'Server: h_ns02'}
 
 resolver_search: ['example.com']
 
