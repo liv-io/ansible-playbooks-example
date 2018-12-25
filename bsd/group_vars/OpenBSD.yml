@@ -5,7 +5,7 @@
 #-------------------------------------------------------------------------------
 
 openbsd_syspatch_installurl:
- - {url: {'https://ftp.OpenBSD.org/pub/OpenBSD'}, comment: 'OpenBSD Packages'}
+ - {url: 'https://ftp.OpenBSD.org/pub/OpenBSD', comment: 'OpenBSD Packages'}
 
 #-------------------------------------------------------------------------------
 # ROOT
