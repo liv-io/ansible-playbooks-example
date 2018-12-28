@@ -43,7 +43,7 @@ freebsd_pf_filters_host:
 # FREEBSD_RC
 #-------------------------------------------------------------------------------
 
-freebsd_rc_host:
+freebsd_rc_config_host:
   - name: 'ifconfig_re0'
     value: 'inet 1.1.1.2 netmask 255.255.255.248'
     state: 'true'
