@@ -58,6 +58,7 @@
     - role: sysctl
     - role: sysstat
     - role: systemd
+    - role: systemd_timesyncd
     - role: timezone
     - role: tmux
     - role: vim

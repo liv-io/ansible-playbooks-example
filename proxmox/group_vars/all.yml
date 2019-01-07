@@ -60,6 +60,20 @@ sudo_config_all:
   - {name: 'example', state: 'true', order: '50', comment: 'example', config: {'example ALL=(root) NOPASSWD: ALL'}}
 
 #-------------------------------------------------------------------------------
+# SYSTEMD_TIMESYNCD
+#-------------------------------------------------------------------------------
+
+systemd_timesyncd_server:
+  - 'ntp01.example.com'
+  - 'ntp02.example.com'
+  - 'ntp03.example.com'
+  - 'ntp04.example.com'
+
+systemd_timesyncd_fallback:
+  - 'ntp05.example.com'
+  - 'ntp06.example.com'
+
+#-------------------------------------------------------------------------------
 # ROOT
 #-------------------------------------------------------------------------------
 
