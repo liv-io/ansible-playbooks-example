@@ -62,6 +62,7 @@
     - role: timezone
     - role: tmux
     - role: vim
+    - role: zfs
   environment:
     http_proxy: 'http://proxy.example.com:3128'
     https_proxy: 'http://proxy.example.com:3128'
