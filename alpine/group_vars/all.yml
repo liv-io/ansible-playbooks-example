@@ -18,9 +18,9 @@ busybox_ntpd_server:
   - 'ntp03.example.com'
   - 'ntp04.example.com'
 
-busybox_ntpd_monitor_mail_recipient: ["admin@example.com"]
+busybox_ntpd_monitor_mail_from_address: "root@example.com"
 
-busybox_ntpd_monitor_mail_sender: "root@example.com"
+busybox_ntpd_monitor_mail_to_address: ["admin@example.com"]
 
 busybox_ntpd_monitor_mail_state: 'true'
 

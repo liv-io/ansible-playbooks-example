@@ -31,9 +31,9 @@ ntpd_server:
   - {address: 'ntp03.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp03'}
   - {address: 'ntp04.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp04'}
 
-ntpd_monitor_mail_recipient: ["admin@example.com"]
+ntpd_monitor_mail_from_address: "root@example.com"
 
-ntpd_monitor_mail_sender: "root@example.com"
+ntpd_monitor_mail_to_address: ["admin@example.com"]
 
 ntpd_monitor_mail_state: 'true'
 
