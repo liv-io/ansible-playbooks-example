@@ -52,6 +52,7 @@
     - role: motd
     - role: net_tools
     - role: openssh
+    - role: openvswitch_switch
     - role: resolver
     - role: root
     - role: sudo
