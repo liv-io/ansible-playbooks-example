@@ -50,6 +50,7 @@
     - role: less
     - role: locale
     - role: motd
+    - role: monit
     - role: net_tools
     - role: openssh
     - role: openvswitch_switch
