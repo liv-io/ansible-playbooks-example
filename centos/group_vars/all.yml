@@ -71,9 +71,11 @@ ntpd_monitor_mail_state: 'true'
 # OPENSMTPD
 #-------------------------------------------------------------------------------
 
-opensmtpd_accept_all:
-  - {config: {'accept for local alias <aliases> deliver to mbox'}, comment: 'Accept: Aliases'}
-  - {config: {'accept for any relay via smtp://mail.example.com'}, comment: 'Accept: Relay'}
+opensmtpd_accept_all: |
+  # Accept: Aliases
+  accept for local alias <aliases> deliver to mbox
+  # Accept: Relay
+  accept for any relay via smtp://mail.example.com
 
 #-------------------------------------------------------------------------------
 # OPENSSH
@@ -110,8 +112,19 @@ shell_https_proxy: 'http://proxy.example.com:3128'
 #-------------------------------------------------------------------------------
 
 sudo_config_all:
-  - {name: 'root', state: 'true', order: '10', comment: 'root', config: {'root ALL=(ALL) ALL'}}
-  - {name: 'example', state: 'true', order: '50', comment: 'example', config: {'example ALL=(root) NOPASSWD: ALL'}}
+  - name: 'root'
+    state: 'true'
+    order: '10'
+    config: |
+      # root
+      root ALL=(ALL) ALL
+
+  - name: 'example'
+    state: 'true'
+    order: '50'
+    config: |
+      # example
+      example ALL=(root) NOPASSWD: ALL
 
 #-------------------------------------------------------------------------------
 # ROOT
