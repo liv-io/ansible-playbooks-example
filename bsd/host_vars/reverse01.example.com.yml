@@ -11,10 +11,8 @@ nginx_config:
     port: 80
     hsts_state: 'true'
     xss_protection_state: 'true'
-    config:
-      - comment: 'Proxy'
-        config:
-          - 'return 301 https://$server_name$request_uri;'
+    config: |
+      return 301 https://$server_name$request_uri;
 
   - name: 'example.com'
     alias: ['web.example.com', 'www.example.com']
@@ -27,25 +25,21 @@ nginx_config:
     ssl_cipher_suite: 'AES256+EECDH'
     ssl_certificate: '/etc/pki/example/web.example.com.crt'
     ssl_certificate_key: '/etc/pki/example/web.example.com.key'
-    config:
-      - comment: 'HTTP Header'
-        config:
-          - '# X-Frame-Options - disable frame embedding (phishing, clickjacking prevention)'
-          - "add_header X-Frame-Options 'DENY';"
-          - '# X-Content-Type-Options - disable MIME-sniffing (drive-by download attacks prevention)'
-          - "add_header X-Content-Type-Options 'nosniff';"
-          - '# X-XSS-Protection - enable XSS filter (cross-site scripting prevention)'
-          - "add_header X-XSS-Protection '1; mode=block';"
+    config: |
+      # X-Frame-Options - disable frame embedding (phishing, clickjacking prevention)
+      add_header X-Frame-Options 'DENY';
+      # X-Content-Type-Options - disable MIME-sniffing (drive-by download attacks prevention)
+      add_header X-Content-Type-Options 'nosniff';
+      # X-XSS-Protection - enable XSS filter (cross-site scripting prevention)
+      add_header X-XSS-Protection '1; mode=block';
 
-      - comment: 'Proxy'
-        config:
-          - 'location / {'
-          - '  proxy_pass                         https://example.com/;'
-          - '  proxy_set_header Host              $host;'
-          - '  proxy_set_header X-Real-IP         $remote_addr;'
-          - '  proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;'
-          - '  proxy_set_header X-Forwarded-Proto $scheme;'
-          - '}'
+      location / {
+        proxy_pass                         https://example.com/;
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+      }
 
 #-------------------------------------------------------------------------------
 # MOTD

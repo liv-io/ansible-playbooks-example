@@ -12,10 +12,8 @@ httpd_config:
     server_admin: 'admin@example.com'
     document_root: '/data/example.com/web'
     hsts_state: 'true'
-    config:
-      - comment: 'Redirect'
-        config:
-          - 'Redirect permanent /  https://example.com/'
+    config: |
+      Redirect permanent /  https://example.com/
 
   - name: 'example.com'
     alias: ['web.example.com', 'www.example.com']
@@ -29,13 +27,11 @@ httpd_config:
     ssl_certificate_file: '/etc/pki/example/web.example.com.crt'
     ssl_certificate_key_file: '/etc/pki/example/web.example.com.key'
     ssl_certificate_chain_file: '/etc/pki/example/ca.example.com.crt'
-    config:
-      - comment: 'Document Root'
-        config:
-          - '<Directory /data/example.com/web>'
-          - '  AllowOverride None'
-          - '  Require all granted'
-          - '</Directory>'
+    config: |
+      <Directory /data/example.com/web>
+        AllowOverride None
+        Require all granted
+      </Directory>
 
 #-------------------------------------------------------------------------------
 # MOTD

@@ -24,7 +24,7 @@ openntpd_server:
   - {address: '192.33.96.102', comment: 'Swiss Federal Institute of Technology Zurich'}
 
 openntpd_listen:
-  - {config: {'10.0.0.13'}, comment: 'Host IP address'}
+  - {address: {'10.0.0.13'}, comment: 'Host IP address'}
 
 #-------------------------------------------------------------------------------
 # OPENBSD_PF
