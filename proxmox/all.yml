@@ -27,6 +27,7 @@
     - role: shell
     - role: bash
     - role: user
+    - role: apt
   environment:
     http_proxy: 'http://proxy.example.com:3128'
     https_proxy: 'http://proxy.example.com:3128'
