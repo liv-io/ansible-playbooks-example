@@ -4,22 +4,6 @@
 # ALL
 #-------------------------------------------------------------------------------
 
-# Bootstrap
-- hosts: all
-  tasks:
-    - name: group create 'ansible_distribution_major_version'
-      group_by:
-        key: "{{ansible_distribution_major_version}}"
-
-- hosts: '7'
-  become: 'yes'
-  gather_facts: False
-  roles:
-  environment:
-    http_proxy: 'http://proxy.example.com:3128'
-    https_proxy: 'http://proxy.example.com:3128'
-    ftp_proxy: 'http://proxy.example.com:3128'
-
 # Pre
 - hosts: all
   become: 'yes'
@@ -27,6 +11,7 @@
     - role: shell
     - role: bash
     - role: user
+    - role: dnf
     - role: yum
   environment:
     http_proxy: 'http://proxy.example.com:3128'
@@ -91,6 +76,7 @@
   become: 'yes'
   roles:
     - role: iptables
+    - role: nftables
   environment:
     http_proxy: 'http://proxy.example.com:3128'
     https_proxy: 'http://proxy.example.com:3128'
