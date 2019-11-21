@@ -8,11 +8,11 @@
 - hosts: all
   become: 'yes'
   roles:
+    - role: dnf
+    - role: yum
     - role: shell
     - role: bash
     - role: user
-    - role: dnf
-    - role: yum
   environment:
     http_proxy: 'http://proxy.example.com:3128'
     https_proxy: 'http://proxy.example.com:3128'
