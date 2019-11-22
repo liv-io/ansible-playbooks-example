@@ -37,6 +37,7 @@
     - role: fstrim
     - role: gnu_grep
     - role: gnu_sed
+    - role: gnu_tar
     - role: hostname
     - role: hosts
     - role: htop
