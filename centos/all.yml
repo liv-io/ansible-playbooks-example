@@ -49,6 +49,7 @@
     - role: motd
     - role: net_tools
     - role: network_manager
+    - role: nload
     - role: ntpd
     - role: openssh
     - role: resolver
