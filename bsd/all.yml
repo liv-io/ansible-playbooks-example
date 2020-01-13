@@ -12,12 +12,13 @@
         key: "{{ansible_distribution}}"
 
 - hosts: FreeBSD
-  become: 'yes'
+  become: yes
   gather_facts: False
   roles:
     - role: freebsd_pkg
     - role: freebsd_rc
-    - role: periodic
+    - role: freebsd_periodic
+    - role: root
     - role: user
   environment:
     http_proxy: 'http://forward.example.com:3128'
@@ -25,11 +26,13 @@
     ftp_proxy: 'http://forward.example.com:3128'
 
 - hosts: OpenBSD
-  become: 'yes'
+  become: yes
   gather_facts: False
   roles:
     - role: openbsd_syspatch
     - role: openbsd_rc
+    - role: openbsd_periodic
+    - role: root
     - role: user
   environment:
     http_proxy: 'http://forward.example.com:3128'
@@ -38,7 +41,7 @@
 
 # Pre
 - hosts: all
-  become: 'yes'
+  become: yes
   roles:
     - role: shell
     - role: bash
@@ -49,7 +52,7 @@
 
 # Main
 - hosts: all
-  become: 'yes'
+  become: yes
   roles:
     - role: bind_tools
     - role: colordiff
@@ -69,17 +72,19 @@
     - role: hosts
     - role: hostname
     - role: htop
+    - role: ifstat
     - role: iftop
     - role: less
     - role: lsof
+    - role: mailx
     - role: motd
     - role: nano
     - role: netcat
-    - role: ntpd
+    - role: openntpd
+    - role: opensmtpd
     - role: openssh
     - role: passwd
     - role: resolver
-    - role: root
     - role: rsync
     - role: sudo
     - role: tcpdump
@@ -95,7 +100,7 @@
 
 # Post
 - hosts: all
-  become: 'yes'
+  become: yes
   roles:
     - role: freebsd_pf
     - role: openbsd_pf
