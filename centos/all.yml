@@ -6,7 +6,7 @@
 
 # Pre
 - hosts: all
-  become: 'yes'
+  become: yes
   roles:
     - role: dnf
     - role: yum
@@ -20,7 +20,7 @@
 
 # Main
 - hosts: all
-  become: 'yes'
+  become: yes
   roles:
     - role: auditd
     - role: avahi
@@ -75,7 +75,7 @@
 
 # Post
 - hosts: all
-  become: 'yes'
+  become: yes
   roles:
     - role: iptables
     - role: nftables
