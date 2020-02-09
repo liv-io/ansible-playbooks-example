@@ -87,22 +87,6 @@ nftables_filter_all:
   - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', ports: {'10.0.0.18'}, comment: 'HTTP(S): To h_proxy'}
 
 #-------------------------------------------------------------------------------
-# NTPD
-#-------------------------------------------------------------------------------
-
-ntpd_server:
-  - {address: 'ntp01.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp01'}
-  - {address: 'ntp02.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp02'}
-  - {address: 'ntp03.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp03'}
-  - {address: 'ntp04.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp04'}
-
-ntpd_monitor_mail_from_address: "root@example.com"
-
-ntpd_monitor_mail_to_address: ["admin@example.com"]
-
-ntpd_monitor_mail_state: 'true'
-
-#-------------------------------------------------------------------------------
 # OPENSMTPD
 #-------------------------------------------------------------------------------
 
