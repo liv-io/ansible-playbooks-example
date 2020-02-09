@@ -25,6 +25,7 @@
     - role: auditd
     - role: avahi
     - role: bind_tools
+    - role: chrony
     - role: colordiff
     - role: common
     - role: coreutils

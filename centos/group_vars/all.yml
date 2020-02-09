@@ -7,6 +7,16 @@
 bash_tmout: 'disable'
 
 #-------------------------------------------------------------------------------
+# CHRONY
+#-------------------------------------------------------------------------------
+
+chrony_server:
+  - {address: 'ntp01.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp01'}
+  - {address: 'ntp02.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp02'}
+  - {address: 'ntp03.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp03'}
+  - {address: 'ntp04.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp04'}
+
+#-------------------------------------------------------------------------------
 # DNF
 #-------------------------------------------------------------------------------
 
