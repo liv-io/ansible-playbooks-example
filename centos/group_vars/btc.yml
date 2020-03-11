@@ -1,22 +1,21 @@
 ---
 
 #-------------------------------------------------------------------------------
-# FSTAB
+# BITCOIN_CORE
 #-------------------------------------------------------------------------------
 
-fstab_config_group:
-  - filesystem: '/dev/sdb1'
-    state: 'true'
-    mountpoint: '/data'
-    type: 'ext4'
-    dump: 0
-    pass: 0
-    comment: 'Persistent Data'
+bitcoin_core_rpc_allow_ip: '0.0.0.0/0'
+
+bitcoin_core_rpc_auth: 'satoshi:d7316644b50aa7ea8792daf5c6b897e4$54194677335fcb771aa39533ddc2833927de9626b0d8fcb7940a7f56aa8a9569'
+
+bitcoin_core_rpc_bind: '0.0.0.0'
+
+bitcoin_core_zeromq_bind: '0.0.0.0'
 
 #-------------------------------------------------------------------------------
-# IPTABLES
+# NFTABLES
 #-------------------------------------------------------------------------------
 
-iptables_filter_group:
-  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'tcp', ports: {'8333'}, comment: 'BTC: From any'}
-  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', ports: {'8333'}, comment: 'BTC: To any'}
+nftables_filter_host:
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'tcp', ports: {'8333'}, comment: 'bitcoin network from any'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', ports: {'8333'}, comment: 'bitcoin network to any'}

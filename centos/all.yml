@@ -13,6 +13,10 @@
     - role: shell
     - role: bash
     - role: user
+    - role: hosts
+    - role: gnu_tar
+    - role: unzip
+    - role: zip
   environment:
     http_proxy: 'http://proxy.example.com:3128'
     https_proxy: 'http://proxy.example.com:3128'
@@ -38,9 +42,7 @@
     - role: fstrim
     - role: gnu_grep
     - role: gnu_sed
-    - role: gnu_tar
     - role: hostname
-    - role: hosts
     - role: htop
     - role: iftop
     - role: issue
@@ -64,10 +66,8 @@
     - role: telnet
     - role: timezone
     - role: tmux
-    - role: unzip
     - role: vim
     - role: wget
-    - role: zip
   environment:
     http_proxy: 'http://proxy.example.com:3128'
     https_proxy: 'http://proxy.example.com:3128'
