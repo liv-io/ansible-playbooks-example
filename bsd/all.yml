@@ -56,7 +56,6 @@
   roles:
     - role: bind_tools
     - role: colordiff
-    - role: common
     - role: coreutils
     - role: cron
     - role: denyhosts
