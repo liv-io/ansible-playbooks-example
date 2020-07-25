@@ -9,7 +9,6 @@ nginx_config:
     alias: ['web.example.com', 'www.example.com']
     state: 'true'
     port: 80
-    hsts_state: 'true'
     xss_protection_state: 'true'
     config: |
       return 301 https://$server_name$request_uri;
@@ -18,21 +17,12 @@ nginx_config:
     alias: ['web.example.com', 'www.example.com']
     state: 'true'
     port: 443
-    hsts_state: 'false'
+    hsts_state: 'true'
     xss_protection_state: 'true'
     ssl_state: 'true'
-    ssl_protocols: ['TLSv1.2']
-    ssl_cipher_suite: 'AES256+EECDH'
     ssl_certificate: '/etc/pki/example/web.example.com.crt'
     ssl_certificate_key: '/etc/pki/example/web.example.com.key'
     config: |
-      # X-Frame-Options - disable frame embedding (phishing, clickjacking prevention)
-      add_header X-Frame-Options 'DENY';
-      # X-Content-Type-Options - disable MIME-sniffing (drive-by download attacks prevention)
-      add_header X-Content-Type-Options 'nosniff';
-      # X-XSS-Protection - enable XSS filter (cross-site scripting prevention)
-      add_header X-XSS-Protection '1; mode=block';
-
       location / {
         proxy_pass                         https://example.com/;
         proxy_set_header Host              $host;

@@ -1,0 +1,77 @@
+---
+
+#-------------------------------------------------------------------------------
+# NSD
+#-------------------------------------------------------------------------------
+
+nsd_interface:
+  - {address: '0.0.0.0', port: '53', comment: 'Any'}
+
+nsd_zone:
+  - name: 'example.com'
+    state: 'true'
+    comment: 'example.com zone'
+    ttl: '1d'
+    origin: 'example.com.'
+    soa_mname: 'ns01.example.com'
+    soa_rname: 'admin.example.com'
+    soa_serial: '2020072501'
+    soa_refresh: '4h'
+    soa_retry: '30m'
+    soa_expire: '2w'
+    soa_ttl: '1h'
+    records:
+      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
+      - {name: '@', type: 'NS', value: 'ns02.example.com.'}
+      - {name: '@', type: 'MX', value: 'mail.example.com.', priority: '10'}
+      - {name: '@', type: 'TXT', value: '"v=spf1 mx ~all"'}
+      - {name: '@', type: 'A', value: '1.2.3.3'}
+      - {name: 'ns01', type: 'A', value: '1.2.3.2'}
+      - {name: 'ns02', type: 'A', value: '1.2.3.3'}
+      - {name: 'mx01', type: 'A', value: '1.2.3.3'}
+      - {name: 'ws01', type: 'A', value: '1.2.3.3'}
+      - {name: 'bitcoin', type: 'CNAME', value: 'ws01'}
+      - {name: 'btc', type: 'CNAME', value: 'ws01'}
+      - {name: 'mail', type: 'CNAME', value: 'mx01'}
+      - {name: 'web', type: 'CNAME', value: 'ws01'}
+      - {name: 'www', type: 'CNAME', value: 'ws01'}
+
+  - name: '3.2.1.in-addr.arpa'
+    state: 'true'
+    comment: '3.2.1.in-addr.arpa zone'
+    ttl: '1d'
+    origin: '3.2.1.IN-ADDR.ARPA.'
+    soa_mname: 'ns01.example.com'
+    soa_rname: 'admin.example.com'
+    soa_serial: '2020072501'
+    soa_refresh: '4h'
+    soa_retry: '30m'
+    soa_expire: '2w'
+    soa_ttl: '1h'
+    records:
+      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
+      - {name: '@', type: 'NS', value: 'ns02.example.com.'}
+      - {name: '3', type: 'PTR', value: 'mail.example.com.'}
+
+#-------------------------------------------------------------------------------
+# MONIT
+#-------------------------------------------------------------------------------
+
+monit_config_host:
+  - name: 'nsd'
+    state: 'true'
+    comment: 'Name Server Daemon'
+    config: |
+      check process nsd with pidfile "/var/nsd/run/nsd.pid"
+        start program = "/usr/sbin/rcctl start nsd"
+        stop program  = "/usr/sbin/rcctl stop nsd"
+        if failed host 127.0.0.1 port 53 type tcp protocol dns with timeout 10 seconds then alert
+        if failed host 127.0.0.1 port 53 type udp protocol dns with timeout 10 seconds then alert
+        if 5 restarts within 5 cycles then timeout
+
+#-------------------------------------------------------------------------------
+# OPENBSD_PF
+#-------------------------------------------------------------------------------
+
+openbsd_pf_filters_host:
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'any'}, ports: {'53'}, comment: 'dns from any'}

@@ -1,39 +1,6 @@
 ---
 
 #-------------------------------------------------------------------------------
-# HTTPD
-#-------------------------------------------------------------------------------
-
-httpd_config:
-  - name: 'example.com'
-    alias: ['web.example.com', 'www.example.com']
-    state: 'true'
-    port: '80'
-    server_admin: 'admin@example.com'
-    document_root: '/data/example.com/web'
-    hsts_state: 'true'
-    config: |
-      Redirect permanent /  https://example.com/
-
-  - name: 'example.com'
-    alias: ['web.example.com', 'www.example.com']
-    state: 'true'
-    port: '443'
-    server_admin: 'admin@example.com'
-    document_root: '/data/example.com/web'
-    hsts_state: 'true'
-    ssl_state: 'true'
-    ssl_protocols: ['-ALL', '+TLSv1.2']
-    ssl_certificate_file: '/etc/pki/example/web.example.com.crt'
-    ssl_certificate_key_file: '/etc/pki/example/web.example.com.key'
-    ssl_certificate_chain_file: '/etc/pki/example/ca.example.com.crt'
-    config: |
-      <Directory /data/example.com/web>
-        AllowOverride None
-        Require all granted
-      </Directory>
-
-#-------------------------------------------------------------------------------
 # MOTD
 #-------------------------------------------------------------------------------
 
@@ -44,4 +11,4 @@ motd_host_description: 'Web Server'
 #-------------------------------------------------------------------------------
 
 openbsd_pf_filters_host:
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_dmz', '$n_clients'}, destinations: {'any'}, ports: {'80', '443'}, comment: 'http, https from n_dmz, n_clients'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_rp', '$n_clients'}, destinations: {'any'}, ports: {'80', '443'}, comment: 'http, https from h_rp, n_clients'}

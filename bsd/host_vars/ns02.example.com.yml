@@ -4,12 +4,4 @@
 # MOTD
 #-------------------------------------------------------------------------------
 
-motd_host_description: 'Name Server 01'
-
-#-------------------------------------------------------------------------------
-# OPENBSD_PF
-#-------------------------------------------------------------------------------
-
-openbsd_pf_filters_host:
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'any'}, ports: {'53'}, comment: 'dns from any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'any'}, ports: {'53'}, comment: 'dns to any'}
+motd_host_description: 'Name Server 02'
