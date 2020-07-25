@@ -30,13 +30,13 @@ hostname_if_config_host:
   - {interface: 'vlan11', interfaces: [{ip: '10.1.1.3', netmask: '255.255.255.0', vnetid: '11', vlandev: 'aggr0', description: 'v_base'}]}
   - {interface: 'carp11', interfaces: [{type: 'carp', ip: '10.1.1.1', netmask: '255.255.255.0', vhid: '11', carpdev: 'vlan11', advskew: '20', pass: 'VjaD,TDAckVNM.6AFcXw', description: 'v_base'}]}
 
-  - {interface: 'vlan12', interfaces: [{ip: '10.1.2.3', netmask: '255.255.255.0', vnetid: '12', vlandev: 'aggr0', description: 'v_base'}]}
+  - {interface: 'vlan12', interfaces: [{ip: '10.1.2.3', netmask: '255.255.255.0', vnetid: '12', vlandev: 'aggr0', description: 'v_mgmt'}]}
   - {interface: 'carp12', interfaces: [{type: 'carp', ip: '10.1.2.1', netmask: '255.255.255.0', vhid: '12', carpdev: 'vlan12', advskew: '20', pass: 'F8QFk7v,AKWuX2a.42eK', description: 'v_mgmt'}]}
 
   - {interface: 'vlan13', interfaces: [{ip: '10.1.3.3', netmask: '255.255.255.0', vnetid: '13', vlandev: 'aggr0', description: 'v_dmz'}]}
   - {interface: 'carp13', interfaces: [{type: 'carp', ip: '10.1.3.1', netmask: '255.255.255.0', vhid: '13', carpdev: 'vlan13', advskew: '20', pass: '7P3HS.R66TjCJa,AsJma', description: 'v_dmz'}]}
 
-  - {interface: 'vlan14', interfaces: [{ip: '10.1.4.3', netmask: '255.255.255.0', vnetid: '14', vlandev: 'aggr0', description: 'v_dmz'}]}
+  - {interface: 'vlan14', interfaces: [{ip: '10.1.4.3', netmask: '255.255.255.0', vnetid: '14', vlandev: 'aggr0', description: 'v_tools'}]}
   - {interface: 'carp14', interfaces: [{type: 'carp', ip: '10.1.4.1', netmask: '255.255.255.0', vhid: '14', carpdev: 'vlan14', advskew: '20', pass: 'nabKqk,cAV.MJg526adH', description: 'v_tools'}]}
 
   - {interface: 'vlan15', interfaces: [{ip: '10.1.5.3', netmask: '255.255.255.0', vnetid: '15', vlandev: 'aggr0', description: 'v_clients'}]}
