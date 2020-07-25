@@ -60,64 +60,149 @@ periodic_weekly_output: '/dev/null'
 #-------------------------------------------------------------------------------
 
 freebsd_pf_macros_all:
-  - {name: 'n_dmz', value: '10.0.0.0/24', comment: 'Network: dmz network'}
-  - {name: 'n_int', value: '10.0.1.0/24', comment: 'Network: int network'}
-  - {name: 'h_fw', value: '10.0.0.1', comment: 'Host: firewall'}
-  - {name: 'h_ns01', value: '10.0.0.11', comment: 'Host: name server'}
-  - {name: 'h_ns02', value: '10.0.0.12', comment: 'Host: name server'}
-  - {name: 'h_ntp01', value: '10.0.0.13', comment: 'Host: ntp server'}
-  - {name: 'h_ntp02', value: '10.0.0.14', comment: 'Host: ntp server'}
-  - {name: 'h_ntp03', value: '10.0.0.15', comment: 'Host: ntp server'}
-  - {name: 'h_ntp04', value: '10.0.0.16', comment: 'Host: ntp server'}
-  - {name: 'h_forward', value: '10.0.0.17', comment: 'Host: forward proxy'}
-  - {name: 'h_reverse', value: '10.0.0.18', comment: 'Host: reverse proxy'}
-  - {name: 'h_web', value: '10.0.0.19', comment: 'Host: web server'}
+  - {name: 'n_base', value: '10.1.1.0/24', comment: 'n_base'}
+  - {name: 'n_mgmt', value: '10.1.2.0/24', comment: 'n_mgmt'}
+  - {name: 'n_dmz', value: '10.1.3.0/24', comment: 'n_dmz'}
+  - {name: 'n_tools', value: '10.1.4.0/24', comment: 'n_tools'}
+  - {name: 'n_clients', value: '10.1.5.0/24', comment: 'n_clients'}
+
+  - {name: 'h_fw01', value: '10.1.2.2', comment: 'firewall 01'}
+  - {name: 'h_fw02', value: '10.1.2.3', comment: 'firewall 02'}
+  - {name: 'h_sw01', value: '10.1.2.4', comment: 'switch 01'}
+  - {name: 'h_vt01', value: '10.1.2.11', comment: 'virtualization 01'}
+
+  - {name: 'fp01', value: '10.1.3.15', comment: 'forward proxy 01'}
+  - {name: 'rp01', value: '10.1.3.17', comment: 'reverse proxy 01'}
+  - {name: 'ws01', value: '10.1.3.19', comment: 'web server 01'}
+  - {name: 'mx01', value: '10.1.3.21', comment: 'mail server 01'}
+  - {name: 'btc01', value: '10.1.3.23', comment: 'bitcoin server 01'}
+
+  - {name: 'code01', value: '10.1.4.11', comment: 'code host 01'}
+
+  - {name: 'nb01', value: '10.1.5.11', comment: 'notebook 01'}
 
 freebsd_pf_filters_all:
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', state: '$default_udp', comment: 'ICMP Echo Reply: From any'}
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', state: '$default_udp', comment: 'ICMP Destination Unreachable: From any'}
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', state: '$default_udp', comment: 'ICMP Source Quench: From any'}
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_dmz', '$n_int'}, destinations: {'any'}, ports: {'ssh'}, state: '$default_tcp', comment: 'SSH: From n_dmz, n_int'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', state: '$default_udp', comment: 'ICMP Destination Unreachable: To any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', state: '$default_udp', comment: 'ICMP Source Quench: To any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', state: '$default_udp', comment: 'ICMP Echo Request: To any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$n_dmz', '$n_int'}, ports: {'ssh'}, state: '$default_tcp', comment: 'SSH: To n_dmz, n_int'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'domain'}, state: '$default_tcp', comment: 'DNS: To dns servers'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'domain'}, state: '$default_udp', comment: 'DNS: To dns servers'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_ntp01', '$h_ntp02', '$h_ntp03', '$h_ntp04'}, ports: {'ntp'}, state: '$default_udp', comment: 'NTP: To ntp servers'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_forward'}, ports: {'3128'} , state: '$default_tcp', comment: 'HTTP(S): To forward proxy'}
+  #-----------------------------------------------------------------------------
+  # ICMP
+  #-----------------------------------------------------------------------------
+
+  # icmp from any to any
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', comment: 'icmp echo request from any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', comment: 'icmp echo request to any'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', comment: 'icmp destination unreachable from any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', comment: 'icmp destination unreachable to any'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench from any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench to any'}
+
+  #-----------------------------------------------------------------------------
+  # SSH
+  #-----------------------------------------------------------------------------
+
+  # ssh from n_client
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_client'}, destinations: {'any'}, ports: {'22'}, comment: 'ssh from n_client'}
+
+  #-----------------------------------------------------------------------------
+  # DNS
+  #-----------------------------------------------------------------------------
+
+  # dns to h_fw01, h_fw02
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$h_fw01', '$h_fw02'}, ports: {'53'}, comment: 'dns to h_fw01, h_fw02'}
+
+  #-----------------------------------------------------------------------------
+  # NTP
+  #-----------------------------------------------------------------------------
+
+  # ntp to h_fw01, h_fw02
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_fw01', '$h_fw02'}, ports: {'53'}, comment: 'ntp to h_fw01, h_fw02'}
+
+  #-----------------------------------------------------------------------------
+  # SMTP
+  #-----------------------------------------------------------------------------
+
+  # smtp to h_mx
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp to h_mx'}
+
+  #-----------------------------------------------------------------------------
+  # SQUID
+  #-----------------------------------------------------------------------------
+
+  # squid to h_fproxy
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_fp'}, ports: {'3128'} , comment: 'squid to h_fp'}
 
 #-------------------------------------------------------------------------------
 # OPENBSD_PF
 #-------------------------------------------------------------------------------
 
 openbsd_pf_macros_all:
-  - {name: 'n_dmz', value: '10.0.0.0/24', comment: 'Network: dmz network'}
-  - {name: 'n_int', value: '10.0.1.0/24', comment: 'Network: int network'}
-  - {name: 'h_fw', value: '10.0.0.1', comment: 'Host: firewall'}
-  - {name: 'h_ns01', value: '10.0.0.11', comment: 'Host: name server'}
-  - {name: 'h_ns02', value: '10.0.0.12', comment: 'Host: name server'}
-  - {name: 'h_ntp01', value: '10.0.0.13', comment: 'Host: ntp server'}
-  - {name: 'h_ntp02', value: '10.0.0.14', comment: 'Host: ntp server'}
-  - {name: 'h_ntp03', value: '10.0.0.15', comment: 'Host: ntp server'}
-  - {name: 'h_ntp04', value: '10.0.0.16', comment: 'Host: ntp server'}
-  - {name: 'h_forward', value: '10.0.0.17', comment: 'Host: forward proxy'}
-  - {name: 'h_reverse', value: '10.0.0.18', comment: 'Host: reverse proxy'}
-  - {name: 'h_web', value: '10.0.0.19', comment: 'Host: web server'}
+  - {name: 'n_base', value: '10.1.1.0/24', comment: 'n_base'}
+  - {name: 'n_mgmt', value: '10.1.2.0/24', comment: 'n_mgmt'}
+  - {name: 'n_dmz', value: '10.1.3.0/24', comment: 'n_dmz'}
+  - {name: 'n_tools', value: '10.1.4.0/24', comment: 'n_tools'}
+  - {name: 'n_clients', value: '10.1.5.0/24', comment: 'n_clients'}
+
+  - {name: 'h_fw01', value: '10.1.2.2', comment: 'firewall 01'}
+  - {name: 'h_fw02', value: '10.1.2.3', comment: 'firewall 02'}
+  - {name: 'h_sw01', value: '10.1.2.4', comment: 'switch 01'}
+  - {name: 'h_vt01', value: '10.1.2.11', comment: 'virtualization 01'}
+
+  - {name: 'fp01', value: '10.1.3.15', comment: 'forward proxy 01'}
+  - {name: 'rp01', value: '10.1.3.17', comment: 'reverse proxy 01'}
+  - {name: 'ws01', value: '10.1.3.19', comment: 'web server 01'}
+  - {name: 'mx01', value: '10.1.3.21', comment: 'mail server 01'}
+  - {name: 'btc01', value: '10.1.3.23', comment: 'bitcoin server 01'}
+
+  - {name: 'code01', value: '10.1.4.11', comment: 'code host 01'}
+
+  - {name: 'nb01', value: '10.1.5.11', comment: 'notebook 01'}
 
 openbsd_pf_filters_all:
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', state: '$default_udp', comment: 'ICMP Echo Reply: From any'}
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', state: '$default_udp', comment: 'ICMP Destination Unreachable: From any'}
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', state: '$default_udp', comment: 'ICMP Source Quench: From any'}
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_dmz', '$n_int'}, destinations: {'any'}, ports: {'ssh'}, state: '$default_tcp', comment: 'SSH: From n_dmz, n_int'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', state: '$default_udp', comment: 'ICMP Destination Unreachable: To any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', state: '$default_udp', comment: 'ICMP Source Quench: To any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', state: '$default_udp', comment: 'ICMP Echo Request: To any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$n_dmz', '$n_int'}, ports: {'ssh'}, state: '$default_tcp', comment: 'SSH: To n_dmz, n_int'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'domain'}, state: '$default_tcp', comment: 'DNS: To dns servers'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'domain'}, state: '$default_udp', comment: 'DNS: To dns servers'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_ntp01', '$h_ntp02', '$h_ntp03', '$h_ntp04'}, ports: {'ntp'}, state: '$default_udp', comment: 'NTP: To ntp servers'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_forward'}, ports: {'3128'} , state: '$default_tcp', comment: 'HTTP(S): To forward proxy'}
+
+  #-----------------------------------------------------------------------------
+  # ICMP
+  #-----------------------------------------------------------------------------
+
+  # icmp from any to any
+  - {action: 'pass', quick: 'true', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', comment: 'icmp echo request from any'}
+  - {action: 'pass', quick: 'true', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', comment: 'icmp echo request to any'}
+  - {action: 'pass', quick: 'true', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', comment: 'icmp destination unreachable from any'}
+  - {action: 'pass', quick: 'true', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', comment: 'icmp destination unreachable to any'}
+  - {action: 'pass', quick: 'true', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench from any'}
+  - {action: 'pass', quick: 'true', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench to any'}
+
+  #-----------------------------------------------------------------------------
+  # SSH
+  #-----------------------------------------------------------------------------
+
+  # ssh from n_client
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_client'}, destinations: {'any'}, ports: {'22'}, comment: 'ssh from n_client'}
+
+  #-----------------------------------------------------------------------------
+  # DNS
+  #-----------------------------------------------------------------------------
+
+  # dns to h_fw01, h_fw02
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$h_fw01', '$h_fw02'}, ports: {'53'}, comment: 'dns to h_fw01, h_fw02'}
+
+  #-----------------------------------------------------------------------------
+  # NTP
+  #-----------------------------------------------------------------------------
+
+  # ntp to h_fw01, h_fw02
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_fw01', '$h_fw02'}, ports: {'53'}, comment: 'ntp to h_fw01, h_fw02'}
+
+  #-----------------------------------------------------------------------------
+  # SMTP
+  #-----------------------------------------------------------------------------
+
+  # smtp to h_mx
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp to h_mx'}
+
+  #-----------------------------------------------------------------------------
+  # SQUID
+  #-----------------------------------------------------------------------------
+
+  # squid to h_fproxy
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_fp'}, ports: {'3128'} , comment: 'squid to h_fp'}
 
 #-------------------------------------------------------------------------------
 # RESOLVER
@@ -126,8 +211,8 @@ openbsd_pf_filters_all:
 resolver_domain: 'example.com'
 
 resolver_nameserver:
-  - {address: '10.0.0.11', comment: 'h_ns01'}
-  - {address: '10.0.0.12', comment: 'h_ns02'}
+  - {address: '10.1.2.11', comment: 'h_fw01'}
+  - {address: '10.1.2.13', comment: 'h_fw02'}
 
 resolver_search: ['example.com']
 
@@ -135,11 +220,11 @@ resolver_search: ['example.com']
 # SHELL
 #-------------------------------------------------------------------------------
 
-shell_ftp_proxy: 'http://forward.example.com:3128'
+shell_ftp_proxy: 'http://fp.example.com:3128'
 
-shell_http_proxy: 'http://forward.example.com:3128'
+shell_http_proxy: 'http://fp.example.com:3128'
 
-shell_https_proxy: 'http://forward.example.com:3128'
+shell_https_proxy: 'http://fp.example.com:3128'
 
 #-------------------------------------------------------------------------------
 # SUDO

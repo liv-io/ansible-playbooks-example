@@ -9,40 +9,34 @@
 #-------------------------------------------------------------------------------
 
 [fw]
-fw01.example.com ansible_python_interpreter=/usr/local/bin/python
+fw01.example.com ansible_python_interpreter=/usr/local/bin/python3.7
+fw02.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 
 #-------------------------------------------------------------------------------
 # NAME SERVER
 #-------------------------------------------------------------------------------
 
 [ns]
-ns01.example.com ansible_python_interpreter=/usr/local/bin/python2.7
-ns02.example.com ansible_python_interpreter=/usr/local/bin/python2.7
-
-#-------------------------------------------------------------------------------
-# NTP SERVER
-#-------------------------------------------------------------------------------
-
-[ntp]
-ntp01.example.com ansible_python_interpreter=/usr/local/bin/python2.7
+ns01.example.com ansible_python_interpreter=/usr/local/bin/python3.7
+ns02.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 
 #-------------------------------------------------------------------------------
 # FORWARD PROXY
 #-------------------------------------------------------------------------------
 
-[forward]
-forward01.example.com ansible_python_interpreter=/usr/local/bin/python2.7
+[fp]
+fp01.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 
 #-------------------------------------------------------------------------------
 # REVERSE PROXY
 #-------------------------------------------------------------------------------
 
-[reverse]
-reverse01.example.com ansible_python_interpreter=/usr/local/bin/python2.7
+[rp]
+rp01.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 
 #-------------------------------------------------------------------------------
 # WEB
 #-------------------------------------------------------------------------------
 
-[web]
-web01.example.com ansible_python_interpreter=/usr/local/bin/python2.7
+[ws]
+ws01.example.com ansible_python_interpreter=/usr/local/bin/python3.7

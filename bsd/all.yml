@@ -20,10 +20,11 @@
     - role: freebsd_periodic
     - role: root
     - role: user
+    - role: monit
   environment:
-    http_proxy: 'http://forward.example.com:3128'
-    https_proxy: 'http://forward.example.com:3128'
-    ftp_proxy: 'http://forward.example.com:3128'
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
 
 - hosts: OpenBSD
   become: yes
@@ -34,10 +35,11 @@
     - role: openbsd_periodic
     - role: root
     - role: user
+    - role: monit
   environment:
-    http_proxy: 'http://forward.example.com:3128'
-    https_proxy: 'http://forward.example.com:3128'
-    ftp_proxy: 'http://forward.example.com:3128'
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
 
 # Pre
 - hosts: all
@@ -46,9 +48,9 @@
     - role: shell
     - role: bash
   environment:
-    http_proxy: 'http://forward.example.com:3128'
-    https_proxy: 'http://forward.example.com:3128'
-    ftp_proxy: 'http://forward.example.com:3128'
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
 
 # Main
 - hosts: all
@@ -70,6 +72,7 @@
     - role: gnu_zip
     - role: hosts
     - role: hostname
+    - role: hostname_if
     - role: htop
     - role: ifstat
     - role: iftop
@@ -93,9 +96,9 @@
     - role: wget
     - role: zip
   environment:
-    http_proxy: 'http://forward.example.com:3128'
-    https_proxy: 'http://forward.example.com:3128'
-    ftp_proxy: 'http://forward.example.com:3128'
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
 
 # Post
 - hosts: all
@@ -104,6 +107,6 @@
     - role: freebsd_pf
     - role: openbsd_pf
   environment:
-    http_proxy: 'http://forward.example.com:3128'
-    https_proxy: 'http://forward.example.com:3128'
-    ftp_proxy: 'http://forward.example.com:3128'
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'

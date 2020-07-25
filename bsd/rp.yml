@@ -1,0 +1,14 @@
+---
+
+#-------------------------------------------------------------------------------
+# REVERSE PROXY
+#-------------------------------------------------------------------------------
+
+- hosts: rp
+  become: yes
+  roles:
+    - role: nginx
+  environment:
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'

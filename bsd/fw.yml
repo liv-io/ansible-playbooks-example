@@ -1,0 +1,19 @@
+---
+
+#-------------------------------------------------------------------------------
+# FIREWALL
+#-------------------------------------------------------------------------------
+
+- hosts: fw
+  become: yes
+  roles:
+    - role: hostname_if
+    - role: nsd
+    - role: openntpd
+    - role: unbound
+    - role: sysctl
+    - role: openbsd_pf
+  environment:
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'

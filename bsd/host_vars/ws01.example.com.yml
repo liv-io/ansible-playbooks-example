@@ -44,4 +44,4 @@ motd_host_description: 'Web Server'
 #-------------------------------------------------------------------------------
 
 openbsd_pf_filters_host:
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_dmz', '$n_int'}, destinations: {'any'}, ports: {'http', 'https'}, state: '$default_tcp', comment: 'HTTP(S): From n_dmz, n_int'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_dmz', '$n_clients'}, destinations: {'any'}, ports: {'80', '443'}, comment: 'http, https from n_dmz, n_clients'}

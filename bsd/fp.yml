@@ -1,0 +1,14 @@
+---
+
+#-------------------------------------------------------------------------------
+# FORWARD PROXY
+#-------------------------------------------------------------------------------
+
+- hosts: fp
+  become: yes
+  roles:
+    - role: squid
+  environment:
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'

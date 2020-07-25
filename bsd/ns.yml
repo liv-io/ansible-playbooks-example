@@ -1,0 +1,14 @@
+---
+
+#-------------------------------------------------------------------------------
+# NAME SERVER
+#-------------------------------------------------------------------------------
+
+- hosts: ns
+  become: yes
+  roles:
+    - role: nsd
+  environment:
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
