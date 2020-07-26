@@ -7,53 +7,14 @@
 bash_tmout: 'disable'
 
 #-------------------------------------------------------------------------------
-# GROUP
+# FREEBSD_PERIODIC
 #-------------------------------------------------------------------------------
 
-group_config_all:
-  - {name: 'example', state: 'true', gid: '1000'}
+freebsd_periodic_daily_output: '/dev/null'
 
-#-------------------------------------------------------------------------------
-# NANO
-#-------------------------------------------------------------------------------
+freebsd_periodic_monthly_output: '/dev/null'
 
-nano_state: 'remove'
-
-#-------------------------------------------------------------------------------
-# NTPD
-#-------------------------------------------------------------------------------
-
-ntpd_state: 'cronjob'
-
-ntpd_server:
-  - {address: 'ntp01.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp01'}
-  - {address: 'ntp02.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp02'}
-  - {address: 'ntp03.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp03'}
-  - {address: 'ntp04.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp04'}
-
-ntpd_monitor_mail_from_address: "root@example.com"
-
-ntpd_monitor_mail_to_address: ["admin@example.com"]
-
-ntpd_monitor_mail_state: 'true'
-
-#-------------------------------------------------------------------------------
-# OPENSSH
-#-------------------------------------------------------------------------------
-
-openssh_allow_users: ['example']
-
-openssh_password_authentication: 'no'
-
-#-------------------------------------------------------------------------------
-# PERIODIC
-#-------------------------------------------------------------------------------
-
-periodic_daily_output: '/dev/null'
-
-periodic_monthly_output: '/dev/null'
-
-periodic_weekly_output: '/dev/null'
+freebsd_periodic_weekly_output: '/dev/null'
 
 #-------------------------------------------------------------------------------
 # FREEBSD_PF
@@ -130,6 +91,35 @@ freebsd_pf_filters_all:
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_fp'}, ports: {'3128'} , comment: 'squid to h_fp'}
 
 #-------------------------------------------------------------------------------
+# GROUP
+#-------------------------------------------------------------------------------
+
+group_config_all:
+  - {name: 'example', state: 'true', gid: '1000'}
+
+#-------------------------------------------------------------------------------
+# MONIT
+#-------------------------------------------------------------------------------
+
+monit_mail_server:
+  - {address: '127.0.0.1', port: '25'}
+
+monit_mail_to:
+  - {address: 'admin@example.com', filter: 'not on', events: ['instance', 'action']}
+
+#-------------------------------------------------------------------------------
+# MOTD
+#-------------------------------------------------------------------------------
+
+motd_host_description: "Please add 'group_var' or 'host_var' file"
+
+#-------------------------------------------------------------------------------
+# NANO
+#-------------------------------------------------------------------------------
+
+nano_state: 'remove'
+
+#-------------------------------------------------------------------------------
 # OPENBSD_PF
 #-------------------------------------------------------------------------------
 
@@ -203,6 +193,40 @@ openbsd_pf_filters_all:
 
   # squid to h_fproxy
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_fp'}, ports: {'3128'} , comment: 'squid to h_fp'}
+
+#-------------------------------------------------------------------------------
+# OPENNTPD
+#-------------------------------------------------------------------------------
+
+openntpd_monitor_mail_from_address: 'root@example.com'
+
+openntpd_monitor_mail_to_address: ['admin@example.com']
+
+openntpd_monitor_mail_state: 'true'
+
+openntpd_server:
+  - {address: 'ntp01.example.com', comment: 'h_ntp01'}
+  - {address: 'ntp02.example.com', comment: 'h_ntp02'}
+  - {address: 'ntp03.example.com', comment: 'h_ntp03'}
+  - {address: 'ntp04.example.com', comment: 'h_ntp04'}
+
+#-------------------------------------------------------------------------------
+# OPENSMTPD
+#-------------------------------------------------------------------------------
+
+opensmtpd_root_mail_address: 'admin@example.com'
+
+opensmtpd_action_all:
+  - {config: {'action "local" mbox alias <aliases>'}, comment: 'Action: local'}
+  - {config: {'action "relay" relay host smtp://mail.example.com:25'}, comment: 'Action: relay'}
+
+#-------------------------------------------------------------------------------
+# OPENSSH
+#-------------------------------------------------------------------------------
+
+openssh_allow_users: ['example']
+
+openssh_password_authentication: 'no'
 
 #-------------------------------------------------------------------------------
 # RESOLVER
