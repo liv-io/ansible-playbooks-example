@@ -421,8 +421,8 @@ nsd_zone:
       - {name: 'btc', type: 'CNAME', value: 'btc01'}
       - {name: 'dns', type: 'CNAME', value: 'dns01'}
       - {name: 'ntp', type: 'CNAME', value: 'dns01'}
-      - {name: 'fp', type: 'CNAME', value: 'fp02'}
-      - {name: 'rp', type: 'CNAME', value: 'rp02'}
+      - {name: 'fp', type: 'CNAME', value: 'fp01'}
+      - {name: 'rp', type: 'CNAME', value: 'rp01'}
       - {name: 'vt', type: 'CNAME', value: 'vt01'}
       - {name: 'web', type: 'CNAME', value: 'ws01'}
       - {name: 'www', type: 'CNAME', value: 'ws01'}
