@@ -71,15 +71,15 @@ freebsd_pf_macros_all:
   - {name: 'h_sw01', value: '10.1.2.4', comment: 'switch 01'}
   - {name: 'h_vt01', value: '10.1.2.11', comment: 'virtualization 01'}
 
-  - {name: 'fp01', value: '10.1.3.15', comment: 'forward proxy 01'}
-  - {name: 'rp01', value: '10.1.3.17', comment: 'reverse proxy 01'}
-  - {name: 'ws01', value: '10.1.3.19', comment: 'web server 01'}
-  - {name: 'mx01', value: '10.1.3.21', comment: 'mail server 01'}
-  - {name: 'btc01', value: '10.1.3.23', comment: 'bitcoin server 01'}
+  - {name: 'h_fp01', value: '10.1.3.15', comment: 'forward proxy 01'}
+  - {name: 'h_rp01', value: '10.1.3.17', comment: 'reverse proxy 01'}
+  - {name: 'h_ws01', value: '10.1.3.19', comment: 'web server 01'}
+  - {name: 'h_mx01', value: '10.1.3.21', comment: 'mail server 01'}
+  - {name: 'h_btc01', value: '10.1.3.23', comment: 'bitcoin server 01'}
 
-  - {name: 'code01', value: '10.1.4.11', comment: 'code host 01'}
+  - {name: 'h_code01', value: '10.1.4.11', comment: 'code host 01'}
 
-  - {name: 'nb01', value: '10.1.5.11', comment: 'notebook 01'}
+  - {name: 'h_nb01', value: '10.1.5.11', comment: 'notebook 01'}
 
 freebsd_pf_filters_all:
   #-----------------------------------------------------------------------------
@@ -145,15 +145,15 @@ openbsd_pf_macros_all:
   - {name: 'h_sw01', value: '10.1.2.4', comment: 'switch 01'}
   - {name: 'h_vt01', value: '10.1.2.11', comment: 'virtualization 01'}
 
-  - {name: 'fp01', value: '10.1.3.15', comment: 'forward proxy 01'}
-  - {name: 'rp01', value: '10.1.3.17', comment: 'reverse proxy 01'}
-  - {name: 'ws01', value: '10.1.3.19', comment: 'web server 01'}
-  - {name: 'mx01', value: '10.1.3.21', comment: 'mail server 01'}
-  - {name: 'btc01', value: '10.1.3.23', comment: 'bitcoin server 01'}
+  - {name: 'h_fp01', value: '10.1.3.15', comment: 'forward proxy 01'}
+  - {name: 'h_rp01', value: '10.1.3.17', comment: 'reverse proxy 01'}
+  - {name: 'h_ws01', value: '10.1.3.19', comment: 'web server 01'}
+  - {name: 'h_mx01', value: '10.1.3.21', comment: 'mail server 01'}
+  - {name: 'h_btc01', value: '10.1.3.23', comment: 'bitcoin server 01'}
 
-  - {name: 'code01', value: '10.1.4.11', comment: 'code host 01'}
+  - {name: 'h_code01', value: '10.1.4.11', comment: 'code host 01'}
 
-  - {name: 'nb01', value: '10.1.5.11', comment: 'notebook 01'}
+  - {name: 'h_nb01', value: '10.1.5.11', comment: 'notebook 01'}
 
 openbsd_pf_filters_all:
 

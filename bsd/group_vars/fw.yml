@@ -172,7 +172,7 @@ openbsd_pf_filters_group:
   - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_tools'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_code'}, destinations: {'! 10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from h_code to any'}
 
   #-----------------------------------------------------------------------------
-  # H_FPROXY
+  # H_FP
   #-----------------------------------------------------------------------------
 
   # http, https from h_fp to any
