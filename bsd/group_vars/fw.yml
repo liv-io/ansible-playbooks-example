@@ -442,8 +442,6 @@ nsd_zone:
     soa_expire: '5d'
     soa_ttl: '10m'
     records:
-      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
-      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
       - {name: '1', type: 'PTR', value: 'dns01.example.com.'}
 
   # n_mgmt
