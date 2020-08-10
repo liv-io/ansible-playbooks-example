@@ -49,8 +49,6 @@ nsd_zone:
     soa_expire: '2w'
     soa_ttl: '1h'
     records:
-      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
-      - {name: '@', type: 'NS', value: 'ns02.example.com.'}
       - {name: '3', type: 'PTR', value: 'mail.example.com.'}
 
 #-------------------------------------------------------------------------------

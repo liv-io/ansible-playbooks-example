@@ -19,6 +19,8 @@
     - role: freebsd_rc
     - role: freebsd_periodic
     - role: root
+    - role: shell
+    - role: bash
     - role: user
     - role: monit
   environment:
@@ -34,6 +36,8 @@
     - role: openbsd_rc
     - role: openbsd_periodic
     - role: root
+    - role: shell
+    - role: bash
     - role: user
     - role: monit
   environment:
@@ -45,8 +49,6 @@
 - hosts: all
   become: yes
   roles:
-    - role: shell
-    - role: bash
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
@@ -82,11 +84,13 @@
     - role: motd
     - role: nano
     - role: netcat
+    - role: node_exporter
     - role: openntpd
     - role: opensmtpd
     - role: openssh
     - role: passwd
     - role: resolver
+    - role: restic
     - role: rsync
     - role: sudo
     - role: tcpdump

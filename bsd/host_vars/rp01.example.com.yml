@@ -32,6 +32,21 @@ nginx_config:
       }
 
 #-------------------------------------------------------------------------------
+# MONIT
+#-------------------------------------------------------------------------------
+
+monit_config_host:
+  - name: 'nginx'
+    state: 'true'
+    comment: 'Nginx'
+    config: |
+      check process nginx with pidfile "/var/run/nginx.pid"
+        start program = "/usr/sbin/rcctl start nginx"
+        stop program  = "/usr/sbin/rcctl stop nginx"
+        if failed host 127.0.0.1 port 80 type tcp with timeout 10 seconds then alert
+        if 5 restarts within 5 cycles then timeout
+
+#-------------------------------------------------------------------------------
 # MOTD
 #-------------------------------------------------------------------------------
 
@@ -43,4 +58,4 @@ motd_host_description: 'Reverse Proxy'
 
 openbsd_pf_filters_host:
   - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'any'}, ports: {'80', '443'}, comment: 'http, https from any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$n_dmz', '$n_base', '$n_tools'}, ports: {'80', '443'}, comment: 'http, https to n_dmz, n_base, n_tools'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$n_mgmt', '$n_dmz', '$n_tools'}, ports: {'80', '443'}, comment: 'http, https to n_mgmt, n_dmz, n_tools'}

@@ -21,26 +21,36 @@ freebsd_periodic_weekly_output: '/dev/null'
 #-------------------------------------------------------------------------------
 
 freebsd_pf_macros_all:
+  # n_base
   - {name: 'n_base', value: '10.1.1.0/24', comment: 'n_base'}
-  - {name: 'n_mgmt', value: '10.1.2.0/24', comment: 'n_mgmt'}
-  - {name: 'n_dmz', value: '10.1.3.0/24', comment: 'n_dmz'}
-  - {name: 'n_tools', value: '10.1.4.0/24', comment: 'n_tools'}
-  - {name: 'n_clients', value: '10.1.5.0/24', comment: 'n_clients'}
+  - {name: 'h_fw', value: '10.1.1.1', comment: 'firewall'}
+  - {name: 'h_fp01', value: '10.1.1.11', comment: 'forward proxy'}
 
+  # n_mgmt
+  - {name: 'n_mgmt', value: '10.1.2.0/24', common: 'n_mgmt'}
   - {name: 'h_fw01', value: '10.1.2.2', comment: 'firewall 01'}
   - {name: 'h_fw02', value: '10.1.2.3', comment: 'firewall 02'}
-  - {name: 'h_sw01', value: '10.1.2.4', comment: 'switch 01'}
-  - {name: 'h_vt01', value: '10.1.2.11', comment: 'virtualization 01'}
+  - {name: 'h_sw', value: '10.1.2.4', comment: 'switch'}
+  - {name: 'h_vt', value: '10.1.2.9', comment: 'virtualization'}
 
-  - {name: 'h_fp01', value: '10.1.3.15', comment: 'forward proxy 01'}
-  - {name: 'h_rp01', value: '10.1.3.17', comment: 'reverse proxy 01'}
-  - {name: 'h_ws01', value: '10.1.3.19', comment: 'web server 01'}
-  - {name: 'h_mx01', value: '10.1.3.21', comment: 'mail server 01'}
-  - {name: 'h_btc01', value: '10.1.3.23', comment: 'bitcoin server 01'}
+  # n_dmz
+  - {name: 'n_dmz', value: '10.1.3.0/24', common: 'n_dmz'}
+  - {name: 'h_ns01', value: '10.1.3.11', comment: 'name server 01'}
+  - {name: 'h_ns02', value: '10.1.3.13', comment: 'name server 01'}
+  - {name: 'h_rp', value: '10.1.3.15', comment: 'reverse proxy'}
+  - {name: 'h_ws', value: '10.1.3.17', comment: 'web server'}
+  - {name: 'h_mx', value: '10.1.3.19', comment: 'mail server'}
+  - {name: 'h_btc01', value: '10.1.3.21', comment: 'bitcoin server 01'}
+  - {name: 'h_btc02', value: '10.1.3.23', comment: 'bitcoin server 02'}
+  - {name: 'h_btc03', value: '10.1.3.25', comment: 'bitcoin server 03'}
 
-  - {name: 'h_code01', value: '10.1.4.11', comment: 'code host 01'}
+  # n_tools
+  - {name: 'n_tools', value: '10.1.4.0/24', common: 'n_tools'}
+  - {name: 'h_vc', value: '10.1.4.11', comment: 'version control'}
 
-  - {name: 'h_nb01', value: '10.1.5.11', comment: 'notebook 01'}
+  # n_clients
+  - {name: 'n_clients', value: '10.1.5.0/24', common: 'n_clients'}
+  - {name: 'h_nb', value: '10.1.5.11', comment: 'notebook'}
 
 freebsd_pf_filters_all:
   #-----------------------------------------------------------------------------
@@ -59,35 +69,61 @@ freebsd_pf_filters_all:
   # SSH
   #-----------------------------------------------------------------------------
 
-  # ssh from n_client
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_client'}, destinations: {'any'}, ports: {'22'}, comment: 'ssh from n_client'}
+  # ssh from n_base, n_clients
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_base', '$n_clients'}, destinations: {'any'}, ports: {'22'}, comment: 'ssh from n_base, n_clients'}
+
+  #-----------------------------------------------------------------------------
+  # MONITORING SERVER
+  #-----------------------------------------------------------------------------
+
+  # node_exporter from h_ms
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9100'}, comment: 'node_exporter from h_ms'}
+
+  # haproxy_exporter from h_ms
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9101'}, comment: 'haproxy_exporter from h_ms'}
+
+  # mysqld_exporter  from h_ms
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9104'}, comment: 'mysqld_exporter from h_ms'}
+
+  # blackbox_exporter from h_ms
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9115'}, comment: 'blackbox_exporter from h_ms'}
+
+  # monit_exporter from h_ms
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9388'}, comment: 'monit_exporter from h_ms'}
 
   #-----------------------------------------------------------------------------
   # DNS
   #-----------------------------------------------------------------------------
 
-  # dns to h_fw01, h_fw02
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$h_fw01', '$h_fw02'}, ports: {'53'}, comment: 'dns to h_fw01, h_fw02'}
+  # dns to h_fw, h_ns
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$h_fw', '$h_ns01' '$h_ns02'}, ports: {'53'}, comment: 'dns to h_fw, h_ns'}
 
   #-----------------------------------------------------------------------------
   # NTP
   #-----------------------------------------------------------------------------
 
-  # ntp to h_fw01, h_fw02
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_fw01', '$h_fw02'}, ports: {'53'}, comment: 'ntp to h_fw01, h_fw02'}
+  # ntp to h_fw
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_fw'}, ports: {'123'}, comment: 'ntp to h_fw'}
 
   #-----------------------------------------------------------------------------
-  # SMTP
+  # MAIL EXCHANGER
   #-----------------------------------------------------------------------------
 
   # smtp to h_mx
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp to h_mx'}
 
   #-----------------------------------------------------------------------------
-  # SQUID
+  # BACKUP SERVER
   #-----------------------------------------------------------------------------
 
-  # squid to h_fproxy
+  # https to h_bs
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_bs'}, ports: {'443'} , comment: 'https to h_bs'}
+
+  #-----------------------------------------------------------------------------
+  # FORWARD PROXY
+  #-----------------------------------------------------------------------------
+
+  # squid to h_fp
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_fp'}, ports: {'3128'} , comment: 'squid to h_fp'}
 
 #-------------------------------------------------------------------------------
@@ -124,26 +160,36 @@ nano_state: 'remove'
 #-------------------------------------------------------------------------------
 
 openbsd_pf_macros_all:
+  # n_base
   - {name: 'n_base', value: '10.1.1.0/24', comment: 'n_base'}
-  - {name: 'n_mgmt', value: '10.1.2.0/24', comment: 'n_mgmt'}
-  - {name: 'n_dmz', value: '10.1.3.0/24', comment: 'n_dmz'}
-  - {name: 'n_tools', value: '10.1.4.0/24', comment: 'n_tools'}
-  - {name: 'n_clients', value: '10.1.5.0/24', comment: 'n_clients'}
+  - {name: 'h_fw', value: '10.1.1.1', comment: 'firewall'}
+  - {name: 'h_fp01', value: '10.1.1.11', comment: 'forward proxy'}
 
+  # n_mgmt
+  - {name: 'n_mgmt', value: '10.1.2.0/24', common: 'n_mgmt'}
   - {name: 'h_fw01', value: '10.1.2.2', comment: 'firewall 01'}
   - {name: 'h_fw02', value: '10.1.2.3', comment: 'firewall 02'}
-  - {name: 'h_sw01', value: '10.1.2.4', comment: 'switch 01'}
-  - {name: 'h_vt01', value: '10.1.2.11', comment: 'virtualization 01'}
+  - {name: 'h_sw', value: '10.1.2.4', comment: 'switch'}
+  - {name: 'h_vt', value: '10.1.2.9', comment: 'virtualization'}
 
-  - {name: 'h_fp01', value: '10.1.3.15', comment: 'forward proxy 01'}
-  - {name: 'h_rp01', value: '10.1.3.17', comment: 'reverse proxy 01'}
-  - {name: 'h_ws01', value: '10.1.3.19', comment: 'web server 01'}
-  - {name: 'h_mx01', value: '10.1.3.21', comment: 'mail server 01'}
-  - {name: 'h_btc01', value: '10.1.3.23', comment: 'bitcoin server 01'}
+  # n_dmz
+  - {name: 'n_dmz', value: '10.1.3.0/24', common: 'n_dmz'}
+  - {name: 'h_ns01', value: '10.1.3.11', comment: 'name server 01'}
+  - {name: 'h_ns02', value: '10.1.3.13', comment: 'name server 01'}
+  - {name: 'h_rp', value: '10.1.3.15', comment: 'reverse proxy'}
+  - {name: 'h_ws', value: '10.1.3.17', comment: 'web server'}
+  - {name: 'h_mx', value: '10.1.3.19', comment: 'mail server'}
+  - {name: 'h_btc01', value: '10.1.3.21', comment: 'bitcoin server 01'}
+  - {name: 'h_btc02', value: '10.1.3.23', comment: 'bitcoin server 02'}
+  - {name: 'h_btc03', value: '10.1.3.25', comment: 'bitcoin server 03'}
 
-  - {name: 'h_code01', value: '10.1.4.11', comment: 'code host 01'}
+  # n_tools
+  - {name: 'n_tools', value: '10.1.4.0/24', common: 'n_tools'}
+  - {name: 'h_vc', value: '10.1.4.11', comment: 'version control'}
 
-  - {name: 'h_nb01', value: '10.1.5.11', comment: 'notebook 01'}
+  # n_clients
+  - {name: 'n_clients', value: '10.1.5.0/24', common: 'n_clients'}
+  - {name: 'h_nb', value: '10.1.5.11', comment: 'notebook'}
 
 openbsd_pf_filters_all:
 
@@ -163,35 +209,61 @@ openbsd_pf_filters_all:
   # SSH
   #-----------------------------------------------------------------------------
 
-  # ssh from n_client
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_client'}, destinations: {'any'}, ports: {'22'}, comment: 'ssh from n_client'}
+  # ssh from n_base, n_clients
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_base', '$n_clients'}, destinations: {'any'}, ports: {'22'}, comment: 'ssh from n_base, n_clients'}
+
+  #-----------------------------------------------------------------------------
+  # MONITORING SERVER
+  #-----------------------------------------------------------------------------
+
+  # node_exporter from h_ms
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9100'}, comment: 'node_exporter from h_ms'}
+
+  # haproxy_exporter from h_ms
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9101'}, comment: 'haproxy_exporter from h_ms'}
+
+  # mysqld_exporter  from h_ms
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9104'}, comment: 'mysqld_exporter from h_ms'}
+
+  # blackbox_exporter from h_ms
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9115'}, comment: 'blackbox_exporter from h_ms'}
+
+  # monit_exporter from h_ms
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9388'}, comment: 'monit_exporter from h_ms'}
 
   #-----------------------------------------------------------------------------
   # DNS
   #-----------------------------------------------------------------------------
 
-  # dns to h_fw01, h_fw02
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$h_fw01', '$h_fw02'}, ports: {'53'}, comment: 'dns to h_fw01, h_fw02'}
+  # dns to h_fw, h_ns
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$h_fw', '$h_ns01' '$h_ns02'}, ports: {'53'}, comment: 'dns to h_fw, h_ns'}
 
   #-----------------------------------------------------------------------------
   # NTP
   #-----------------------------------------------------------------------------
 
-  # ntp to h_fw01, h_fw02
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_fw01', '$h_fw02'}, ports: {'53'}, comment: 'ntp to h_fw01, h_fw02'}
+  # ntp to h_fw
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_fw'}, ports: {'123'}, comment: 'ntp to h_fw'}
 
   #-----------------------------------------------------------------------------
-  # SMTP
+  # MAIL EXCHANGER
   #-----------------------------------------------------------------------------
 
   # smtp to h_mx
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp to h_mx'}
 
   #-----------------------------------------------------------------------------
-  # SQUID
+  # BACKUP SERVER
   #-----------------------------------------------------------------------------
 
-  # squid to h_fproxy
+  # https to h_bs
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_bs'}, ports: {'443'} , comment: 'https to h_bs'}
+
+  #-----------------------------------------------------------------------------
+  # FORWARD PROXY
+  #-----------------------------------------------------------------------------
+
+  # squid to h_fp
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_fp'}, ports: {'3128'} , comment: 'squid to h_fp'}
 
 #-------------------------------------------------------------------------------
@@ -205,10 +277,7 @@ openntpd_monitor_mail_to_address: ['admin@example.com']
 openntpd_monitor_mail_state: 'true'
 
 openntpd_server:
-  - {address: 'ntp01.example.com', comment: 'h_ntp01'}
-  - {address: 'ntp02.example.com', comment: 'h_ntp02'}
-  - {address: 'ntp03.example.com', comment: 'h_ntp03'}
-  - {address: 'ntp04.example.com', comment: 'h_ntp04'}
+  - {address: 'ntp.example.com', comment: 'h_fw'}
 
 #-------------------------------------------------------------------------------
 # OPENSMTPD
@@ -235,10 +304,35 @@ openssh_password_authentication: 'no'
 resolver_domain: 'example.com'
 
 resolver_nameserver:
-  - {address: '10.1.2.11', comment: 'h_fw01'}
-  - {address: '10.1.2.13', comment: 'h_fw02'}
+  - {address: '10.1.1.1', comment: 'h_fw'}
 
 resolver_search: ['example.com']
+
+#-------------------------------------------------------------------------------
+# RESTIC
+#-------------------------------------------------------------------------------
+
+restic_cacert: '/etc/ssl/ca.example.com.crt'
+
+restic_keep_daily: 30
+
+restic_keep_hourly: 168
+
+restic_keep_monthly: 240
+
+restic_keep_weekly: 12
+
+restic_monitor_mail_to_address: ['admin@example.com']
+
+restic_monitor_mail_state: 'true'
+
+restic_monitor_prom_state: 'true'
+
+restic_password: 'NMhTJr,sftD-vA5uG!v.WE2+a9D87DeE'
+
+restic_server_address: 'backup.example.com'
+
+restic_server_password: '5EWf-AjpSQ_due9x4M-tRb_g5Qq5g_LN'
 
 #-------------------------------------------------------------------------------
 # SHELL
@@ -249,6 +343,8 @@ shell_ftp_proxy: 'http://fp.example.com:3128'
 shell_http_proxy: 'http://fp.example.com:3128'
 
 shell_https_proxy: 'http://fp.example.com:3128'
+
+shell_no_proxy: ['backup.example.com']
 
 #-------------------------------------------------------------------------------
 # SUDO

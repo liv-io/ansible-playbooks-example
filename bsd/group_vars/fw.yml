@@ -392,42 +392,56 @@ nsd_zone:
       - {name: '@', type: 'MX', priority: '10', value: 'mail.example.com.'}
       - {name: '@', type: 'A', value: '10.1.3.17'}
 
-      # n_base
+     # n_base
       - {name: 'dns01', type: 'A', value: '10.1.1.1'}
+      - {name: 'dns', type: 'CNAME', value: 'dns01'}
+      - {name: 'ntp', type: 'CNAME', value: 'dns01'}
 
-      # n_mgmt
+      - {name: 'fp01', type: 'A', value: '10.1.1.11'}
+      - {name: 'fp', type: 'CNAME', value: 'fp01'}
+
+     # n_mgmt
       - {name: 'fw01', type: 'A', value: '10.1.2.2'}
-      - {name: 'fw01', type: 'A', value: '10.1.2.3'}
+      - {name: 'fw02', type: 'A', value: '10.1.2.3'}
+
       - {name: 'sw01', type: 'A', value: '10.1.2.4'}
-      - {name: 'vt01', type: 'A', value: '10.1.2.11'}
+      - {name: 'sw', type: 'CNAME', value: 'sw01'}
+
+      - {name: 'vt01', type: 'A', value: '10.1.2.9'}
+      - {name: 'vt', type: 'CNAME', value: 'vt01'}
 
       # n_dmz
       - {name: 'ns01', type: 'A', value: '10.1.3.11'}
+
       - {name: 'ns02', type: 'A', value: '10.1.3.13'}
-      - {name: 'fp01', type: 'A', value: '10.1.3.15'}
-      - {name: 'rp01', type: 'A', value: '10.1.3.17'}
-      - {name: 'ws01', type: 'A', value: '10.1.3.19'}
-      - {name: 'mx01', type: 'A', value: '10.1.3.21'}
-      - {name: 'btc01', type: 'A', value: '10.1.3.23'}
 
-      # n_tools
-      - {name: 'code01', type: 'A', value: '10.1.4.11'}
-
-      # n_clients
-      - {name: 'nb01', type: 'A', value: '10.1.5.11'}
-
-      # CNAME
-      - {name: 'bitcoin', type: 'CNAME', value: 'btc01'}
-      - {name: 'btc', type: 'CNAME', value: 'btc01'}
-      - {name: 'dns', type: 'CNAME', value: 'dns01'}
-      - {name: 'ntp', type: 'CNAME', value: 'dns01'}
-      - {name: 'fp', type: 'CNAME', value: 'fp01'}
+      - {name: 'rp01', type: 'A', value: '10.1.3.15'}
       - {name: 'rp', type: 'CNAME', value: 'rp01'}
-      - {name: 'vt', type: 'CNAME', value: 'vt01'}
+
+      - {name: 'ws01', type: 'A', value: '10.1.3.17'}
+      - {name: 'ws', type: 'CNAME', value: 'ws01'}
       - {name: 'web', type: 'CNAME', value: 'ws01'}
       - {name: 'www', type: 'CNAME', value: 'ws01'}
       - {name: 'wiki', type: 'CNAME', value: 'ws01'}
+
+      - {name: 'mx01', type: 'A', value: '10.1.3.19'}
+      - {name: 'mx', type: 'CNAME', value: 'mx01'}
       - {name: 'mail', type: 'CNAME', value: 'mx01'}
+
+      - {name: 'btc01', type: 'A', value: '10.1.3.21'}
+
+      - {name: 'btc02', type: 'A', value: '10.1.3.23'}
+
+      - {name: 'btc03', type: 'A', value: '10.1.3.25'}
+
+      # n_tools
+      - {name: 'vc01', type: 'A', value: '10.1.4.11'}
+      - {name: 'vc', type: 'CNAME', value: 'vc01'}
+      - {name: 'git', type: 'CNAME', value: 'vc01'}
+
+      # n_clients
+      - {name: 'nb01', type: 'A', value: '10.1.5.11'}
+      - {name: 'nb', type: 'CNAME', value: 'nb01'}
       - {name: 'notebook', type: 'CNAME', value: 'nb01'}
 
   # n_base
@@ -443,6 +457,7 @@ nsd_zone:
     soa_ttl: '10m'
     records:
       - {name: '1', type: 'PTR', value: 'dns01.example.com.'}
+      - {name: '11', type: 'PTR', value: 'fp01.example.com.'}
 
   # n_mgmt
   - name: '2.1.10.in-addr.arpa'
@@ -459,7 +474,7 @@ nsd_zone:
       - {name: '2', type: 'PTR', value: 'fw01.example.com.'}
       - {name: '3', type: 'PTR', value: 'fw02.example.com.'}
       - {name: '4', type: 'PTR', value: 'sw01.example.com.'}
-      - {name: '11', type: 'PTR', value: 'vt01.example.com.'}
+      - {name: '9', type: 'PTR', value: 'vt01.example.com.'}
 
   # n_dmz
   - name: '3.1.10.in-addr.arpa'
@@ -475,11 +490,12 @@ nsd_zone:
     records:
       - {name: '11', type: 'PTR', value: 'ns01.example.com.'}
       - {name: '13', type: 'PTR', value: 'ns02.example.com.'}
-      - {name: '15', type: 'PTR', value: 'fp01.example.com.'}
-      - {name: '17', type: 'PTR', value: 'rp01.example.com.'}
-      - {name: '19', type: 'PTR', value: 'ws01.example.com.'}
-      - {name: '21', type: 'PTR', value: 'mx01.example.com.'}
-      - {name: '23', type: 'PTR', value: 'btc01.example.com.'}
+      - {name: '15', type: 'PTR', value: 'rp01.example.com.'}
+      - {name: '17', type: 'PTR', value: 'ws01.example.com.'}
+      - {name: '19', type: 'PTR', value: 'mx01.example.com.'}
+      - {name: '21', type: 'PTR', value: 'btc01.example.com.'}
+      - {name: '23', type: 'PTR', value: 'btc02.example.com.'}
+      - {name: '25', type: 'PTR', value: 'btc03.example.com.'}
 
   # n_tools
   - name: '4.1.10.in-addr.arpa'
@@ -493,7 +509,7 @@ nsd_zone:
     soa_expire: '5d'
     soa_ttl: '10m'
     records:
-      - {name: '11', type: 'PTR', value: 'code01.example.com.'}
+      - {name: '11', type: 'PTR', value: 'vc01.example.com.'}
 
   # n_clients
   - name: '5.1.10.in-addr.arpa'
