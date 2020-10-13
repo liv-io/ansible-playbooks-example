@@ -35,7 +35,7 @@ fp01.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 rp01.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 
 #-------------------------------------------------------------------------------
-# WEB
+# WEB SERVER
 #-------------------------------------------------------------------------------
 
 [ws]
