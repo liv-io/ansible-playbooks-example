@@ -15,7 +15,7 @@ nsd_zone:
     origin: 'example.com.'
     soa_mname: 'ns01.example.com'
     soa_rname: 'admin.example.com'
-    soa_serial: '2020072501'
+    soa_serial: '2020101401'
     soa_refresh: '4h'
     soa_retry: '30m'
     soa_expire: '2w'
@@ -23,6 +23,7 @@ nsd_zone:
     records:
       - {name: '@', type: 'NS', value: 'ns01.example.com.'}
       - {name: '@', type: 'NS', value: 'ns02.example.com.'}
+      - {name: '@', type: 'CAA', value: '0 issue "letsencrypt.org"'}
       - {name: '@', type: 'MX', value: 'mail.example.com.', priority: '10'}
       - {name: '@', type: 'TXT', value: '"v=spf1 mx ~all"'}
       - {name: '@', type: 'A', value: '1.2.3.3'}
@@ -43,7 +44,7 @@ nsd_zone:
     origin: '3.2.1.IN-ADDR.ARPA.'
     soa_mname: 'ns01.example.com'
     soa_rname: 'admin.example.com'
-    soa_serial: '2020072501'
+    soa_serial: '2020101401'
     soa_refresh: '4h'
     soa_retry: '30m'
     soa_expire: '2w'
