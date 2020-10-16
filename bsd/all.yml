@@ -62,7 +62,6 @@
     - role: colordiff
     - role: coreutils
     - role: cron
-    - role: denyhosts
     - role: file
     - role: findutils
     - role: freecolor
