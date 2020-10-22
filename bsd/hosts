@@ -28,13 +28,6 @@ ns02.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 fp01.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 
 #-------------------------------------------------------------------------------
-# REVERSE PROXY
-#-------------------------------------------------------------------------------
-
-[rp]
-rp01.example.com ansible_python_interpreter=/usr/local/bin/python3.7
-
-#-------------------------------------------------------------------------------
 # WEB SERVER
 #-------------------------------------------------------------------------------
 

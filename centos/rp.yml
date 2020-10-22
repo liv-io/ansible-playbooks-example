@@ -5,9 +5,11 @@
 #-------------------------------------------------------------------------------
 
 - hosts: rp
-  become: yes
+  become: 'yes'
   roles:
-    - role: nginx
+    - role: httpd
+    - role: mod_security
+    - role: mod_security_crs
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
