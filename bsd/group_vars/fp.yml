@@ -1,0 +1,139 @@
+---
+
+#-------------------------------------------------------------------------------
+# MONIT
+#-------------------------------------------------------------------------------
+
+monit_config_host:
+  - name: 'squid'
+    state: 'true'
+    comment: 'Squid'
+    config: |
+      check process squid with pidfile "/var/run/squid.pid"
+        start program = "/usr/sbin/rcctl start squid"
+        stop program  = "/usr/sbin/rcctl stop squid"
+        if failed host 127.0.0.1 port 3128 type tcp with timeout 10 seconds then alert
+        if 5 restarts within 5 cycles then timeout
+
+#-------------------------------------------------------------------------------
+# MOTD
+#-------------------------------------------------------------------------------
+
+motd_host_description: 'Forward Proxy'
+
+#-------------------------------------------------------------------------------
+# OPENBSD_PF
+#-------------------------------------------------------------------------------
+
+openbsd_pf_filters_host:
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_base', '$n_mgmt', '$n_dmz', '$n_tools', '$n_clients'}, destinations: {'any'}, ports: {'3128'}, comment: 'squid from n_base, n_mgmt, n_dmz, n_tools, n_clients'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'any'}, ports: {'80', '443'}, comment: 'http, https to any'}
+
+#-------------------------------------------------------------------------------
+# SQUID
+#-------------------------------------------------------------------------------
+
+squid_acl:
+  - {name: 'src_network_base', type: 'src', value: '10.1.1.0/24', comment: 'n_base'}
+  - {name: 'src_network_mgmt', type: 'src', value: '10.1.2.0/24', comment: 'n_mgmt'}
+  - {name: 'src_network_dmz', type: 'src', value: '10.1.3.0/24', comment: 'n_dmz'}
+  - {name: 'src_network_tools', type: 'src', value: '10.1.4.0/24', comment: 'n_tools'}
+  - {name: 'src_network_clients', type: 'src', value: '10.1.5.0/24', comment: 'n_clients'}
+
+squid_http_access:
+  # n_base
+  - {action: 'allow', source: 'src_network_base', protocol: 'http', destination: 'dst_domain_allowed', comment: 'n_base'}
+  - {action: 'allow', source: 'src_network_base', protocol: 'https SSL_ports', destination: 'dst_domain_allowed', comment: 'n_base'}
+  - {action: 'allow', source: 'src_network_base', protocol: 'http', destination: 'dst_network_allowed', comment: 'n_base'}
+  - {action: 'allow', source: 'src_network_base', protocol: 'https SSL_ports', destination: 'dst_network_allowed', comment: 'n_base'}
+
+  # n_mgmt
+  - {action: 'allow', source: 'src_network_mgmt', protocol: 'http', destination: 'dst_domain_allowed', comment: 'n_mgmt'}
+  - {action: 'allow', source: 'src_network_mgmt', protocol: 'https SSL_ports', destination: 'dst_domain_allowed', comment: 'n_mgmt'}
+  - {action: 'allow', source: 'src_network_mgmt', protocol: 'http', destination: 'dst_network_allowed', comment: 'n_mgmt'}
+  - {action: 'allow', source: 'src_network_mgmt', protocol: 'https SSL_ports', destination: 'dst_network_allowed', comment: 'n_mgmt'}
+
+  # n_dmz
+  - {action: 'allow', source: 'src_network_dmz', protocol: 'http', destination: 'dst_domain_allowed', comment: 'n_dmz'}
+  - {action: 'allow', source: 'src_network_dmz', protocol: 'https SSL_ports', destination: 'dst_domain_allowed', comment: 'n_dmz'}
+  - {action: 'allow', source: 'src_network_dmz', protocol: 'http', destination: 'dst_network_allowed', comment: 'n_dmz'}
+  - {action: 'allow', source: 'src_network_dmz', protocol: 'https SSL_ports', destination: 'dst_network_allowed', comment: 'n_dmz'}
+
+  # n_tools
+  - {action: 'allow', source: 'src_network_tools', protocol: 'http', destination: 'dst_domain_allowed', comment: 'n_tools'}
+  - {action: 'allow', source: 'src_network_tools', protocol: 'https SSL_ports', destination: 'dst_domain_allowed', comment: 'n_tools'}
+  - {action: 'allow', source: 'src_network_tools', protocol: 'http', destination: 'dst_network_allowed', comment: 'n_tools'}
+  - {action: 'allow', source: 'src_network_tools', protocol: 'https SSL_ports', destination: 'dst_network_allowed', comment: 'n_tools'}
+
+  # n_clients
+  - {action: 'allow', source: 'src_network_clients', protocol: 'http', destination: 'dst_domain_allowed', comment: 'n_clients'}
+  - {action: 'allow', source: 'src_network_clients', protocol: 'https SSL_ports', destination: 'dst_domain_allowed', comment: 'n_clients'}
+  - {action: 'allow', source: 'src_network_clients', protocol: 'http', destination: 'dst_network_allowed', comment: 'n_clients'}
+  - {action: 'allow', source: 'src_network_clients', protocol: 'https SSL_ports', destination: 'dst_network_allowed', comment: 'n_clients'}
+
+squid_domain_allowed:
+  # FreeBSD
+  - {name: 'pkg.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'pkgmir.pkg.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'pkg0.bme.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'pkg0.nyi.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'pkg0.isc.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'update.FreeBSD.org', comment: 'FreeBSD: Updates'}
+  - {name: 'update1.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'update2.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'update3.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'update4.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'update5.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'update6.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'ftp.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'ec2-eu-west-1.portsnap.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'sourcefire.portsnap.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'your-org.portsnap.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'ec2-ap-southeast-2.portsnap.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'ec2-ap-northeast-1.portsnap.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'ec2-sa-east-1.portsnap.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'distcache.FreeBSD.org', comment: 'FreeBSD: Updates'}
+
+  # OpenBSD
+  - {name: 'ftp.openbsd.org', comment: 'OpenBSD: Updates'}
+  - {name: 'ftp.eu.openbsd.org', comment: 'OpenBSD: Updates'}
+  - {name: 'ftp2.eu.openbsd.org', comment: 'OpenBSD: Updates'}
+  - {name: 'cdn.openbsd.org', comment: 'OpenBSD: Updates'}
+  - {name: 'firmware.openbsd.org', comment: 'OpenBSD: Updates'}
+  - {name: 'stable.mtier.org', comment: 'OpenBSD: mtier Packages'}
+
+  # CentOS
+  - {name: 'mirror.centos.org', comment: 'CentOS: Updates'}
+  - {name: 'vault.centos.org', comment: 'CentOS: Updates'}
+  - {name: 'mirrors.kernel.org', comment: 'CentOS: Updates'}
+  - {name: 'mirrors.edge.kernel.org', comment: 'CentOS: Updates'}
+
+  # Debian
+  - {name: 'security.debian.org', comment: 'Debian updates'}
+  - {name: 'security-cdn.debian.org', comment: 'Debian updates'}
+  - {name: 'cdn-fastly.deb.debian.org', comment: 'Debian updates'}
+  - {name: 'ftp.ch.debian.org', comment: 'Debian updates'}
+
+  # Proxmox
+  - {name: 'download.proxmox.com', comment: 'Proxmox updates'}
+  - {name: 'enterprise.proxmox.com', comment: 'Proxmox updates'}
+
+  # example.com
+  - {name: '.example.com', comment: 'example.com'}
+
+  # Bitcoin
+  - {name: 'bitcoin.org', comment: 'Bitcoin releases'}
+
+  # LetsEncrypt
+  - {name: '.api.letsencrypt.org', comment: 'LetsEncrypt - Certificate Renewal'}
+  - {name: 'ocsp.int-x3.letsencrypt.org', comment: 'LetsEncrypt - OCSP'}
+  - {name: 'ocsp.int-x3.letsencrypt.org.edgesuite.net', comment: 'LetsEncrypt - OCSP'}
+
+  # Suricata
+  - {name: 'www.openinfosecfoundation.org', comment: 'Suricata Archive'}
+  - {name: 'openinfosecfoundation.org', comment: 'Suricata Traffic ID ruleset (oisf/trafficid)'}
+  - {name: 'rules.emergingthreats.net', comment: 'Emerging Threats Open Ruleset (et/open)'}
+
+  # Grafana
+  - {name: 'grafana.com', comment: 'Grafana Plugins'}
+  - {name: 'packages.grafana.com', comment: 'Grafana Packages'}
