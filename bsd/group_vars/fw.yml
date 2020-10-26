@@ -457,6 +457,9 @@ nsd_zone:
     soa_expire: '5d'
     soa_ttl: '10m'
     records:
+      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
+      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
+
       - {name: '1', type: 'PTR', value: 'dns01.example.com.'}
       - {name: '11', type: 'PTR', value: 'fp01.example.com.'}
 
@@ -472,6 +475,9 @@ nsd_zone:
     soa_expire: '5d'
     soa_ttl: '10m'
     records:
+      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
+      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
+
       - {name: '2', type: 'PTR', value: 'fw01.example.com.'}
       - {name: '3', type: 'PTR', value: 'fw02.example.com.'}
       - {name: '4', type: 'PTR', value: 'sw01.example.com.'}
@@ -489,6 +495,9 @@ nsd_zone:
     soa_expire: '5d'
     soa_ttl: '10m'
     records:
+      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
+      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
+
       - {name: '11', type: 'PTR', value: 'ns01.example.com.'}
       - {name: '13', type: 'PTR', value: 'ns02.example.com.'}
       - {name: '15', type: 'PTR', value: 'rp01.example.com.'}
@@ -510,6 +519,9 @@ nsd_zone:
     soa_expire: '5d'
     soa_ttl: '10m'
     records:
+      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
+      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
+
       - {name: '11', type: 'PTR', value: 'vc01.example.com.'}
 
   # n_clients
@@ -524,6 +536,9 @@ nsd_zone:
     soa_expire: '5d'
     soa_ttl: '10m'
     records:
+      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
+      - {name: '@', type: 'NS', value: 'ns01.example.com.'}
+
       - {name: '11', type: 'PTR', value: 'nb01.example.com.'}
 
 #-------------------------------------------------------------------------------
