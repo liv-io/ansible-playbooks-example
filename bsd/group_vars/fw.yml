@@ -586,6 +586,9 @@ unbound_interface:
   - {address: '10.1.4.1', port: '53', comment: 'n_tools'}
   - {address: '10.1.5.1', port: '53', comment: 'n_clients'}
 
+unbound_local_zone:
+  - {zone: '10.in-addr.arpa.', type: 'nodefault', comment: 'Enable reverse lookup for 10.0.0.0/8'}
+
 unbound_stub_zone:
   - {name: 'example.com', address: '127.0.0.1', port: '53', comment: 'example.com zone'}
   - {name: '1.1.10.in-addr.arpa', address: '127.0.0.1', port: '53', comment: 'n_base'}
