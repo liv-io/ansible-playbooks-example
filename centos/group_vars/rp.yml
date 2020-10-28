@@ -48,6 +48,14 @@ httpd_config:
 mod_security_sec_rule_engine: 'enable'
 
 #-------------------------------------------------------------------------------
+# MOD_SECURITY_CRS3
+#-------------------------------------------------------------------------------
+
+mod_security_crs3_sec_default_action:
+  - "phase:1,log,auditlog,redirect:'http://%{request_headers.host}/',tag:'Host: %{request_headers.host}'"
+  - "phase:2,log,auditlog,redirect:'http://%{request_headers.host}/',tag:'Host: %{request_headers.host}'"
+
+#-------------------------------------------------------------------------------
 # MONIT
 #-------------------------------------------------------------------------------
 

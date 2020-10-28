@@ -9,7 +9,7 @@
   roles:
     - role: httpd
     - role: mod_security
-    - role: mod_security_crs
+    - role: mod_security_crs3
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
