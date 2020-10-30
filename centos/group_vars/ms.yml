@@ -38,7 +38,7 @@ alertmanager_config:
     config: |
       - name: 'user'
         email_configs:
-        - to: 'l@example.com'
+        - to: 'user@example.com'
 
 #-------------------------------------------------------------------------------
 # GRAFANA
