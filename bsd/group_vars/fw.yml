@@ -579,6 +579,9 @@ unbound_access_control:
 
 unbound_do_not_query_localhost: 'no'
 
+unbound_include:
+  - {file: '/data/adblock/adblock.conf', comment: 'Unbound AdBlock List'}
+
 unbound_interface:
   - {address: '10.1.1.1', port: '53', comment: 'n_base'}
   - {address: '10.1.2.1', port: '53', comment: 'n_mgmt'}

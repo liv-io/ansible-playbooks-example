@@ -11,6 +11,7 @@
     - role: nsd
     - role: openntpd
     - role: unbound
+    - role: unbound_adblock
     - role: sysctl
     - role: openbsd_pf
   environment:
