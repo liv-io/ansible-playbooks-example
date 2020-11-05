@@ -75,6 +75,7 @@ squid_domain_allowed:
   # FreeBSD
   - {name: 'pkg.freebsd.org', comment: 'FreeBSD: Updates'}
   - {name: 'pkgmir.pkg.freebsd.org', comment: 'FreeBSD: Updates'}
+  - {name: 'pkgmir.geo.freebsd.org', comment: 'FreeBSD: Updates'}
   - {name: 'pkg0.bme.freebsd.org', comment: 'FreeBSD: Updates'}
   - {name: 'pkg0.nyi.freebsd.org', comment: 'FreeBSD: Updates'}
   - {name: 'pkg0.isc.freebsd.org', comment: 'FreeBSD: Updates'}
