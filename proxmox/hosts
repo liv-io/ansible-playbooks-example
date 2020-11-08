@@ -5,8 +5,8 @@
 # Notice: 'all' is a preexisting built-in group and matches all managed nodes.
 
 #-------------------------------------------------------------------------------
-# VIRT
+# VIRTUALIZATION
 #-------------------------------------------------------------------------------
 
-[virt]
-virt[01:03].example.com
+[vt]
+vt[01:03].example.com

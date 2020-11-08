@@ -4,9 +4,9 @@
 # APT
 #-------------------------------------------------------------------------------
 
-apt_http_proxy: 'http://proxy.example.com:3128'
+apt_http_proxy: 'http://fp.example.com:3128'
 
-apt_https_proxy: 'http://proxy.example.com:3128'
+apt_https_proxy: 'http://fp.example.com:3128'
 
 #-------------------------------------------------------------------------------
 # BASH
@@ -89,11 +89,11 @@ resolver_search: ['example.com']
 # SHELL
 #-------------------------------------------------------------------------------
 
-shell_ftp_proxy: 'http://proxy.example.com:3128'
+shell_ftp_proxy: 'http://fp.example.com:3128'
 
-shell_http_proxy: 'http://proxy.example.com:3128'
+shell_http_proxy: 'http://fp.example.com:3128'
 
-shell_https_proxy: 'http://proxy.example.com:3128'
+shell_https_proxy: 'http://fp.example.com:3128'
 
 #-------------------------------------------------------------------------------
 # SUDO

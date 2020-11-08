@@ -11,14 +11,14 @@
       group_by:
         key: "{{ansible_distribution}}"
 
-- hosts: '9'
+- hosts: '10'
   become: 'yes'
   gather_facts: False
   roles:
   environment:
-    http_proxy: 'http://forward.example.com:3128'
-    https_proxy: 'http://forward.example.com:3128'
-    ftp_proxy: 'http://forward.example.com:3128'
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
 
 # Pre
 - hosts: all
@@ -29,9 +29,9 @@
     - role: user
     - role: apt
   environment:
-    http_proxy: 'http://forward.example.com:3128'
-    https_proxy: 'http://forward.example.com:3128'
-    ftp_proxy: 'http://forward.example.com:3128'
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
 
 # Main
 - hosts: all
@@ -53,6 +53,7 @@
     - role: monit
     - role: motd
     - role: net_tools
+    - role: node_exporter
     - role: openssh
     - role: openvswitch_switch
     - role: pve
@@ -68,15 +69,15 @@
     - role: vim
     - role: zfs
   environment:
-    http_proxy: 'http://forward.example.com:3128'
-    https_proxy: 'http://forward.example.com:3128'
-    ftp_proxy: 'http://forward.example.com:3128'
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
 
 # Post
 - hosts: all
   become: yes
   roles:
   environment:
-    http_proxy: 'http://forward.example.com:3128'
-    https_proxy: 'http://forward.example.com:3128'
-    ftp_proxy: 'http://forward.example.com:3128'
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
