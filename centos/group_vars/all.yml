@@ -20,7 +20,7 @@ chrony_server:
 # DNF
 #-------------------------------------------------------------------------------
 
-dnf_proxy: 'http://proxy.example.com:3128'
+dnf_proxy: 'http://fp.example.com:3128'
 
 #-------------------------------------------------------------------------------
 # GROUP
@@ -112,11 +112,11 @@ resolver_search: ['example.com']
 # SHELL
 #-------------------------------------------------------------------------------
 
-shell_ftp_proxy: 'http://proxy.example.com:3128'
+shell_ftp_proxy: 'http://fp.example.com:3128'
 
-shell_http_proxy: 'http://proxy.example.com:3128'
+shell_http_proxy: 'http://fp.example.com:3128'
 
-shell_https_proxy: 'http://proxy.example.com:3128'
+shell_https_proxy: 'http://fp.example.com:3128'
 
 #-------------------------------------------------------------------------------
 # SUDO
@@ -172,4 +172,4 @@ user_config_all:
 # YUM
 #-------------------------------------------------------------------------------
 
-yum_proxy: 'http://proxy.example.com:3128'
+yum_proxy: 'http://fp.example.com:3128'

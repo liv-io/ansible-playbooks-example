@@ -18,9 +18,9 @@
     - role: unzip
     - role: zip
   environment:
-    http_proxy: 'http://proxy.example.com:3128'
-    https_proxy: 'http://proxy.example.com:3128'
-    ftp_proxy: 'http://proxy.example.com:3128'
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
 
 # Main
 - hosts: all
@@ -68,9 +68,9 @@
     - role: vim
     - role: wget
   environment:
-    http_proxy: 'http://proxy.example.com:3128'
-    https_proxy: 'http://proxy.example.com:3128'
-    ftp_proxy: 'http://proxy.example.com:3128'
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
 
 # Post
 - hosts: all
@@ -79,6 +79,6 @@
     - role: iptables
     - role: nftables
   environment:
-    http_proxy: 'http://proxy.example.com:3128'
-    https_proxy: 'http://proxy.example.com:3128'
-    ftp_proxy: 'http://proxy.example.com:3128'
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
