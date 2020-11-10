@@ -8,7 +8,6 @@
   become: 'yes'
   roles:
     - role: prometheus
-    - role: grafana_upstream
     - role: nginx
   environment:
     http_proxy: 'http://fp.example.com:3128'
