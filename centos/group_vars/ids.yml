@@ -7,6 +7,18 @@
 motd_host_description: 'Intrusion Detection System'
 
 #-------------------------------------------------------------------------------
+# RSYSLOG
+#-------------------------------------------------------------------------------
+
+rsyslog_config_host:
+  - name: "suricata"
+    comment: "Suricata"
+    section: "input"
+    config:
+      - {type: imfile, File: '/var/log/suricata/fast.log', Tag: suricata, Severity: info, Facility: local6}
+      - {type: imfile, File: '/var/log/suricata/fast.log', Tag: suricata, Severity: info, Facility: local6}
+
+#-------------------------------------------------------------------------------
 # SELINUX
 #-------------------------------------------------------------------------------
 

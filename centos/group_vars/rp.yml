@@ -85,3 +85,15 @@ nftables_filter_host:
   - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'tcp', ports: {'80', '443'}, comment: 'http, https from any'}
   - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.0.0.0/8'}, ports: {'80', '443'}, comment: 'http, https to internal-networks'}
   - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', ports: {'443'}, comment: 'https to any (letsencrypt)'}
+
+#-------------------------------------------------------------------------------
+# RSYSLOG
+#-------------------------------------------------------------------------------
+
+rsyslog_config_host:
+  - name: "httpd"
+    comment: "Apache HTTPD"
+    section: "input"
+    config:
+      - {type: imfile, File: '/var/log/httpd/*access_log', Tag: httpd, Severity: info, Facility: local6}
+      - {type: imfile, File: '/var/log/httpd/*error_log', Tag: httpd, Severity: info, Facility: local6}
