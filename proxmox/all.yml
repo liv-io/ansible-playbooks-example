@@ -59,6 +59,7 @@
     - role: pve
     - role: resolver
     - role: root
+    - role: rsyslog
     - role: sudo
     - role: sysctl
     - role: sysstat

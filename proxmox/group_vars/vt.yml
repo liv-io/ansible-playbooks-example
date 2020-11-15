@@ -1,6 +1,18 @@
 ---
 
 #-------------------------------------------------------------------------------
+# RSYSLOG
+#-------------------------------------------------------------------------------
+
+rsyslog_config_host:
+  - name: nginx
+    comment: Nginx
+    section: input
+    config:
+      - {type: imfile, File: /var/log/nginx/*_access.log, Tag: nginx, Severity: info, Facility: local6}
+      - {type: imfile, File: /var/log/nginx/*_error.log, Tag: nginx, Severity: info, Facility: local6}
+
+#-------------------------------------------------------------------------------
 # ZFS
 #-------------------------------------------------------------------------------
 
