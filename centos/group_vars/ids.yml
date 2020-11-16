@@ -51,3 +51,8 @@ suricata_config:
       - {action: 'alert', protocol: 'tls', srcaddr: '$HOME_NET', srcport: 'any', direction: '->', dstaddr: '$EXTERNAL_NET', dstport: 'any', msg: 'LIV APT Package Manager Activity (URL)', options: 'flow:established,to_server; tls_sni; content:"debian.org"; isdataat:!1,relative;', classtype: 'policy-violation', reference: {'url,doc.liv.io/suricata/5000016', 'url,liv.io'}, metadata: 'created 20201008, updated 20201008', sid: '5000016', rev: '1'}
 
 suricata_home_net: '[10.0.0.0/8]'
+
+suricata_ruleset:
+  - {state: 'enable', name: 'et/open'}
+  - {state: 'enable', name: 'oisf/trafficid'}
+  - {state: 'install', name: 'hunting', link: 'https://github.com/travisbgreen/hunting-rules/blob/master/hunting.rules'}
