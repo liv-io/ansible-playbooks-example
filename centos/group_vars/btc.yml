@@ -25,3 +25,19 @@ nftables_filter_host:
 #-------------------------------------------------------------------------------
 
 selinux_mode: 'permissive'
+
+#-------------------------------------------------------------------------------
+# SYSCTL
+#-------------------------------------------------------------------------------
+
+sysctl_config_host:
+  - name: 'swap'
+    order: '50'
+    state: 'true'
+    sysctl:
+      - key: 'vm.swappiness'
+        value: '10'
+        comment: 'swappiness for database workload'
+      - key: 'vm.vfs_cache_pressure'
+        value: '50'
+        comment: 'tendency to reclaim memory used by VFS caches'
