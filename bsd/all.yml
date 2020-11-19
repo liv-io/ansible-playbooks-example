@@ -32,6 +32,7 @@
   become: yes
   gather_facts: False
   roles:
+    - role: openbsd_syslogd
     - role: openbsd_syspatch
     - role: openbsd_rc
     - role: openbsd_periodic
