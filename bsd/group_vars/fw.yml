@@ -204,6 +204,18 @@ openbsd_pf_filters_group:
   - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fw'}, ports: {'123'}, comment: 'ntp from internal-networks to h_fw'}
 
   #-----------------------------------------------------------------------------
+  # H_LS
+  #-----------------------------------------------------------------------------
+
+  # syslog from internal-networks to h_ls
+  - {action: 'pass', direction: 'in', interfaces: {'$i_base', '$i_mgmt', '$i_dmz', '$i_tools'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ls'}, ports: {'514'}, comment: 'syslog from internal-networks to h_ls'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_base', '$i_mgmt', '$i_dmz', '$i_tools'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ls'}, ports: {'514'}, comment: 'syslog from internal-networks to h_ls'}
+
+  # http, https from n_clients, n_wifi to h_ls
+  - {action: 'pass', direction: 'in', interfaces: {'$i_base', '$i_clients', '$i_wifi'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ls'}, ports: {'80', '443'}, comment: 'http, https from n_clients, n_wifi to h_ls'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_base', '$i_clients', '$i_wifi'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ls'}, ports: {'80', '443'}, comment: 'http, https from n_clients, n_wifi to h_ls'}
+
+  #-----------------------------------------------------------------------------
   # H_MX
   #-----------------------------------------------------------------------------
 

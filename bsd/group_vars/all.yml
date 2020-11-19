@@ -120,6 +120,13 @@ freebsd_pf_filters_all:
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_bs'}, ports: {'443'} , comment: 'https to h_bs'}
 
   #-----------------------------------------------------------------------------
+  # LOG SERVER
+  #-----------------------------------------------------------------------------
+
+  # syslog to h_ls
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$h_ls'}, ports: {'514'} , comment: 'syslog to h_ls'}
+
+  #-----------------------------------------------------------------------------
   # FORWARD PROXY
   #-----------------------------------------------------------------------------
 
@@ -273,6 +280,13 @@ openbsd_pf_filters_all:
 
   # https to h_bs
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_bs'}, ports: {'443'} , comment: 'https to h_bs'}
+
+  #-----------------------------------------------------------------------------
+  # LOG SERVER
+  #-----------------------------------------------------------------------------
+
+  # syslog to h_ls
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_ls'}, ports: {'514'} , comment: 'syslog to h_ls'}
 
   #-----------------------------------------------------------------------------
   # FORWARD PROXY
