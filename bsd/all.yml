@@ -15,6 +15,7 @@
   become: yes
   gather_facts: False
   roles:
+    - role: freebsd_syslogd
     - role: freebsd_pkg
     - role: freebsd_rc
     - role: freebsd_periodic
