@@ -217,7 +217,7 @@ prometheus_alerting_rules: |
             description: "Filesystem '/' usage: {% raw %}{{ $value }}{% endraw %}%"
 
         - alert: "Filesystem 'swap' threshold exceeded"
-          expr: ( (sum by (instance) (node_memory_SwapTotal_bytes)) - (sum by (instance) (node_memory_SwapFree_bytes)) ) / (sum by (instance) (node_memory_SwapTotal_bytes)) * 100 > 30
+          expr: ( (sum by (instance) (node_memory_SwapTotal_bytes)) - (sum by (instance) (node_memory_SwapFree_bytes)) ) / (sum by (instance) (node_memory_SwapTotal_bytes)) * 100 > 70
           for: 30s
           labels:
             severity: warning
