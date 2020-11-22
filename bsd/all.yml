@@ -71,6 +71,7 @@
     - role: gnu_grep
     - role: gnu_netcat
     - role: gnu_sed
+    - role: gnu_tar
     - role: gnu_watch
     - role: gnu_zip
     - role: hosts
