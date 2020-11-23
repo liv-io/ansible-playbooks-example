@@ -53,6 +53,7 @@
     - role: net_tools
     - role: network_manager
     - role: nload
+    - role: node_exporter
     - role: openssh
     - role: resolver
     - role: root
