@@ -48,6 +48,7 @@
     - role: less
     - role: locale
     - role: lsof
+    - role: monit
     - role: motd
     - role: net_tools
     - role: network_manager

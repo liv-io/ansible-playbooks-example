@@ -10,6 +10,8 @@ bash_tmout: 'disable'
 # CHRONY
 #-------------------------------------------------------------------------------
 
+chrony_monitor_monit_state: 'true'
+
 chrony_server:
   - {address: 'ntp01.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp01'}
   - {address: 'ntp02.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp02'}
@@ -115,11 +117,15 @@ opensmtpd_accept_all: |
   # Accept: Relay
   accept for any relay via smtp://mail.example.com
 
+opensmtpd_monitor_monit_state: 'true'
+
 #-------------------------------------------------------------------------------
 # OPENSSH
 #-------------------------------------------------------------------------------
 
 openssh_allow_users: ['example']
+
+openssh_monitor_monit_state: 'true'
 
 openssh_password_authentication: 'no'
 
