@@ -74,6 +74,16 @@ iptables_filter_all:
   - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', ports: {'10.0.0.18'}, comment: 'squid to h_proxy'}
 
 #-------------------------------------------------------------------------------
+# MONIT
+#-------------------------------------------------------------------------------
+
+monit_mail_server:
+  - {address: '127.0.0.1', port: '25'}
+
+monit_mail_to:
+  - {address: 'user@example.com', filter: 'not on', events: ['instance', 'action']}
+
+#-------------------------------------------------------------------------------
 # NANO
 #-------------------------------------------------------------------------------
 
@@ -181,6 +191,32 @@ sudo_config_all:
     config: |
       # example
       example ALL=(root) NOPASSWD: ALL
+
+#-------------------------------------------------------------------------------
+# RESTIC
+#-------------------------------------------------------------------------------
+
+restic_keep_daily: 30
+
+restic_keep_hourly: 168
+
+restic_keep_monthly: 240
+
+restic_keep_weekly: 12
+
+restic_monitor_mail_from_address: 'root@example.com'
+
+restic_monitor_mail_to_address: ['user@example.com']
+
+restic_monitor_mail_state: 'true'
+
+restic_monitor_prom_state: 'true'
+
+restic_password: '7rMu,ntxrEfd+RFAQdcJh+US.Cu2XQF.'
+
+restic_server_address: 'bs.example.com'
+
+restic_server_password: '8cgT97AiwCVfw5G4kt_ANHGBbrvFjrRP'
 
 #-------------------------------------------------------------------------------
 # ROOT

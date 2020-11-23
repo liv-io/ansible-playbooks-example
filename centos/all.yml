@@ -48,7 +48,6 @@
     - role: less
     - role: locale
     - role: lsof
-    - role: monit
     - role: motd
     - role: net_tools
     - role: network_manager
@@ -56,6 +55,7 @@
     - role: node_exporter
     - role: openssh
     - role: resolver
+    - role: restic
     - role: root
     - role: rsync
     - role: rsyslog
@@ -79,6 +79,7 @@
 - hosts: all
   become: yes
   roles:
+    - role: monit
     - role: iptables
     - role: nftables
   environment:
