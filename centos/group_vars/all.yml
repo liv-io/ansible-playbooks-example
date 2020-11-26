@@ -49,6 +49,8 @@ httpd_log_format_combined_ssl: 'remote_addr:%h %l remote_user:%u %t request:\"%r
 
 httpd_log_format_common: 'remote_addr:%h %l remote_user:%u %t request:\"%r\" status:%>s %b'
 
+httpd_monitor_monit_state: 'true'
+
 #-------------------------------------------------------------------------------
 # IPTABLES
 #-------------------------------------------------------------------------------
@@ -122,6 +124,8 @@ nginx_log_format_main_ssl: |-
   'status:$status $body_bytes_sent "$http_referer" '
   '"$http_user_agent" http_x_forwarded_for:"$http_x_forwarded_for" '
   '$ssl_protocol/$ssl_cipher '
+
+nginx_monitor_monit_state: 'true'
 
 #-------------------------------------------------------------------------------
 # NODE_EXPORTER
