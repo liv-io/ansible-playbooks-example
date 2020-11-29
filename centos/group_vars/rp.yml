@@ -56,22 +56,6 @@ mod_security_crs3_sec_default_action:
   - "phase:2,log,auditlog,redirect:'http://%{request_headers.host}/',tag:'Host: %{request_headers.host}'"
 
 #-------------------------------------------------------------------------------
-# MONIT
-#-------------------------------------------------------------------------------
-
-monit_config_host:
-  - name: 'httpd'
-    state: 'true'
-    comment: 'httpd'
-    config: |
-      check process httpd with pidfile "/run/httpd/httpd.pid"
-        start program = "/sbin/service httpd start"
-        stop program = "/sbin/service httpd stop"
-        if failed host 127.0.0.1 port 80 type tcp with timeout 10 seconds then alert
-        if failed host 127.0.0.1 port 443 type tcp with timeout 10 seconds then alert
-        if 5 restarts within 5 cycles then unmonitor
-
-#-------------------------------------------------------------------------------
 # MOTD
 #-------------------------------------------------------------------------------
 
