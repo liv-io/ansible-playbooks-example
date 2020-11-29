@@ -332,42 +332,6 @@ openbsd_pf_filters_group:
 #-------------------------------------------------------------------------------
 
 monit_config_group:
-  - name: 'openntpd'
-    state: 'true'
-    comment: 'openntpd'
-    config: |
-      check process ntpd matching "/usr/sbin/ntpd.*"
-        start program = "/usr/sbin/rcctl start ntpd"
-        stop program  = "/usr/sbin/rcctl stop ntpd"
-
-  - name: 'openssh'
-    state: 'true'
-    comment: 'openssh'
-    config: |
-      check process openssh with pidfile "/var/run/sshd.pid"
-        start program = "/usr/sbin/rcctl start sshd"
-        stop program = "/usr/sbin/rcctl stop sshd"
-        if failed host 127.0.0.1 port 22 type tcp protocol ssh with timeout 10 seconds then alert
-        if 5 restarts within 5 cycles then unmonitor
-
-  - name: 'nsd'
-    state: 'true'
-    comment: 'nsd'
-    config: |
-      check process nsd with pidfile "/var/nsd/run/nsd.pid"
-        start program = "/usr/sbin/rcctl start nsd"
-        stop program = "/usr/sbin/rcctl stop nsd"
-        if 5 restarts within 5 cycles then unmonitor
-
-  - name: 'unbound'
-    state: 'true'
-    comment: 'unbound'
-    config: |
-      check process unbound matching "unbound -c /var/unbound/etc/unbound.conf"
-        start program = "/usr/sbin/rcctl start unbound"
-        stop program = "/usr/sbin/rcctl stop unbound"
-        if 5 restarts within 5 cycles then unmonitor
-
   - name: 'dhcpd'
     state: 'true'
     comment: 'dhcpd'
@@ -386,6 +350,8 @@ motd_host_description: 'Firewall'
 #-------------------------------------------------------------------------------
 # NSD
 #-------------------------------------------------------------------------------
+
+nsd_monitor_monit_state: 'true'
 
 nsd_zone:
   - name: 'example.com'
@@ -611,6 +577,8 @@ unbound_interface:
 
 unbound_local_zone:
   - {zone: '10.in-addr.arpa.', type: 'nodefault', comment: 'Enable reverse lookup for 10.0.0.0/8'}
+
+unbound_monitor_monit_state: 'true'
 
 unbound_stub_zone:
   - {name: 'example.com', address: '127.0.0.1', port: '53', comment: 'example.com zone'}

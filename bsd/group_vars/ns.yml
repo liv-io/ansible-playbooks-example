@@ -7,6 +7,8 @@
 nsd_interface:
   - {address: '0.0.0.0', port: '53', comment: 'Any'}
 
+nsd_monitor_monit_state: 'true'
+
 nsd_zone:
   - name: 'example.com'
     state: 'true'
@@ -54,22 +56,6 @@ nsd_zone:
       - {name: '@', type: 'NS', value: 'ns01.example.com.'}
 
       - {name: '3', type: 'PTR', value: 'mail.example.com.'}
-
-#-------------------------------------------------------------------------------
-# MONIT
-#-------------------------------------------------------------------------------
-
-monit_config_host:
-  - name: 'nsd'
-    state: 'true'
-    comment: 'Name Server Daemon'
-    config: |
-      check process nsd with pidfile "/var/nsd/run/nsd.pid"
-        start program = "/usr/sbin/rcctl start nsd"
-        stop program  = "/usr/sbin/rcctl stop nsd"
-        if failed host 127.0.0.1 port 53 type tcp protocol dns with timeout 10 seconds then alert
-        if failed host 127.0.0.1 port 53 type udp protocol dns with timeout 10 seconds then alert
-        if 5 restarts within 5 cycles then timeout
 
 #-------------------------------------------------------------------------------
 # OPENBSD_PF

@@ -1,29 +1,6 @@
 ---
 
 #-------------------------------------------------------------------------------
-# MONIT
-#-------------------------------------------------------------------------------
-
-monit_config_all:
-  - name: 'openntpd'
-    state: 'true'
-    comment: 'openntpd'
-    config: |
-      check process ntpd matching "/usr/local/sbin/ntpd.*"
-        start program = "/usr/sbin/service openntpd start"
-        stop program  = "/usr/sbin/service openntpd stop"
-
-  - name: 'openssh'
-    state: 'true'
-    comment: 'openssh'
-    config: |
-      check process openssh with pidfile "/var/run/sshd.pid"
-        start program = "/usr/sbin/service sshd start"
-        stop program  = "/usr/sbin/service sshd stop"
-        if failed host 127.0.0.1 port 22 type tcp protocol ssh with timeout 10 seconds then alert
-        if 5 restarts within 5 cycles then unmonitor
-
-#-------------------------------------------------------------------------------
 # ROOT
 #-------------------------------------------------------------------------------
 

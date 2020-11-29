@@ -7,6 +7,12 @@
 bash_tmout: 'disable'
 
 #-------------------------------------------------------------------------------
+# CRON
+#-------------------------------------------------------------------------------
+
+cron_monitor_monit_state: 'true'
+
+#-------------------------------------------------------------------------------
 # FREEBSD_PERIODIC
 #-------------------------------------------------------------------------------
 
@@ -134,6 +140,12 @@ freebsd_pf_filters_all:
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_fp'}, ports: {'3128'} , comment: 'squid to h_fp'}
 
 #-------------------------------------------------------------------------------
+# FREEBSD_SYSLOGD
+#-------------------------------------------------------------------------------
+
+freebsd_syslogd_monitor_monit_state: 'true'
+
+#-------------------------------------------------------------------------------
 # GROUP
 #-------------------------------------------------------------------------------
 
@@ -176,6 +188,14 @@ nginx_log_format_main_ssl: |-
   'status:$status $body_bytes_sent "$http_referer" '
   '"$http_user_agent" http_x_forwarded_for:"$http_x_forwarded_for" '
   '$ssl_protocol/$ssl_cipher '
+
+nginx_monitor_monit_state: 'true'
+
+#-------------------------------------------------------------------------------
+# NODE_EXPORTER
+#-------------------------------------------------------------------------------
+
+node_exporter_monitor_monit_state: 'true'
 
 #-------------------------------------------------------------------------------
 # OPENBSD_PF
@@ -296,6 +316,12 @@ openbsd_pf_filters_all:
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_fp'}, ports: {'3128'} , comment: 'squid to h_fp'}
 
 #-------------------------------------------------------------------------------
+# OPENBSD_SYSLOGD
+#-------------------------------------------------------------------------------
+
+openbsd_syslogd_monitor_monit_state: 'true'
+
+#-------------------------------------------------------------------------------
 # OPENNTPD
 #-------------------------------------------------------------------------------
 
@@ -305,6 +331,8 @@ openntpd_monitor_mail_to_address: ['admin@example.com']
 
 openntpd_monitor_mail_state: 'true'
 
+openntpd_monitor_monit_state: 'true'
+
 openntpd_server:
   - {address: 'ntp.example.com', comment: 'h_fw'}
 
@@ -312,17 +340,21 @@ openntpd_server:
 # OPENSMTPD
 #-------------------------------------------------------------------------------
 
-opensmtpd_root_mail_address: 'admin@example.com'
-
 opensmtpd_action_all:
   - {config: {'action "local" mbox alias <aliases>'}, comment: 'Action: local'}
   - {config: {'action "relay" relay host smtp://mail.example.com:25'}, comment: 'Action: relay'}
+
+opensmtpd_monitor_monit_state: 'true'
+
+opensmtpd_root_mail_address: 'admin@example.com'
 
 #-------------------------------------------------------------------------------
 # OPENSSH
 #-------------------------------------------------------------------------------
 
 openssh_allow_users: ['example']
+
+openssh_monitor_monit_state: 'true'
 
 openssh_password_authentication: 'no'
 
@@ -362,6 +394,12 @@ restic_password: 'NMhTJr,sftD-vA5uG!v.WE2+a9D87DeE'
 restic_server_address: 'backup.example.com'
 
 restic_server_password: '5EWf-AjpSQ_due9x4M-tRb_g5Qq5g_LN'
+
+#-------------------------------------------------------------------------------
+# RSYSLOG
+#-------------------------------------------------------------------------------
+
+rsyslog_monitor_monit_state: 'true'
 
 #-------------------------------------------------------------------------------
 # SHELL

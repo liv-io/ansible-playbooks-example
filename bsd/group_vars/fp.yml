@@ -1,21 +1,6 @@
 ---
 
 #-------------------------------------------------------------------------------
-# MONIT
-#-------------------------------------------------------------------------------
-
-monit_config_host:
-  - name: 'squid'
-    state: 'true'
-    comment: 'Squid'
-    config: |
-      check process squid with pidfile "/var/run/squid.pid"
-        start program = "/usr/sbin/rcctl start squid"
-        stop program  = "/usr/sbin/rcctl stop squid"
-        if failed host 127.0.0.1 port 3128 type tcp with timeout 10 seconds then alert
-        if 5 restarts within 5 cycles then timeout
-
-#-------------------------------------------------------------------------------
 # MOTD
 #-------------------------------------------------------------------------------
 
@@ -138,3 +123,5 @@ squid_domain_allowed:
   # Grafana
   - {name: 'grafana.com', comment: 'Grafana Plugins'}
   - {name: 'packages.grafana.com', comment: 'Grafana Packages'}
+
+squid_monitor_monit_state: 'true'

@@ -1,0 +1,14 @@
+#-------------------------------------------------------------------------------
+# BACKUP SERVER
+#-------------------------------------------------------------------------------
+
+- hosts: bs
+  become: 'yes'
+  roles:
+    - role: restic
+    - role: httpd
+    - role: rest_server
+  environment:
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
