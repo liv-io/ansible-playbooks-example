@@ -92,6 +92,12 @@ monit_mail_to:
   - {address: 'user@example.com', filter: 'not on', events: ['instance', 'action']}
 
 #-------------------------------------------------------------------------------
+# MONIT_EXPORTER
+#-------------------------------------------------------------------------------
+
+monit_exporter_monitor_monit_state: 'true'
+
+#-------------------------------------------------------------------------------
 # NANO
 #-------------------------------------------------------------------------------
 
@@ -182,6 +188,8 @@ shell_ftp_proxy: 'http://fp.example.com:3128'
 shell_http_proxy: 'http://fp.example.com:3128'
 
 shell_https_proxy: 'http://fp.example.com:3128'
+
+shell_no_proxy: ['localhost', '127.0.0.1', '::1', 'bs.example.com', 'backup.example.com']
 
 #-------------------------------------------------------------------------------
 # SUDO
