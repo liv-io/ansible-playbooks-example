@@ -67,25 +67,6 @@ monit_config_all:
       check process pveproxy matching "pveproxy"
         if failed host 127.0.0.1 port 8006 type tcp with timeout 10 seconds then alert
 
-  - name: 'systemd-timesyncd'
-    state: 'true'
-    comment: 'systemd-timesyncd'
-    config: |
-      check process systemd-timesyncd matching "/lib/systemd/systemd-timesyncd"
-        start program = "/usr/sbin/service systemd-timesyncd start"
-        stop program = "/usr/sbin/service systemd-timesyncd stop"
-        if 5 restarts within 5 cycles then unmonitor
-
-  - name: 'openssh'
-    state: 'true'
-    comment: 'openssh'
-    config: |
-      check process openssh with pidfile "/run/sshd.pid"
-        start program = "/usr/sbin/service sshd start"
-        stop program = "/usr/sbin/service sshd stop"
-        if failed host 127.0.0.1 port 22 type tcp protocol ssh with timeout 10 seconds then alert
-        if 5 restarts within 5 cycles then unmonitor
-
 monit_mail_server:
   - {address: '127.0.0.1', port: '25'}
 
