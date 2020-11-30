@@ -24,6 +24,7 @@
     - role: bash
     - role: user
     - role: monit
+    - role: monit_exporter
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
@@ -42,6 +43,7 @@
     - role: bash
     - role: user
     - role: monit
+    - role: monit_exporter
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
