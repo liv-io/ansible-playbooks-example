@@ -64,6 +64,7 @@
     - role: colordiff
     - role: coreutils
     - role: cron
+    - role: curl
     - role: file
     - role: findutils
     - role: freecolor
