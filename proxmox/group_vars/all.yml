@@ -134,6 +134,8 @@ shell_http_proxy: 'http://fp.example.com:3128'
 
 shell_https_proxy: 'http://fp.example.com:3128'
 
+shell_no_proxy: ['localhost', '127.0.0.1', '::1', 'bs.example.com', 'backup.example.com']
+
 #-------------------------------------------------------------------------------
 # SUDO
 #-------------------------------------------------------------------------------
