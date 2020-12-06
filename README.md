@@ -26,13 +26,13 @@
 
 ## About
 
-`ansible-playbooks-example` gives an example on how to utilize the Ansible roles. The Ansible roles are licensed under the Simplified BSD License.
+`ansible-playbooks-example` gives an example on how to utilize the Ansible roles. All Ansible roles are licensed under the Simplified BSD License.
 
 ### Features
 
 ### Support
 
-The Ansible roles support the following operating systems:
+The following operating systems are supported:
 * CentOS 7
 * CentOS 8
 * Debian 10
