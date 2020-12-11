@@ -532,9 +532,9 @@ nsd_zone:
 #-------------------------------------------------------------------------------
 
 openntpd_server:
-  - {address: '162.23.41.55', comment: 'Federal Institute of Metrology METAS'}
-  - {address: '162.23.41.56', comment: 'Federal Institute of Metrology METAS'}
-  - {address: '162.23.41.10', comment: 'Federal Institute of Metrology METAS'}
+  - {address: '195.176.26.204', comment: 'Federal Institute of Metrology METAS'}
+  - {address: '195.176.26.205', comment: 'Federal Institute of Metrology METAS'}
+  - {address: '195.176.26.206', comment: 'Federal Institute of Metrology METAS'}
   - {address: '192.33.96.101', comment: 'Swiss Federal Institute of Technology Zurich'}
   - {address: '192.33.96.102', comment: 'Swiss Federal Institute of Technology Zurich'}
 
