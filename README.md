@@ -33,8 +33,6 @@
 ### Support
 
 The following operating systems are supported:
-* CentOS 7
-* CentOS 8
 * Debian 10
 * FreeBSD 12.1-*
 * OpenBSD 6.8
