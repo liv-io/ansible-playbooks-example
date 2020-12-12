@@ -43,8 +43,8 @@
     - role: mailx
     - role: motd
     - role: net_tools
-    - role: node_exporter
     - role: nload
+    - role: node_exporter
     - role: openntpd
     - role: openssh
     - role: resolver
