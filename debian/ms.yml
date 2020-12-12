@@ -1,0 +1,15 @@
+---
+
+#-------------------------------------------------------------------------------
+# MONITORING SERVER
+#-------------------------------------------------------------------------------
+
+- hosts: ms
+  become: 'yes'
+  roles:
+    - role: prometheus
+    - role: nginx
+  environment:
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'

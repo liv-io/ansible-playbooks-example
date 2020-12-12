@@ -1,0 +1,78 @@
+---
+
+#-------------------------------------------------------------------------------
+# ALL
+#-------------------------------------------------------------------------------
+
+# Pre
+- hosts: all
+  become: yes
+  roles:
+    - role: hosts
+    - role: apt
+    - role: shell
+    - role: bash
+    - role: user
+    - role: gnu_tar
+    - role: gnu_zip
+    - role: ca_certificates
+  environment:
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
+
+# Main
+- hosts: all
+  become: yes
+  roles:
+    - role: bzip2
+    - role: colordiff
+    - role: coreutils
+    - role: curl
+    - role: diffutils
+    - role: dstat
+    - role: file
+    - role: findutils
+    - role: hostname
+    - role: htop
+    - role: iproute2
+    - role: iputils_ping
+    - role: issue
+    - role: less
+    - role: locale
+    - role: mailx
+    - role: motd
+    - role: net_tools
+    - role: node_exporter
+    - role: nload
+    - role: openntpd
+    - role: openssh
+    - role: resolver
+    - role: root
+    - role: rsync
+    - role: sudo
+    - role: sysctl
+    - role: sysstat
+    - role: systemd
+    - role: tcpdump
+    - role: telnet
+    - role: timezone
+    - role: tmux
+    - role: vim
+    - role: wget
+  environment:
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
+
+# Post
+- hosts: all
+  become: yes
+  roles:
+    - role: monit
+    - role: monit_exporter
+    - role: nftables
+  environment:
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
