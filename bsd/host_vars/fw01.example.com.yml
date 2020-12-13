@@ -46,8 +46,8 @@ hostname_if_config_host:
   # PFSYNC (em3)
   #-----------------------------------------------------------------------------
 
-  - {interface: 'pfsync0', interfaces: [{type: 'pfsync', syncdev: 'em2', description: 'pfsync'}]}
-  - {interface: 'em2', interfaces: [{ip: '10.1.0.2', netmask: '255.255.255.0', broadcast: '10.1.0.255', description: 'n_pf_sync'}]}
+  - {interface: 'pfsync0', interfaces: [{type: 'pfsync', syncdev: 'em3', description: 'pfsync'}]}
+  - {interface: 'em3', interfaces: [{ip: '10.1.0.2', netmask: '255.255.255.0', broadcast: '10.1.0.255', description: 'n_pf_sync'}]}
 
 #-------------------------------------------------------------------------------
 # MOTD
