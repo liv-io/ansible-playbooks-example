@@ -1,6 +1,20 @@
 ---
 
 #-------------------------------------------------------------------------------
+# APACHE2
+#-------------------------------------------------------------------------------
+
+apache2_log_format_combined: 'remote_addr:%h %l remote_user:%u %t request:\"%r\" status:%>s %b \"%{Referer}i\" \"%{User-Agent}i\"'
+
+apache2_log_format_combined_io: 'remote_addr:%h %l remote_user:%u %t request:\"%r\" status:%>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O'
+
+apache2_log_format_combined_ssl: 'remote_addr:%h %l remote_user:%u %t request:\"%r\" status:%>s %b \"%{Referer}i\" \"%{User-agent}i\" %{SSL_PROTOCOL}x %{SSL_CIPHER}x'
+
+apache2_log_format_common: 'remote_addr:%h %l remote_user:%u %t request:\"%r\" status:%>s %b'
+
+apache2_monitor_monit_state: 'true'
+
+#-------------------------------------------------------------------------------
 # APT
 #-------------------------------------------------------------------------------
 
@@ -65,20 +79,6 @@ fstrim_monitor_prom_state: 'true'
 
 group_config_all:
   - {name: 'example', state: 'true', gid: '1000'}
-
-#-------------------------------------------------------------------------------
-# HTTPD
-#-------------------------------------------------------------------------------
-
-httpd_log_format_combined: 'remote_addr:%h %l remote_user:%u %t request:\"%r\" status:%>s %b \"%{Referer}i\" \"%{User-Agent}i\"'
-
-httpd_log_format_combined_io: 'remote_addr:%h %l remote_user:%u %t request:\"%r\" status:%>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O'
-
-httpd_log_format_combined_ssl: 'remote_addr:%h %l remote_user:%u %t request:\"%r\" status:%>s %b \"%{Referer}i\" \"%{User-agent}i\" %{SSL_PROTOCOL}x %{SSL_CIPHER}x'
-
-httpd_log_format_common: 'remote_addr:%h %l remote_user:%u %t request:\"%r\" status:%>s %b'
-
-httpd_monitor_monit_state: 'true'
 
 #-------------------------------------------------------------------------------
 # MARIADB
