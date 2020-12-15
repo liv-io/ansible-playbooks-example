@@ -25,7 +25,9 @@
 - hosts: all
   become: yes
   roles:
+    - role: auditd
     - role: bzip2
+    - role: chrony
     - role: colordiff
     - role: coreutils
     - role: curl
@@ -33,6 +35,7 @@
     - role: dstat
     - role: file
     - role: findutils
+    - role: fstrim
     - role: hostname
     - role: htop
     - role: iproute2
@@ -45,11 +48,12 @@
     - role: net_tools
     - role: nload
     - role: node_exporter
-    - role: openntpd
     - role: openssh
     - role: resolver
+    - role: restic
     - role: root
     - role: rsync
+    - role: rsyslog
     - role: sudo
     - role: sysctl
     - role: sysstat

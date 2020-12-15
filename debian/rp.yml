@@ -1,0 +1,16 @@
+---
+
+#-------------------------------------------------------------------------------
+# REVERSE PROXY
+#-------------------------------------------------------------------------------
+
+- hosts: rp
+  become: 'yes'
+  roles:
+    - role: apache2
+    - role: modsecurity
+    - role: modsecurity_crs
+  environment:
+    http_proxy: 'http://fp.example.com:3128'
+    https_proxy: 'http://fp.example.com:3128'
+    ftp_proxy: 'http://fp.example.com:3128'
