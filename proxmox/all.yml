@@ -27,7 +27,6 @@
   roles:
     - role: auditd
     - role: bzip2
-    - role: chrony
     - role: colordiff
     - role: coreutils
     - role: curl
