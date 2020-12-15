@@ -4,30 +4,18 @@
 # ALL
 #-------------------------------------------------------------------------------
 
-# Bootstrap
-- hosts: all
-  tasks:
-    - name: group create 'ansible_distribution'
-      group_by:
-        key: "{{ansible_distribution}}"
-
-- hosts: '10'
-  become: 'yes'
-  gather_facts: False
-  roles:
-  environment:
-    http_proxy: 'http://fp.example.com:3128'
-    https_proxy: 'http://fp.example.com:3128'
-    ftp_proxy: 'http://fp.example.com:3128'
-
 # Pre
 - hosts: all
   become: yes
   roles:
+    - role: hosts
+    - role: apt
     - role: shell
     - role: bash
     - role: user
-    - role: apt
+    - role: gnu_tar
+    - role: gnu_zip
+    - role: ca_certificates
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
@@ -38,36 +26,46 @@
   become: yes
   roles:
     - role: auditd
+    - role: bzip2
+    - role: chrony
     - role: colordiff
+    - role: coreutils
+    - role: curl
+    - role: diffutils
     - role: dstat
-    - role: gnu_awk
-    - role: gnu_grep
-    - role: gnu_sed
+    - role: file
+    - role: findutils
+    - role: fstrim
     - role: hostname
-    - role: hosts
     - role: htop
     - role: iproute2
+    - role: iputils_ping
     - role: issue
     - role: less
     - role: locale
-    - role: monit
+    - role: mailx
     - role: motd
     - role: net_tools
+    - role: nload
     - role: node_exporter
     - role: openssh
     - role: openvswitch_switch
     - role: pve
     - role: resolver
     - role: root
+    - role: rsync
     - role: rsyslog
     - role: sudo
     - role: sysctl
     - role: sysstat
     - role: systemd
     - role: systemd_timesyncd
+    - role: tcpdump
+    - role: telnet
     - role: timezone
     - role: tmux
     - role: vim
+    - role: wget
     - role: zfs
   environment:
     http_proxy: 'http://fp.example.com:3128'
@@ -78,6 +76,9 @@
 - hosts: all
   become: yes
   roles:
+    - role: monit
+    - role: monit_exporter
+    - role: nftables
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'

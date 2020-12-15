@@ -74,6 +74,37 @@ monit_mail_to:
   - {address: 'admin@example.com', filter: 'not on', events: ['instance', 'action']}
 
 #-------------------------------------------------------------------------------
+# MONIT_EXPORTER
+#-------------------------------------------------------------------------------
+
+monit_exporter_monitor_monit_state: 'true'
+
+#-------------------------------------------------------------------------------
+# NANO
+#-------------------------------------------------------------------------------
+
+nano_state: 'remove'
+
+#-------------------------------------------------------------------------------
+# NFTABLES
+#-------------------------------------------------------------------------------
+
+nftables_filter_all:
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'icmp', code: 'destination-unreachable', comment: 'icmp destination-unreachable from any'}
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'icmp', code: 'echo-request', comment: 'icmp echo-request from any'}
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'icmp', code: 'parameter-problem', comment: 'icmp parameter-problem from any'}
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'icmp', code: 'source-quench', comment: 'icmp source-quench from any'}
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'icmp', code: 'time-exceeded', comment: 'icmp time-exceeded from any'}
+  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'tcp', sources: {'10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from internal-networks'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'icmp', code: 'echo-request', comment: 'icmp echo-request to any'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'icmp', code: 'source-quench', comment: 'icmp source-quench to any'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.0.0.11', '10.0.0.12'}, ports: {'53'}, comment: 'dns to h_ns01, h_ns02'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'udp', destinations: {'10.0.0.11', '10.0.0.12'}, ports: {'53'}, comment: 'dns to h_ns01, h_ns02'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'udp', destinations: {'10.0.0.13', '10.0.0.14', '10.0.0.15', '10.0.0.16'}, ports: {'123'}, comment: 'ntp to h_ntp01, h_ntp02, h_ntp03, h_ntp04'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.0.0.17'}, ports: {'smtp'}, comment: 'smtp to h_mail'}
+  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', ports: {'10.0.0.18'}, comment: 'squid to h_proxy'}
+
+#-------------------------------------------------------------------------------
 # NGINX
 #-------------------------------------------------------------------------------
 
@@ -97,6 +128,18 @@ nginx_monitor_monit_state: 'true'
 node_exporter_monitor_monit_state: 'true'
 
 #-------------------------------------------------------------------------------
+# OPENSMTPD
+#-------------------------------------------------------------------------------
+
+opensmtpd_accept_all: |
+  # Accept: Aliases
+  accept for local alias <aliases> deliver to mbox
+  # Accept: Relay
+  accept for any relay via smtp://mail.example.com
+
+opensmtpd_monitor_monit_state: 'true'
+
+#-------------------------------------------------------------------------------
 # OPENSSH
 #-------------------------------------------------------------------------------
 
@@ -117,6 +160,12 @@ resolver_nameserver:
   - {address: '10.0.0.12', comment: 'Server: h_ns02'}
 
 resolver_search: ['example.com']
+
+#-------------------------------------------------------------------------------
+# ROOT
+#-------------------------------------------------------------------------------
+
+root_password: '$2b$10$Jua/9rgOstNEVRKz11ncGO1EG.Z1krMLkOurJe4jNHVEU0UZV4fI6'
 
 #-------------------------------------------------------------------------------
 # RSYSLOG
@@ -170,12 +219,6 @@ systemd_timesyncd_server:
 systemd_timesyncd_fallback:
   - 'ntp05.example.com'
   - 'ntp06.example.com'
-
-#-------------------------------------------------------------------------------
-# ROOT
-#-------------------------------------------------------------------------------
-
-root_password: '$2b$10$Jua/9rgOstNEVRKz11ncGO1EG.Z1krMLkOurJe4jNHVEU0UZV4fI6'
 
 #-------------------------------------------------------------------------------
 # TIMEZONE
