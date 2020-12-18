@@ -40,10 +40,10 @@ The following operating systems are supported:
 ### Dependencies
 
 The Ansible control machine depends on:
-* [Ansible](https://github.com/ansible/ansible) >= 2.8
+* [Ansible](https://github.com/ansible/ansible) >= 2.8.0
 
 The Ansible managed node depends on:
-* [Python](https://github.com/python/cpython) >= 2.7
+* [Python](https://github.com/python/cpython) >= 2.7.0
 
 ## Setup
 
