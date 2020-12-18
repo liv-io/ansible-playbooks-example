@@ -26,6 +26,7 @@
   become: yes
   roles:
     - role: auditd
+    - role: bind_tools
     - role: bzip2
     - role: chrony
     - role: colordiff
