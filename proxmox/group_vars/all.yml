@@ -4,6 +4,16 @@
 # APT
 #-------------------------------------------------------------------------------
 
+apt_config_group:
+  - path: '/etc/apt/sources.list.d/proxmox.list'
+    state: 'true'
+    repositories:
+      - url: 'http://download.proxmox.com/debian/pve'
+        state: 'true'
+        comment: 'Debian - Security'
+        distribution: 'buster'
+        components: ['pve-no-subscription']
+
 apt_http_proxy: 'http://fp.example.com:3128'
 
 apt_https_proxy: 'http://fp.example.com:3128'
