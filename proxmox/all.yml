@@ -26,6 +26,7 @@
   become: yes
   roles:
     - role: auditd
+    - role: bind_tools
     - role: bzip2
     - role: colordiff
     - role: coreutils
@@ -43,6 +44,7 @@
     - role: less
     - role: locale
     - role: mailx
+    - role: man_db
     - role: motd
     - role: net_tools
     - role: nload
