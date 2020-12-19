@@ -146,13 +146,13 @@ node_exporter_monitor_monit_state: 'true'
 # OPENSMTPD
 #-------------------------------------------------------------------------------
 
-opensmtpd_accept_all: |
-  # Accept: Aliases
-  accept for local alias <aliases> deliver to mbox
-  # Accept: Relay
-  accept for any relay via smtp://mail.example.com
+opensmtpd_action_all:
+  - {config: {'action "local" mbox alias <aliases>'}, comment: 'Action: local'}
+  - {config: {'action "relay" relay host smtp://mail.example.com:25'}, comment: 'Action: relay'}
 
 opensmtpd_monitor_monit_state: 'true'
+
+opensmtpd_root_mail_address: 'admin@example.com'
 
 #-------------------------------------------------------------------------------
 # OPENSSH
