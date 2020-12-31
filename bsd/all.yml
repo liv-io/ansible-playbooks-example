@@ -23,8 +23,6 @@
     - role: shell
     - role: bash
     - role: user
-    - role: monit
-    - role: monit_exporter
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
@@ -42,8 +40,6 @@
     - role: shell
     - role: bash
     - role: user
-    - role: monit
-    - role: monit_exporter
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
@@ -53,6 +49,8 @@
 - hosts: all
   become: yes
   roles:
+    - role: gnu_tar
+    - role: gnu_zip
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
@@ -74,9 +72,7 @@
     - role: gnu_grep
     - role: gnu_netcat
     - role: gnu_sed
-    - role: gnu_tar
     - role: gnu_watch
-    - role: gnu_zip
     - role: hosts
     - role: hostname
     - role: hostname_if
@@ -113,6 +109,8 @@
 - hosts: all
   become: yes
   roles:
+    - role: monit
+    - role: monit_exporter
     - role: freebsd_pf
     - role: openbsd_pf
   environment:
