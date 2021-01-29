@@ -1,8 +1,6 @@
 ---
 
-#-------------------------------------------------------------------------------
 # RSYSLOG
-#-------------------------------------------------------------------------------
 
 rsyslog_config_host:
   - name: nginx
@@ -12,8 +10,6 @@ rsyslog_config_host:
       - {type: imfile, File: /var/log/nginx/*_access.log, Tag: nginx, Severity: info, Facility: local6}
       - {type: imfile, File: /var/log/nginx/*_error.log, Tag: nginx, Severity: info, Facility: local6}
 
-#-------------------------------------------------------------------------------
 # ZFS
-#-------------------------------------------------------------------------------
 
 zfs_scrub_pools_pools: ['data01', 'data02']

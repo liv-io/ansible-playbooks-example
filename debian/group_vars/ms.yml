@@ -1,8 +1,6 @@
 ---
 
-#-------------------------------------------------------------------------------
 # ALERTMANAGER
-#-------------------------------------------------------------------------------
 
 alertmanager_config:
   - section: 'global'
@@ -42,15 +40,11 @@ alertmanager_config:
 
 alertmanager_monitor_monit_state: 'true'
 
-#-------------------------------------------------------------------------------
 # BLACKBOX_EXPORTER
-#-------------------------------------------------------------------------------
 
 blackbox_exporter_monitor_monit_state: 'true'
 
-#-------------------------------------------------------------------------------
 # GRAFANA
-#-------------------------------------------------------------------------------
 
 grafana_monitor_monit_state: 'true'
 
@@ -64,15 +58,11 @@ grafana_smtp_port: '25'
 
 grafana_smtp_state: 'true'
 
-#-------------------------------------------------------------------------------
 # MOTD
-#-------------------------------------------------------------------------------
 
 motd_host_description: 'Monitoring Server'
 
-#-------------------------------------------------------------------------------
 # NGINX
-#-------------------------------------------------------------------------------
 
 nginx_config:
   - name: 'alert.example.com'
@@ -164,9 +154,7 @@ nginx_config:
         proxy_set_header X-Forwarded-Proto $scheme;
       }
 
-#-------------------------------------------------------------------------------
 # NFTABLES
-#-------------------------------------------------------------------------------
 
 nftables_filter_host:
   - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'tcp', sources: {'10.1.3.0/24', '10.1.5.0/24'}, ports: {'80', '443'}, comment: 'http, https from n_dmz, n_clients'}
@@ -177,9 +165,7 @@ nftables_filter_host:
   - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.0.0.0/8'}, ports: {'9115'}, comment: 'blackbox_exporter to internal-networks'}
   - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.0.0.0/8'}, ports: {'9388'}, comment: 'monit_exporter to internal-networks'}
 
-#-------------------------------------------------------------------------------
 # PROMETHEUS
-#-------------------------------------------------------------------------------
 
 prometheus_alertmanager_url: 'https://alert.example.com'
 
@@ -209,15 +195,11 @@ prometheus_node_exporter_target_manual_hosts:
 
 prometheus_smokeping_prober_state: 'true'
 
-#-------------------------------------------------------------------------------
 # RESTIC
-#-------------------------------------------------------------------------------
 
 restic_state: 'remove'
 
-#-------------------------------------------------------------------------------
 # RSYSLOG
-#-------------------------------------------------------------------------------
 
 rsyslog_config_host:
   - name: nginx
@@ -227,9 +209,7 @@ rsyslog_config_host:
       - {type: imfile, File: '/var/log/nginx/*_access.log', Tag: nginx, Severity: info, Facility: local6}
       - {type: imfile, File: '/var/log/nginx/*_error.log', Tag: nginx, Severity: info, Facility: local6}
 
-#-------------------------------------------------------------------------------
 # SMOKEPING_PROBER
-#-------------------------------------------------------------------------------
 
 smokeping_prober_hosts:
   - 'localhost'

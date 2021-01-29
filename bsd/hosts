@@ -1,35 +1,25 @@
-#-------------------------------------------------------------------------------
 # ALL
-#-------------------------------------------------------------------------------
 
 # Notice: 'all' is a preexisting built-in group and matches all managed nodes.
 
-#-------------------------------------------------------------------------------
 # FIREWALL
-#-------------------------------------------------------------------------------
 
 [fw]
 fw01.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 fw02.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 
-#-------------------------------------------------------------------------------
 # NAME SERVER
-#-------------------------------------------------------------------------------
 
 [ns]
 ns01.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 ns02.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 
-#-------------------------------------------------------------------------------
 # FORWARD PROXY
-#-------------------------------------------------------------------------------
 
 [fp]
 fp01.example.com ansible_python_interpreter=/usr/local/bin/python3.7
 
-#-------------------------------------------------------------------------------
 # WEB SERVER
-#-------------------------------------------------------------------------------
 
 [ws]
 ws01.example.com ansible_python_interpreter=/usr/local/bin/python3.7

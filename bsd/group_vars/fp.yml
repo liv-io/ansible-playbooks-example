@@ -1,22 +1,16 @@
 ---
 
-#-------------------------------------------------------------------------------
 # MOTD
-#-------------------------------------------------------------------------------
 
 motd_host_description: 'Forward Proxy'
 
-#-------------------------------------------------------------------------------
 # OPENBSD_PF
-#-------------------------------------------------------------------------------
 
 openbsd_pf_filters_host:
   - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_base', '$n_mgmt', '$n_dmz', '$n_tools', '$n_clients'}, destinations: {'any'}, ports: {'3128'}, comment: 'squid from n_base, n_mgmt, n_dmz, n_tools, n_clients'}
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'any'}, ports: {'80', '443'}, comment: 'http, https to any'}
 
-#-------------------------------------------------------------------------------
 # SQUID
-#-------------------------------------------------------------------------------
 
 squid_acl:
   - {name: 'src_network_base', type: 'src', value: '10.1.1.0/24', comment: 'n_base'}

@@ -1,14 +1,10 @@
 ---
 
-#-------------------------------------------------------------------------------
 # HOSTNAME_IF
-#-------------------------------------------------------------------------------
 
 hostname_if_config_host:
 
-  #-----------------------------------------------------------------------------
   # WAN (em0)
-  #-----------------------------------------------------------------------------
 
   - {interface: 'em0', description: 'i_wan'}
 
@@ -18,9 +14,7 @@ hostname_if_config_host:
   - {interface: 'carp5', interfaces: [{type: 'carp', ip: '1.2.3.5', netmask: '255.255.255.248', vhid: '5', carpdev: 'em0', advskew: '20', pass: 'd9q9HHd7cF.GFeV,rktv', description: 'n_wan'}]}
   - {interface: 'carp6', interfaces: [{type: 'carp', ip: '1.2.3.6', netmask: '255.255.255.248', vhid: '6', carpdev: 'em0', advskew: '20', pass: '9sjDuL.dehuUDVG,K7kd', description: 'n_wan'}]}
 
-  #-----------------------------------------------------------------------------
   # DATA (em1, em2)
-  #-----------------------------------------------------------------------------
 
   - {interface: 'em1', description: 'i_data'}
   - {interface: 'em2', description: 'i_data'}
@@ -42,21 +36,15 @@ hostname_if_config_host:
   - {interface: 'vlan15', interfaces: [{ip: '10.1.5.3', netmask: '255.255.255.0', vnetid: '15', vlandev: 'aggr0', description: 'v_clients'}]}
   - {interface: 'carp15', interfaces: [{type: 'carp', ip: '10.1.5.1', netmask: '255.255.255.0', vhid: '15', carpdev: 'vlan15', advskew: '20', pass: 'kPCT6a,H4DcvcKb.9QJf', description: 'v_clients'}]}
 
-  #-----------------------------------------------------------------------------
   # PFSYNC (em3)
-  #-----------------------------------------------------------------------------
 
   - {interface: 'pfsync0', interfaces: [{type: 'pfsync', syncdev: 'em3', description: 'pfsync'}]}
   - {interface: 'em3', interfaces: [{ip: '10.1.0.3', netmask: '255.255.255.0', broadcast: '10.1.0.255', description: 'n_pf_sync'}]}
 
-#-------------------------------------------------------------------------------
 # MOTD
-#-------------------------------------------------------------------------------
 
 motd_host_description: 'Firewall (Passive)'
 
-#-------------------------------------------------------------------------------
 # OPENNTPD
-#-------------------------------------------------------------------------------
 
 openntpd_check_time_state: 'disable'

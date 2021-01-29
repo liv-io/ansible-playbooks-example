@@ -1,20 +1,14 @@
 ---
 
-#-------------------------------------------------------------------------------
 # BASH
-#-------------------------------------------------------------------------------
 
 bash_tmout: 'disable'
 
-#-------------------------------------------------------------------------------
 # CRON
-#-------------------------------------------------------------------------------
 
 cron_monitor_monit_state: 'true'
 
-#-------------------------------------------------------------------------------
 # FREEBSD_PERIODIC
-#-------------------------------------------------------------------------------
 
 freebsd_periodic_daily_output: '/dev/null'
 
@@ -22,9 +16,7 @@ freebsd_periodic_monthly_output: '/dev/null'
 
 freebsd_periodic_weekly_output: '/dev/null'
 
-#-------------------------------------------------------------------------------
 # FREEBSD_PF
-#-------------------------------------------------------------------------------
 
 freebsd_pf_macros_all:
   # n_base
@@ -59,9 +51,7 @@ freebsd_pf_macros_all:
   - {name: 'h_nb', value: '10.1.5.11', comment: 'notebook'}
 
 freebsd_pf_filters_all:
-  #-----------------------------------------------------------------------------
   # ICMP
-  #-----------------------------------------------------------------------------
 
   # icmp from any to any
   - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', comment: 'icmp echo request from any'}
@@ -71,16 +61,12 @@ freebsd_pf_filters_all:
   - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench from any'}
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench to any'}
 
-  #-----------------------------------------------------------------------------
   # SSH
-  #-----------------------------------------------------------------------------
 
   # ssh from n_base, n_clients
   - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_base', '$n_clients'}, destinations: {'any'}, ports: {'22'}, comment: 'ssh from n_base, n_clients'}
 
-  #-----------------------------------------------------------------------------
   # MONITORING SERVER
-  #-----------------------------------------------------------------------------
 
   # node_exporter from h_ms
   - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9100'}, comment: 'node_exporter from h_ms'}
@@ -97,64 +83,46 @@ freebsd_pf_filters_all:
   # monit_exporter from h_ms
   - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9388'}, comment: 'monit_exporter from h_ms'}
 
-  #-----------------------------------------------------------------------------
   # DNS
-  #-----------------------------------------------------------------------------
 
   # dns to h_fw, h_ns
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$h_fw', '$h_ns01' '$h_ns02'}, ports: {'53'}, comment: 'dns to h_fw, h_ns'}
 
-  #-----------------------------------------------------------------------------
   # NTP
-  #-----------------------------------------------------------------------------
 
   # ntp to h_fw
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_fw'}, ports: {'123'}, comment: 'ntp to h_fw'}
 
-  #-----------------------------------------------------------------------------
   # MAIL EXCHANGER
-  #-----------------------------------------------------------------------------
 
   # smtp to h_mx
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp to h_mx'}
 
-  #-----------------------------------------------------------------------------
   # BACKUP SERVER
-  #-----------------------------------------------------------------------------
 
   # https to h_bs
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_bs'}, ports: {'443'} , comment: 'https to h_bs'}
 
-  #-----------------------------------------------------------------------------
   # LOG SERVER
-  #-----------------------------------------------------------------------------
 
   # syslog to h_ls
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$h_ls'}, ports: {'514'} , comment: 'syslog to h_ls'}
 
-  #-----------------------------------------------------------------------------
   # FORWARD PROXY
-  #-----------------------------------------------------------------------------
 
   # squid to h_fp
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_fp'}, ports: {'3128'} , comment: 'squid to h_fp'}
 
-#-------------------------------------------------------------------------------
 # FREEBSD_SYSLOGD
-#-------------------------------------------------------------------------------
 
 freebsd_syslogd_monitor_monit_state: 'true'
 
-#-------------------------------------------------------------------------------
 # GROUP
-#-------------------------------------------------------------------------------
 
 group_config_all:
   - {name: 'example', state: 'true', gid: '1000'}
 
-#-------------------------------------------------------------------------------
 # MONIT
-#-------------------------------------------------------------------------------
 
 monit_mail_server:
   - {address: '127.0.0.1', port: '25'}
@@ -162,27 +130,19 @@ monit_mail_server:
 monit_mail_to:
   - {address: 'admin@example.com', filter: 'not on', events: ['instance', 'action']}
 
-#-------------------------------------------------------------------------------
 # MONIT_EXPORTER
-#-------------------------------------------------------------------------------
 
 monit_exporter_monitor_monit_state: 'true'
 
-#-------------------------------------------------------------------------------
 # MOTD
-#-------------------------------------------------------------------------------
 
 motd_host_description: "Please add 'group_var' or 'host_var' file"
 
-#-------------------------------------------------------------------------------
 # NANO
-#-------------------------------------------------------------------------------
 
 nano_state: 'remove'
 
-#-------------------------------------------------------------------------------
 # NGINX
-#-------------------------------------------------------------------------------
 
 nginx_log_format_main: |-
   'remote_addr:$remote_addr - $remote_user [$time_local] request:"$request" '
@@ -197,15 +157,11 @@ nginx_log_format_main_ssl: |-
 
 nginx_monitor_monit_state: 'true'
 
-#-------------------------------------------------------------------------------
 # NODE_EXPORTER
-#-------------------------------------------------------------------------------
 
 node_exporter_monitor_monit_state: 'true'
 
-#-------------------------------------------------------------------------------
 # OPENBSD_PF
-#-------------------------------------------------------------------------------
 
 openbsd_pf_macros_all:
   # n_base
@@ -241,9 +197,7 @@ openbsd_pf_macros_all:
 
 openbsd_pf_filters_all:
 
-  #-----------------------------------------------------------------------------
   # ICMP
-  #-----------------------------------------------------------------------------
 
   # icmp from any to any
   - {action: 'pass', quick: 'true', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', comment: 'icmp echo request from any'}
@@ -253,16 +207,12 @@ openbsd_pf_filters_all:
   - {action: 'pass', quick: 'true', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench from any'}
   - {action: 'pass', quick: 'true', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench to any'}
 
-  #-----------------------------------------------------------------------------
   # SSH
-  #-----------------------------------------------------------------------------
 
   # ssh from n_base, n_clients
   - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_base', '$n_clients'}, destinations: {'any'}, ports: {'22'}, comment: 'ssh from n_base, n_clients'}
 
-  #-----------------------------------------------------------------------------
   # MONITORING SERVER
-  #-----------------------------------------------------------------------------
 
   # node_exporter from h_ms
   - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9100'}, comment: 'node_exporter from h_ms'}
@@ -279,64 +229,46 @@ openbsd_pf_filters_all:
   # monit_exporter from h_ms
   - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9388'}, comment: 'monit_exporter from h_ms'}
 
-  #-----------------------------------------------------------------------------
   # DNS
-  #-----------------------------------------------------------------------------
 
   # dns to h_fw, h_ns
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$h_fw', '$h_ns01' '$h_ns02'}, ports: {'53'}, comment: 'dns to h_fw, h_ns'}
 
-  #-----------------------------------------------------------------------------
   # NTP
-  #-----------------------------------------------------------------------------
 
   # ntp to h_fw
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_fw'}, ports: {'123'}, comment: 'ntp to h_fw'}
 
-  #-----------------------------------------------------------------------------
   # MAIL EXCHANGER
-  #-----------------------------------------------------------------------------
 
   # smtp to h_mx
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp to h_mx'}
 
-  #-----------------------------------------------------------------------------
   # BACKUP SERVER
-  #-----------------------------------------------------------------------------
 
   # https to h_bs
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_bs'}, ports: {'443'} , comment: 'https to h_bs'}
 
-  #-----------------------------------------------------------------------------
   # LOG SERVER
-  #-----------------------------------------------------------------------------
 
   # syslog to h_ls
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_ls'}, ports: {'514'} , comment: 'syslog to h_ls'}
 
-  #-----------------------------------------------------------------------------
   # FORWARD PROXY
-  #-----------------------------------------------------------------------------
 
   # squid to h_fp
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_fp'}, ports: {'3128'} , comment: 'squid to h_fp'}
 
-#-------------------------------------------------------------------------------
 # OPENBSD_SYSLOGD
-#-------------------------------------------------------------------------------
 
 openbsd_syslogd_monitor_monit_state: 'true'
 
-#-------------------------------------------------------------------------------
 # OPENBSD_SYSPATCH
-#-------------------------------------------------------------------------------
 
 openbsd_syspatch_installurl:
  - {url: 'https://ftp.OpenBSD.org/pub/OpenBSD', comment: 'OpenBSD Packages'}
 
-#-------------------------------------------------------------------------------
 # OPENNTPD
-#-------------------------------------------------------------------------------
 
 openntpd_monitor_mail_from_address: 'root@example.com'
 
@@ -349,9 +281,7 @@ openntpd_monitor_monit_state: 'true'
 openntpd_server:
   - {address: 'ntp.example.com', comment: 'h_fw'}
 
-#-------------------------------------------------------------------------------
 # OPENSMTPD
-#-------------------------------------------------------------------------------
 
 opensmtpd_action_all:
   - {config: {'action "local" mbox alias <aliases>'}, comment: 'Action: local'}
@@ -361,9 +291,7 @@ opensmtpd_monitor_monit_state: 'true'
 
 opensmtpd_root_mail_address: 'admin@example.com'
 
-#-------------------------------------------------------------------------------
 # OPENSSH
-#-------------------------------------------------------------------------------
 
 openssh_allow_users: ['example']
 
@@ -371,9 +299,7 @@ openssh_monitor_monit_state: 'true'
 
 openssh_password_authentication: 'no'
 
-#-------------------------------------------------------------------------------
 # RESOLVER
-#-------------------------------------------------------------------------------
 
 resolver_domain: 'example.com'
 
@@ -382,9 +308,7 @@ resolver_nameserver:
 
 resolver_search: ['example.com']
 
-#-------------------------------------------------------------------------------
 # RESTIC
-#-------------------------------------------------------------------------------
 
 restic_cacert: '/etc/ssl/ca.example.com.crt'
 
@@ -408,15 +332,11 @@ restic_server_address: 'backup.example.com'
 
 restic_server_password: '5EWf-AjpSQ_due9x4M-tRb_g5Qq5g_LN'
 
-#-------------------------------------------------------------------------------
 # RSYSLOG
-#-------------------------------------------------------------------------------
 
 rsyslog_monitor_monit_state: 'true'
 
-#-------------------------------------------------------------------------------
 # SHELL
-#-------------------------------------------------------------------------------
 
 shell_ftp_proxy: 'http://fp.example.com:3128'
 
@@ -426,9 +346,7 @@ shell_https_proxy: 'http://fp.example.com:3128'
 
 shell_no_proxy: ['localhost', '127.0.0.1', '::1', 'bs.example.com', 'backup.example.com']
 
-#-------------------------------------------------------------------------------
 # SUDO
-#-------------------------------------------------------------------------------
 
 sudo_config_all:
   - name: 'root'
