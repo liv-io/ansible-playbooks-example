@@ -34,7 +34,7 @@
 
 The following operating systems are supported:
 * Debian 10
-* FreeBSD 12.1-*
+* FreeBSD 12.2-*
 * OpenBSD 6.8
 
 ### Dependencies
