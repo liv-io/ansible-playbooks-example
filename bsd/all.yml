@@ -65,7 +65,6 @@
     - role: curl
     - role: file
     - role: findutils
-    - role: freecolor
     - role: gnu_diff
     - role: gnu_grep
     - role: gnu_netcat
