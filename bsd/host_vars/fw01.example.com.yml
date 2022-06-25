@@ -6,40 +6,40 @@ hostname_if_config_host:
 
   # WAN (em0)
 
-  - {interface: 'em0', description: 'i_wan'}
+  - {device: 'em0', description: 'i_wan'}
 
-  - {interface: 'carp2', interfaces: [{type: 'carp', ip: '1.2.3.2', netmask: '255.255.255.248', vhid: '2', carpdev: 'em0', advskew: '10', pass: 'ckAJ,F7Taqx25.icNC7e', description: 'n_wan'}]}
-  - {interface: 'carp3', interfaces: [{type: 'carp', ip: '1.2.3.3', netmask: '255.255.255.248', vhid: '3', carpdev: 'em0', advskew: '10', pass: 'tnGp2VW.prTvHrnU9L,E', description: 'n_wan'}]}
-  - {interface: 'carp4', interfaces: [{type: 'carp', ip: '1.2.3.4', netmask: '255.255.255.248', vhid: '4', carpdev: 'em0', advskew: '10', pass: 'eg2W,CH9fo7Uv8,JSeD6', description: 'n_wan'}]}
-  - {interface: 'carp5', interfaces: [{type: 'carp', ip: '1.2.3.5', netmask: '255.255.255.248', vhid: '5', carpdev: 'em0', advskew: '10', pass: 'd9q9HHd7cF.GFeV,rktv', description: 'n_wan'}]}
-  - {interface: 'carp6', interfaces: [{type: 'carp', ip: '1.2.3.6', netmask: '255.255.255.248', vhid: '6', carpdev: 'em0', advskew: '10', pass: '9sjDuL.dehuUDVG,K7kd', description: 'n_wan'}]}
+  - {device: 'carp2', interfaces: [{type: 'carp', ip: '1.2.3.2', netmask: '255.255.255.248', vhid: '2', carpdev: 'em0', advskew: '10', pass: 'ckAJ,F7Taqx25.icNC7e', description: 'n_wan'}]}
+  - {device: 'carp3', interfaces: [{type: 'carp', ip: '1.2.3.3', netmask: '255.255.255.248', vhid: '3', carpdev: 'em0', advskew: '10', pass: 'tnGp2VW.prTvHrnU9L,E', description: 'n_wan'}]}
+  - {device: 'carp4', interfaces: [{type: 'carp', ip: '1.2.3.4', netmask: '255.255.255.248', vhid: '4', carpdev: 'em0', advskew: '10', pass: 'eg2W,CH9fo7Uv8,JSeD6', description: 'n_wan'}]}
+  - {device: 'carp5', interfaces: [{type: 'carp', ip: '1.2.3.5', netmask: '255.255.255.248', vhid: '5', carpdev: 'em0', advskew: '10', pass: 'd9q9HHd7cF.GFeV,rktv', description: 'n_wan'}]}
+  - {device: 'carp6', interfaces: [{type: 'carp', ip: '1.2.3.6', netmask: '255.255.255.248', vhid: '6', carpdev: 'em0', advskew: '10', pass: '9sjDuL.dehuUDVG,K7kd', description: 'n_wan'}]}
 
   # DATA (em1, em2)
 
-  - {interface: 'em1', description: 'i_data'}
-  - {interface: 'em2', description: 'i_data'}
+  - {device: 'em1', description: 'i_data'}
+  - {device: 'em2', description: 'i_data'}
 
-  - {interface: 'aggr0', interfaces: [{type: 'aggr', trunkports: ['em1', 'em2'], description: 'i_data'}]}
+  - {device: 'aggr0', interfaces: [{type: 'aggr', trunkports: ['em1', 'em2'], description: 'i_data'}]}
 
-  - {interface: 'vlan11', interfaces: [{ip: '10.1.1.2', netmask: '255.255.255.0', vnetid: '11', vlandev: 'aggr0', description: 'v_base'}]}
-  - {interface: 'carp11', interfaces: [{type: 'carp', ip: '10.1.1.1', netmask: '255.255.255.0', vhid: '11', carpdev: 'vlan11', advskew: '10', pass: 'VjaD,TDAckVNM.6AFcXw', description: 'v_base'}]}
+  - {device: 'vlan11', interfaces: [{ip: '10.1.1.2', netmask: '255.255.255.0', vnetid: '11', vlandev: 'aggr0', description: 'v_base'}]}
+  - {device: 'carp11', interfaces: [{type: 'carp', ip: '10.1.1.1', netmask: '255.255.255.0', vhid: '11', carpdev: 'vlan11', advskew: '10', pass: 'VjaD,TDAckVNM.6AFcXw', description: 'v_base'}]}
 
-  - {interface: 'vlan12', interfaces: [{ip: '10.1.2.2', netmask: '255.255.255.0', vnetid: '12', vlandev: 'aggr0', description: 'v_mgmt'}]}
-  - {interface: 'carp12', interfaces: [{type: 'carp', ip: '10.1.2.1', netmask: '255.255.255.0', vhid: '12', carpdev: 'vlan12', advskew: '10', pass: 'F8QFk7v,AKWuX2a.42eK', description: 'v_mgmt'}]}
+  - {device: 'vlan12', interfaces: [{ip: '10.1.2.2', netmask: '255.255.255.0', vnetid: '12', vlandev: 'aggr0', description: 'v_mgmt'}]}
+  - {device: 'carp12', interfaces: [{type: 'carp', ip: '10.1.2.1', netmask: '255.255.255.0', vhid: '12', carpdev: 'vlan12', advskew: '10', pass: 'F8QFk7v,AKWuX2a.42eK', description: 'v_mgmt'}]}
 
-  - {interface: 'vlan13', interfaces: [{ip: '10.1.3.2', netmask: '255.255.255.0', vnetid: '13', vlandev: 'aggr0', description: 'v_dmz'}]}
-  - {interface: 'carp13', interfaces: [{type: 'carp', ip: '10.1.3.1', netmask: '255.255.255.0', vhid: '13', carpdev: 'vlan13', advskew: '10', pass: '7P3HS.R66TjCJa,AsJma', description: 'v_dmz'}]}
+  - {device: 'vlan13', interfaces: [{ip: '10.1.3.2', netmask: '255.255.255.0', vnetid: '13', vlandev: 'aggr0', description: 'v_dmz'}]}
+  - {device: 'carp13', interfaces: [{type: 'carp', ip: '10.1.3.1', netmask: '255.255.255.0', vhid: '13', carpdev: 'vlan13', advskew: '10', pass: '7P3HS.R66TjCJa,AsJma', description: 'v_dmz'}]}
 
-  - {interface: 'vlan14', interfaces: [{ip: '10.1.4.2', netmask: '255.255.255.0', vnetid: '14', vlandev: 'aggr0', description: 'v_tools'}]}
-  - {interface: 'carp14', interfaces: [{type: 'carp', ip: '10.1.4.1', netmask: '255.255.255.0', vhid: '14', carpdev: 'vlan14', advskew: '10', pass: 'nabKqk,cAV.MJg526adH', description: 'v_tools'}]}
+  - {device: 'vlan14', interfaces: [{ip: '10.1.4.2', netmask: '255.255.255.0', vnetid: '14', vlandev: 'aggr0', description: 'v_tools'}]}
+  - {device: 'carp14', interfaces: [{type: 'carp', ip: '10.1.4.1', netmask: '255.255.255.0', vhid: '14', carpdev: 'vlan14', advskew: '10', pass: 'nabKqk,cAV.MJg526adH', description: 'v_tools'}]}
 
-  - {interface: 'vlan15', interfaces: [{ip: '10.1.5.2', netmask: '255.255.255.0', vnetid: '15', vlandev: 'aggr0', description: 'v_clients'}]}
-  - {interface: 'carp15', interfaces: [{type: 'carp', ip: '10.1.5.1', netmask: '255.255.255.0', vhid: '15', carpdev: 'vlan15', advskew: '10', pass: 'kPCT6a,H4DcvcKb.9QJf', description: 'v_clients'}]}
+  - {device: 'vlan15', interfaces: [{ip: '10.1.5.2', netmask: '255.255.255.0', vnetid: '15', vlandev: 'aggr0', description: 'v_clients'}]}
+  - {device: 'carp15', interfaces: [{type: 'carp', ip: '10.1.5.1', netmask: '255.255.255.0', vhid: '15', carpdev: 'vlan15', advskew: '10', pass: 'kPCT6a,H4DcvcKb.9QJf', description: 'v_clients'}]}
 
   # PFSYNC (em3)
 
-  - {interface: 'pfsync0', interfaces: [{type: 'pfsync', syncdev: 'em3', description: 'pfsync'}]}
-  - {interface: 'em3', interfaces: [{ip: '10.1.0.2', netmask: '255.255.255.0', broadcast: '10.1.0.255', description: 'n_pf_sync'}]}
+  - {device: 'pfsync0', interfaces: [{type: 'pfsync', syncdev: 'em3', description: 'pfsync'}]}
+  - {device: 'em3', interfaces: [{ip: '10.1.0.2', netmask: '255.255.255.0', broadcast: '10.1.0.255', description: 'n_pf_sync'}]}
 
 # MOTD
 
