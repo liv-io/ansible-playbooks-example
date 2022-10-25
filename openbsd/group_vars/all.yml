@@ -8,115 +8,6 @@ bash_tmout: 'disable'
 
 cron_monitor_monit_state: 'true'
 
-# FREEBSD_PERIODIC
-
-freebsd_periodic_daily_output: '/dev/null'
-
-freebsd_periodic_monthly_output: '/dev/null'
-
-freebsd_periodic_weekly_output: '/dev/null'
-
-# FREEBSD_PF
-
-freebsd_pf_macros_all:
-  # n_base
-  - {name: 'n_base', value: '10.1.1.0/24', comment: 'n_base'}
-  - {name: 'h_fw', value: '10.1.1.1', comment: 'firewall'}
-  - {name: 'h_fp01', value: '10.1.1.11', comment: 'forward proxy'}
-
-  # n_mgmt
-  - {name: 'n_mgmt', value: '10.1.2.0/24', common: 'n_mgmt'}
-  - {name: 'h_fw01', value: '10.1.2.2', comment: 'firewall 01'}
-  - {name: 'h_fw02', value: '10.1.2.3', comment: 'firewall 02'}
-  - {name: 'h_sw', value: '10.1.2.4', comment: 'switch'}
-  - {name: 'h_vt', value: '10.1.2.9', comment: 'virtualization'}
-
-  # n_dmz
-  - {name: 'n_dmz', value: '10.1.3.0/24', common: 'n_dmz'}
-  - {name: 'h_ns01', value: '10.1.3.11', comment: 'name server 01'}
-  - {name: 'h_ns02', value: '10.1.3.13', comment: 'name server 01'}
-  - {name: 'h_rp', value: '10.1.3.15', comment: 'reverse proxy'}
-  - {name: 'h_ws', value: '10.1.3.17', comment: 'web server'}
-  - {name: 'h_mx', value: '10.1.3.19', comment: 'mail server'}
-  - {name: 'h_btc01', value: '10.1.3.21', comment: 'bitcoin server 01'}
-  - {name: 'h_btc02', value: '10.1.3.23', comment: 'bitcoin server 02'}
-  - {name: 'h_btc03', value: '10.1.3.25', comment: 'bitcoin server 03'}
-
-  # n_tools
-  - {name: 'n_tools', value: '10.1.4.0/24', common: 'n_tools'}
-  - {name: 'h_vc', value: '10.1.4.11', comment: 'version control'}
-
-  # n_clients
-  - {name: 'n_clients', value: '10.1.5.0/24', common: 'n_clients'}
-  - {name: 'h_nb', value: '10.1.5.11', comment: 'notebook'}
-
-freebsd_pf_filters_all:
-  # ICMP
-
-  # icmp from any to any
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', comment: 'icmp echo request from any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', comment: 'icmp echo request to any'}
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', comment: 'icmp destination unreachable from any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', comment: 'icmp destination unreachable to any'}
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench from any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench to any'}
-
-  # SSH
-
-  # ssh from n_base, n_clients
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$n_base', '$n_clients'}, destinations: {'any'}, ports: {'22'}, comment: 'ssh from n_base, n_clients'}
-
-  # MONITORING SERVER
-
-  # node_exporter from h_ms
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9100'}, comment: 'node_exporter from h_ms'}
-
-  # haproxy_exporter from h_ms
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9101'}, comment: 'haproxy_exporter from h_ms'}
-
-  # mysqld_exporter  from h_ms
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9104'}, comment: 'mysqld_exporter from h_ms'}
-
-  # blackbox_exporter from h_ms
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9115'}, comment: 'blackbox_exporter from h_ms'}
-
-  # monit_exporter from h_ms
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_ms'}, destinations: {'any'}, ports: {'9388'}, comment: 'monit_exporter from h_ms'}
-
-  # DNS
-
-  # dns to h_fw, h_ns
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$h_fw', '$h_ns01' '$h_ns02'}, ports: {'53'}, comment: 'dns to h_fw, h_ns'}
-
-  # NTP
-
-  # ntp to h_fw
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'udp'}, sources: {'any'}, destinations: {'$h_fw'}, ports: {'123'}, comment: 'ntp to h_fw'}
-
-  # MAIL EXCHANGER
-
-  # smtp to h_mx
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp to h_mx'}
-
-  # BACKUP SERVER
-
-  # https to h_bs
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_bs'}, ports: {'443'} , comment: 'https to h_bs'}
-
-  # LOG SERVER
-
-  # syslog to h_ls
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$h_ls'}, ports: {'514'} , comment: 'syslog to h_ls'}
-
-  # FORWARD PROXY
-
-  # squid to h_fp
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_fp'}, ports: {'3128'} , comment: 'squid to h_fp'}
-
-# FREEBSD_SYSLOGD
-
-freebsd_syslogd_monitor_monit_state: 'true'
-
 # GROUP
 
 group_config_all:
@@ -332,6 +223,10 @@ restic_server_address: 'backup.example.com'
 
 restic_server_password: '5EWf-AjpSQ_due9x4M-tRb_g5Qq5g_LN'
 
+# ROOT
+
+root_password: '$2b$10$Jua/9rgOstNEVRKz11ncGO1EG.Z1krMLkOurJe4jNHVEU0UZV4fI6'
+
 # RSYSLOG
 
 rsyslog_monitor_monit_state: 'true'
@@ -363,3 +258,20 @@ sudo_config_all:
     config: |
       # example
       example ALL=(root) NOPASSWD: ALL
+
+# USER
+
+user_config_all:
+  - name: 'example'
+    state: 'true'
+    comment: 'example'
+    uid: '1000'
+    group: 'example'
+    groups: ['wheel']
+    groups_append: 'true'
+    password: '$2b$10$6cmx3Y2CaKFoAwqWmKXxtOCD0FWgPZ.QWor2m9W8U.m5E7ygTCb..'
+    password_update: 'true'
+    shell: '/usr/local/bin/bash'
+    authorized_key:
+      - state: 'true'
+        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDR/DO2YFGGs7Qle7Dt2pxsqveVsiXeHVZd2vpjSqKFd7psEZ53BOmAdRoaK/VZvuj+RPjmfJCYDKAxoVxCIL9l2hkfv35e6YRDT0gh0wely37zIFrOineyufYEIOVtgHKKjr88ZP641z9oLgT7xNPKNqhTat5sOdB5cAEf+0q8uFLzcBEdQpTePQmigl4Cp7RL3YHtEDXfDRqlNiAsCd5/YKabDW1rVMksbGQSynOrFyjtkQw5Th+xUZe7uBU08wQEFWXGJacbCEME568UBzbOoqbsuxvD41QggGOI3CQC1QPtXUweFFtc0iwxfwSX4IpTuqIa/7RJRepzPpOf8PsHj135h1SYXZ5fxtnL2/yTfwmaCJb7iUqpJzfyJyndLgdbCtB/JccOUWxSBkA+hU4UVZS5AVN/n+oyGGB7hKt6vk2xRwV47iV+HPdcbaGPqxBOynpAKtWEtMXFxOa/rCh0i9ZDAkj7wxPaje8nbNdQS8O5yrLquXIwOSwyeyKN2yDFGRSiD3In+BilqbmA8N8o/2ZaRKSjjmH7Jpm+F+AR9lAi3M8aj4Ic444/zKO4EbzntyumzG59FPTO3KS67JemixJelKIJMFnOwSpoLMOSfpnVS0LTdVy3mkwQjwEgFXZtMeg4F3o0AO80E5/sjR9sd4zMTLwJHCO+tQVgQzSGYw== example@example.com'

@@ -51,29 +51,6 @@ squid_http_access:
   - {action: 'allow', source: 'src_network_clients', protocol: 'https SSL_ports', destination: 'dst_network_allowed', comment: 'n_clients'}
 
 squid_domain_allowed:
-  # FreeBSD
-  - {name: 'pkg.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'pkgmir.pkg.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'pkgmir.geo.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'pkg0.bme.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'pkg0.nyi.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'pkg0.isc.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'update.FreeBSD.org', comment: 'FreeBSD: Updates'}
-  - {name: 'update1.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'update2.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'update3.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'update4.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'update5.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'update6.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'ftp.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'ec2-eu-west-1.portsnap.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'sourcefire.portsnap.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'your-org.portsnap.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'ec2-ap-southeast-2.portsnap.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'ec2-ap-northeast-1.portsnap.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'ec2-sa-east-1.portsnap.freebsd.org', comment: 'FreeBSD: Updates'}
-  - {name: 'distcache.FreeBSD.org', comment: 'FreeBSD: Updates'}
-
   # OpenBSD
   - {name: 'ftp.openbsd.org', comment: 'OpenBSD: Updates'}
   - {name: 'ftp.eu.openbsd.org', comment: 'OpenBSD: Updates'}

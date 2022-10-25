@@ -2,33 +2,9 @@
 
 # ALL
 
-# Bootstrap
+# Pre
 - hosts: all
-  tasks:
-    - name: group create 'ansible_distribution'
-      group_by:
-        key: "{{ansible_distribution}}"
-
-- hosts: FreeBSD
   become: yes
-  gather_facts: False
-  roles:
-    - role: freebsd_syslogd
-    - role: freebsd_pkg
-    - role: freebsd_rc
-    - role: freebsd_periodic
-    - role: root
-    - role: shell
-    - role: bash
-    - role: user
-  environment:
-    http_proxy: 'http://fp.example.com:3128'
-    https_proxy: 'http://fp.example.com:3128'
-    ftp_proxy: 'http://fp.example.com:3128'
-
-- hosts: OpenBSD
-  become: yes
-  gather_facts: False
   roles:
     - role: openbsd_syslogd
     - role: openbsd_syspatch
@@ -38,17 +14,7 @@
     - role: shell
     - role: bash
     - role: user
-  environment:
-    http_proxy: 'http://fp.example.com:3128'
-    https_proxy: 'http://fp.example.com:3128'
-    ftp_proxy: 'http://fp.example.com:3128'
-
-# Pre
-- hosts: all
-  become: yes
-  roles:
     - role: gnu_tar
-    - role: gnu_zip
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
@@ -58,16 +24,12 @@
 - hosts: all
   become: yes
   roles:
-    - role: bind_tools
     - role: colordiff
     - role: coreutils
-    - role: cron
     - role: curl
-    - role: file
     - role: findutils
     - role: gnu_diff
     - role: gnu_grep
-    - role: gnu_netcat
     - role: gnu_sed
     - role: gnu_watch
     - role: hosts
@@ -76,12 +38,8 @@
     - role: htop
     - role: ifstat
     - role: iftop
-    - role: less
-    - role: lsof
-    - role: mailx
     - role: motd
     - role: nano
-    - role: netcat
     - role: node_exporter
     - role: openntpd
     - role: opensmtpd
@@ -91,7 +49,6 @@
     - role: restic
     - role: rsync
     - role: sudo
-    - role: tcpdump
     - role: tmux
     - role: unzip
     - role: vim
@@ -108,7 +65,6 @@
   roles:
     - role: monit
     - role: monit_exporter
-    - role: freebsd_pf
     - role: openbsd_pf
   environment:
     http_proxy: 'http://fp.example.com:3128'
