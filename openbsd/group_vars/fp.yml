@@ -50,6 +50,10 @@ squid_http_access:
   - {action: 'allow', source: 'src_network_clients', protocol: 'http', destination: 'dst_network_allowed', comment: 'n_clients'}
   - {action: 'allow', source: 'src_network_clients', protocol: 'https SSL_ports', destination: 'dst_network_allowed', comment: 'n_clients'}
 
+  # src_network_unrestricted
+  - {action: 'allow', source: 'src_network_unrestricted', protocol: 'http', destination: 'all', comment: 'Allow unrestricted hosts to access any resource via http'}
+  - {action: 'allow', source: 'src_network_unrestricted', protocol: 'https SSL_ports', destination: 'all', comment: 'Allow unrestricted hosts to access any resource via https'}
+
 squid_domain_allowed:
   # OpenBSD
   - {name: 'ftp.openbsd.org', comment: 'OpenBSD: Updates'}
