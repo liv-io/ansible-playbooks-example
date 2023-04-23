@@ -55,10 +55,10 @@ motd_host_description: 'Reverse Proxy'
 
 # NFTABLES
 
-nftables_filter_host:
-  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'tcp', ports: {'80', '443'}, comment: 'http, https from any'}
-  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.1.2.0/24', '10.1.3.0/24', '10.1.4.0/24'}, ports: {'80', '443'}, comment: 'http, https to n_mgmt, n_dmz, n_tools'}
-  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', ports: {'443'}, comment: 'https to any (letsencrypt)'}
+nftables_filter_rule_host: |
+  add rule ip filter INPUT ct state new tcp dport { 80, 443 } counter accept comment "http, https from any"
+  add rule ip filter OUTPUT ip daddr { 10.1.2.0/24, 10.1.3.0/24, 10.1.4.0/24 } ct state new tcp dport { 80, 443 } counter accept comment "http, https to n_mgmt, n_dmz, n_tools"
+  add rule ip filter OUTPUT ct state new tcp dport 443 counter accept comment "https to any (letsencrypt)"
 
 # RSYSLOG
 

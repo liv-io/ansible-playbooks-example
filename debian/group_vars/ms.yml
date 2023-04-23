@@ -156,14 +156,14 @@ nginx_config:
 
 # NFTABLES
 
-nftables_filter_host:
-  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'tcp', sources: {'10.1.3.0/24', '10.1.5.0/24'}, ports: {'80', '443'}, comment: 'http, https from n_dmz, n_clients'}
-  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', ports: {'80', '443'}, comment: 'http, https to any (blackbox_exporter)'}
-  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.0.0.0/8'}, ports: {'9100'}, comment: 'node_exporter to internal-networks'}
-  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.0.0.0/8'}, ports: {'9101'}, comment: 'haproxy_exporter to internal-networks'}
-  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.0.0.0/8'}, ports: {'9104'}, comment: 'mysqld_exporter to internal-networks'}
-  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.0.0.0/8'}, ports: {'9115'}, comment: 'blackbox_exporter to internal-networks'}
-  - {action: 'accept', direction: 'out', version: 'ipv4', protocol: 'tcp', destinations: {'10.0.0.0/8'}, ports: {'9388'}, comment: 'monit_exporter to internal-networks'}
+nftables_filter_rule_host: |
+  add rule ip filter INPUT ip saddr { 10.1.3.0/24, 10.1.5.0/24 } ct state new tcp dport { 80, 443 } counter accept comment "http, https from n_dmz, n_clients"
+  add rule ip filter OUTPUT ct state new tcp dport { 80, 443 } counter accept comment "http, https to any (blackbox_exporter)"
+  add rule ip filter OUTPUT ip daddr 10.0.0.0/8 ct state new tcp dport 9100 counter accept comment "node_exporter to internal-networks"
+  add rule ip filter OUTPUT ip daddr 10.0.0.0/8 ct state new tcp dport 9101 counter accept comment "haproxy_exporter to internal-networks"
+  add rule ip filter OUTPUT ip daddr 10.0.0.0/8 ct state new tcp dport 9104 counter accept comment "mysqld_exporter to internal-networks"
+  add rule ip filter OUTPUT ip daddr 10.0.0.0/8 ct state new tcp dport 9115 counter accept comment "blackbox_exporter to internal-networks"
+  add rule ip filter OUTPUT ip daddr 10.0.0.0/8 ct state new tcp dport 9388 counter accept comment "monit_exporter to internal-networks"
 
 # PROMETHEUS
 

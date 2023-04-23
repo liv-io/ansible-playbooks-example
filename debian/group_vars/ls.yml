@@ -64,10 +64,10 @@ motd_host_description: 'Logging Server'
 
 # NFTABLES
 
-nftables_filter_host:
-  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'tcp', sources: {'10.1.1.0/24', '10.1.2.0/24', '10.1.3.0/24', '10.1.4.0/24', '10.1.5.0/24'}, ports: {'514'}, comment: 'syslog from internal-networks'}
-  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'udp', sources: {'10.1.1.0/24', '10.1.2.0/24', '10.1.3.0/24', '10.1.4.0/24', '10.1.5.0/24'}, ports: {'514'}, comment: 'syslog from internal-networks'}
-  - {action: 'accept', direction: 'in', version: 'ipv4', protocol: 'tcp', sources: {'10.1.3.0/24', '10.1.5.0/24'}, ports: {'80', '443'}, comment: 'http, https from n_dmz, n_clients'}
+nftables_filter_rule_host: |
+  add rule ip filter INPUT ip saddr { 10.1.1.0/24, 10.1.2.0/24, 10.1.3.0/24, 10.1.4.0/24, 10.1.5.0/24 } ct state new tcp dport 514 counter accept comment "syslog from internal-networks"
+  add rule ip filter INPUT ip saddr { 10.1.1.0/24, 10.1.2.0/24, 10.1.3.0/24, 10.1.4.0/24, 10.1.5.0/24 } ct state new udp dport 514 counter accept comment "syslog from internal-networks"
+  add rule ip filter INPUT ip saddr { 10.1.3.0/24, 10.1.5.0/24 } ct state new tcp dport { 80, 443 } counter accept comment "http, https from n_dmz, n_clients"
 
 # NGINX
 
