@@ -34,6 +34,7 @@
 
 The following operating systems are supported:
 * Debian 11
+* Debian 12
 * OpenBSD 7.1
 * OpenBSD 7.2
 

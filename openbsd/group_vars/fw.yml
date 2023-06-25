@@ -108,12 +108,6 @@ openbsd_pf_filters_all:
   - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'50000:65535'}, comment: 'discord from n_clients to any'}
   - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'50000:65535'}, comment: 'discord from n_clients to any'}
 
-  # ANY
-
-  # any from i_wan to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'! 10.0.0.0/8'}, comment: 'any from h_fw to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'! 10.0.0.0/8'}, comment: 'any from h_fw to any'}
-
 openbsd_pf_filters_group:
 
   # H_BTC
