@@ -29,10 +29,6 @@ monit_exporter_monitor_monit_state: 'true'
 
 motd_host_description: "Please add 'group_var' or 'host_var' file"
 
-# NANO
-
-nano_state: 'remove'
-
 # NGINX
 
 nginx_log_format_main: |-
@@ -189,6 +185,27 @@ openssh_allow_users: ['example']
 openssh_monitor_monit_state: 'true'
 
 openssh_password_authentication: 'no'
+
+# PACKAGE
+
+package_config_all:
+  - {name: 'colordiff', state: 'true'}
+  - {name: 'coreutils', state: 'true'}
+  - {name: 'curl', state: 'true'}
+  - {name: 'findutils', state: 'true'}
+  - {name: 'ggrep', state: 'true'}
+  - {name: 'gsed', state: 'true'}
+  - {name: 'gtar--', state: 'true'}
+  - {name: 'gnuwatch', state: 'true'}
+  - {name: 'htop', state: 'true'}
+  - {name: 'ifstat--', state: 'true'}
+  - {name: 'iftop', state: 'true'}
+  - {name: 'jq', state: 'true'}
+  - {name: 'lowdown', state: 'true'}
+  - {name: 'rsync--', state: 'true'}
+  - {name: 'unzip--', state: 'true'}
+  - {name: 'wget', state: 'true'}
+  - {name: 'zip', state: 'true'}
 
 # RESOLVER
 

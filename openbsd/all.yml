@@ -6,6 +6,7 @@
 - hosts: all
   become: yes
   roles:
+    - role: package
     - role: openbsd_syslogd
     - role: openbsd_syspatch
     - role: openbsd_rc
@@ -14,7 +15,6 @@
     - role: shell
     - role: bash
     - role: user
-    - role: gnu_tar
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
@@ -24,36 +24,19 @@
 - hosts: all
   become: yes
   roles:
-    - role: colordiff
-    - role: coreutils
-    - role: curl
-    - role: findutils
-    - role: gnu_diff
-    - role: gnu_grep
-    - role: gnu_sed
-    - role: gnu_watch
     - role: hosts
     - role: hostname
     - role: hostname_if
-    - role: htop
-    - role: ifstat
-    - role: iftop
     - role: motd
-    - role: nano
     - role: node_exporter
     - role: openntpd
     - role: opensmtpd
     - role: openssh
-    - role: passwd
     - role: resolver
     - role: restic
-    - role: rsync
     - role: sudo
     - role: tmux
-    - role: unzip
     - role: vim
-    - role: wget
-    - role: zip
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
