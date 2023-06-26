@@ -83,10 +83,6 @@ monit_mail_to: []
 
 monit_exporter_monitor_monit_state: 'true'
 
-# NANO
-
-nano_state: 'remove'
-
 # NFTABLES
 
 nftables_filter_rule_all: |

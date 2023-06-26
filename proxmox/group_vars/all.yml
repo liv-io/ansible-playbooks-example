@@ -80,10 +80,6 @@ monit_mail_to: []
 
 monit_exporter_monitor_monit_state: 'true'
 
-# NANO
-
-nano_state: 'remove'
-
 # NFTABLES
 
 nftables_filter_rule_all: |
@@ -172,7 +168,7 @@ package_config_all:
 
 resolver_domain: 'example.com'
 
-resolver_nameserver: 
+resolver_nameserver:
   - {address: '10.0.0.11', comment: 'Server: h_ns01'}
   - {address: '10.0.0.12', comment: 'Server: h_ns02'}
 
