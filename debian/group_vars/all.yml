@@ -150,11 +150,47 @@ openssh_monitor_monit_state: 'true'
 
 openssh_password_authentication: 'no'
 
+# PACKAGE
+
+package_config_all:
+  - {name: 'bzip2', state: 'true'}
+  - {name: 'ca-certificates', state: 'true'}
+  - {name: 'colordiff', state: 'true'}
+  - {name: 'coreutils', state: 'true'}
+  - {name: 'curl', state: 'true'}
+  - {name: 'diffutils', state: 'true'}
+  - {name: 'dnsutils', state: 'true'}
+  - {name: 'dstat', state: 'true'}
+  - {name: 'file', state: 'true'}
+  - {name: 'findutils', state: 'true'}
+  - {name: 'gdisk', state: 'true'}
+  - {name: 'grep', state: 'true'}
+  - {name: 'gzip', state: 'true'}
+  - {name: 'htop', state: 'true'}
+  - {name: 'iproute2', state: 'true'}
+  - {name: 'iputils-ping', state: 'true'}
+  - {name: 'jq', state: 'true'}
+  - {name: 'ldnsutils', state: 'true'}
+  - {name: 'less', state: 'true'}
+  - {name: 'lowdown', state: 'true'}
+  - {name: 'man-db', state: 'true'}
+  - {name: 'net-tools', state: 'true'}
+  - {name: 'nload', state: 'true'}
+  - {name: 'rsync', state: 'true'}
+  - {name: 'sed', state: 'true'}
+  - {name: 'sysstat', state: 'true'}
+  - {name: 'tar', state: 'true'}
+  - {name: 'tcpdump', state: 'true'}
+  - {name: 'telnet', state: 'true'}
+  - {name: 'unzip', state: 'true'}
+  - {name: 'wget', state: 'true'}
+  - {name: 'zip', state: 'true'}
+
 # RESOLVER
 
 resolver_domain: 'example.com'
 
-resolver_nameserver: 
+resolver_nameserver:
   - {address: '10.0.0.11', comment: 'Server: h_ns01'}
   - {address: '10.0.0.12', comment: 'Server: h_ns02'}
 

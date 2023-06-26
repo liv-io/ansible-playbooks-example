@@ -8,12 +8,10 @@
   roles:
     - role: hosts
     - role: apt
+    - role: package
     - role: shell
     - role: bash
     - role: user
-    - role: gnu_tar
-    - role: gnu_zip
-    - role: ca_certificates
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
@@ -24,47 +22,25 @@
   become: yes
   roles:
     - role: auditd
-    - role: bind_tools
-    - role: bzip2
     - role: chrony
-    - role: colordiff
-    - role: coreutils
-    - role: curl
-    - role: diffutils
-    - role: dstat
-    - role: file
-    - role: findutils
     - role: fstrim
     - role: hostname
-    - role: htop
-    - role: iproute2
-    - role: iputils_ping
     - role: issue
-    - role: less
     - role: locale
-    - role: mailx
-    - role: man_db
     - role: motd
-    - role: net_tools
-    - role: nload
     - role: node_exporter
     - role: opensmtpd
     - role: openssh
     - role: resolver
     - role: restic
     - role: root
-    - role: rsync
     - role: rsyslog
     - role: sudo
     - role: sysctl
-    - role: sysstat
     - role: systemd
-    - role: tcpdump
-    - role: telnet
     - role: timezone
     - role: tmux
     - role: vim
-    - role: wget
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
