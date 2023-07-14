@@ -8,11 +8,6 @@ bash_tmout: 'disable'
 
 cron_monitor_monit_state: 'true'
 
-# GROUP
-
-group_config_all:
-  - {name: 'example', state: 'true', gid: '1000'}
-
 # MONIT
 
 monit_mail_server:
@@ -289,6 +284,5 @@ user_config_all:
     password: '$2b$10$6cmx3Y2CaKFoAwqWmKXxtOCD0FWgPZ.QWor2m9W8U.m5E7ygTCb..'
     password_update: 'true'
     shell: '/usr/local/bin/bash'
-    authorized_key:
-      - state: 'true'
-        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDR/DO2YFGGs7Qle7Dt2pxsqveVsiXeHVZd2vpjSqKFd7psEZ53BOmAdRoaK/VZvuj+RPjmfJCYDKAxoVxCIL9l2hkfv35e6YRDT0gh0wely37zIFrOineyufYEIOVtgHKKjr88ZP641z9oLgT7xNPKNqhTat5sOdB5cAEf+0q8uFLzcBEdQpTePQmigl4Cp7RL3YHtEDXfDRqlNiAsCd5/YKabDW1rVMksbGQSynOrFyjtkQw5Th+xUZe7uBU08wQEFWXGJacbCEME568UBzbOoqbsuxvD41QggGOI3CQC1QPtXUweFFtc0iwxfwSX4IpTuqIa/7RJRepzPpOf8PsHj135h1SYXZ5fxtnL2/yTfwmaCJb7iUqpJzfyJyndLgdbCtB/JccOUWxSBkA+hU4UVZS5AVN/n+oyGGB7hKt6vk2xRwV47iV+HPdcbaGPqxBOynpAKtWEtMXFxOa/rCh0i9ZDAkj7wxPaje8nbNdQS8O5yrLquXIwOSwyeyKN2yDFGRSiD3In+BilqbmA8N8o/2ZaRKSjjmH7Jpm+F+AR9lAi3M8aj4Ic444/zKO4EbzntyumzG59FPTO3KS67JemixJelKIJMFnOwSpoLMOSfpnVS0LTdVy3mkwQjwEgFXZtMeg4F3o0AO80E5/sjR9sd4zMTLwJHCO+tQVgQzSGYw== example@example.com'
+    authorized_keys:
+      - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDR/DO2YFGGs7Qle7Dt2pxsqveVsiXeHVZd2vpjSqKFd7psEZ53BOmAdRoaK/VZvuj+RPjmfJCYDKAxoVxCIL9l2hkfv35e6YRDT0gh0wely37zIFrOineyufYEIOVtgHKKjr88ZP641z9oLgT7xNPKNqhTat5sOdB5cAEf+0q8uFLzcBEdQpTePQmigl4Cp7RL3YHtEDXfDRqlNiAsCd5/YKabDW1rVMksbGQSynOrFyjtkQw5Th+xUZe7uBU08wQEFWXGJacbCEME568UBzbOoqbsuxvD41QggGOI3CQC1QPtXUweFFtc0iwxfwSX4IpTuqIa/7RJRepzPpOf8PsHj135h1SYXZ5fxtnL2/yTfwmaCJb7iUqpJzfyJyndLgdbCtB/JccOUWxSBkA+hU4UVZS5AVN/n+oyGGB7hKt6vk2xRwV47iV+HPdcbaGPqxBOynpAKtWEtMXFxOa/rCh0i9ZDAkj7wxPaje8nbNdQS8O5yrLquXIwOSwyeyKN2yDFGRSiD3In+BilqbmA8N8o/2ZaRKSjjmH7Jpm+F+AR9lAi3M8aj4Ic444/zKO4EbzntyumzG59FPTO3KS67JemixJelKIJMFnOwSpoLMOSfpnVS0LTdVy3mkwQjwEgFXZtMeg4F3o0AO80E5/sjR9sd4zMTLwJHCO+tQVgQzSGYw== example@example.com'
