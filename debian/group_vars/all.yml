@@ -189,6 +189,8 @@ resolver_search: ['example.com']
 
 # RESTIC
 
+restic_cacert: '/etc/ssl/ca.example.com.crt'
+
 restic_keep_daily: 30
 
 restic_keep_hourly: 168
@@ -210,6 +212,8 @@ restic_password: '7rMu,ntxrEfd+RFAQdcJh+US.Cu2XQF.'
 restic_server_address: 'bs.example.com'
 
 restic_server_password: '8cgT97AiwCVfw5G4kt_ANHGBbrvFjrRP'
+
+restic_server_username: 'restic'
 
 # ROOT
 

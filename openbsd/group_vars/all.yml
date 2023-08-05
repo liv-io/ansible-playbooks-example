@@ -223,6 +223,8 @@ restic_keep_monthly: 240
 
 restic_keep_weekly: 12
 
+restic_monitor_mail_from_address: 'root@example.com'
+
 restic_monitor_mail_to_address: ['admin@example.com']
 
 restic_monitor_mail_state: 'true'
@@ -234,6 +236,8 @@ restic_password: 'NMhTJr,sftD-vA5uG!v.WE2+a9D87DeE'
 restic_server_address: 'backup.example.com'
 
 restic_server_password: '5EWf-AjpSQ_due9x4M-tRb_g5Qq5g_LN'
+
+restic_server_username: 'restic'
 
 # ROOT
 
