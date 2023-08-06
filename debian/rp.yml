@@ -3,7 +3,7 @@
 # REVERSE PROXY
 
 - hosts: rp
-  become: 'yes'
+  become: True
   roles:
     - role: apache2
     - role: modsecurity

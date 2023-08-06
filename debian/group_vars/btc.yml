@@ -21,7 +21,7 @@ nftables_filter_rule_host: |
 sysctl_config_host:
   - name: 'swap'
     order: '50'
-    state: 'true'
+    state: True
     sysctl:
       - key: 'vm.swappiness'
         value: '10'

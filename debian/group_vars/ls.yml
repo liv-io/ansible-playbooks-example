@@ -38,11 +38,11 @@ alertmanager_config:
         email_configs:
         - to: 'user@example.com'
 
-alertmanager_monitor_monit_state: 'true'
+alertmanager_monitor_monit_state: True
 
 # GRAFANA
 
-grafana_monitor_monit_state: 'true'
+grafana_monitor_monit_state: True
 
 grafana_smtp_from_address: 'ls@example.com'
 
@@ -52,11 +52,11 @@ grafana_smtp_host: 'mail.example.com'
 
 grafana_smtp_port: '25'
 
-grafana_smtp_state: 'true'
+grafana_smtp_state: True
 
 # LOKI
 
-loki_monitor_monit_state: 'true'
+loki_monitor_monit_state: True
 
 # MOTD
 
@@ -74,20 +74,20 @@ nftables_filter_rule_host: |
 nginx_config:
   - name: 'log.example.com'
     alias: ['logs.example.com']
-    state: 'true'
+    state: True
     port: 80
-    hsts_state: 'true'
-    xss_protection_state: 'true'
+    hsts_state: True
+    xss_protection_state: True
     config: |
       return 301 https://$server_name$request_uri;
 
   - name: 'log.example.com'
     alias: ['logs.example.com']
-    state: 'true'
+    state: True
     port: 443
-    hsts_state: 'true'
-    xss_protection_state: 'true'
-    ssl_state: 'true'
+    hsts_state: True
+    xss_protection_state: True
+    ssl_state: True
     ssl_ecdh_curve: 'secp384r1'
     ssl_certificate: '/etc/ssl/example/wildcard.example.com.crt'
     ssl_certificate_key: '/etc/ssl/example/wildcard.example.com.pem'
@@ -105,7 +105,7 @@ nginx_config:
 
 # PROMTAIL
 
-promtail_monitor_monit_state: 'true'
+promtail_monitor_monit_state: True
 
 promtail_pipeline_stages_host: |
   {% raw %}

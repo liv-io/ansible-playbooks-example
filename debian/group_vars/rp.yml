@@ -9,22 +9,22 @@ apache2_global_config: |
 apache2_config:
   - name: 'example.com'
     alias: ['web.example.com', 'www.example.com']
-    state: 'true'
+    state: True
     port: '80'
     server_admin: 'admin@example.com'
     document_root: '/var/www/html'
-    xss_protection_state: 'true'
+    xss_protection_state: True
     config: |
       Redirect permanent /  https://example.com/
 
   - name: 'example.com'
     alias: ['web.example.com', 'www.example.com']
-    state: 'true'
+    state: True
     port: '443'
     server_admin: 'admin@example.com'
     document_root: '/var/www/html'
-    xss_protection_state: 'true'
-    ssl_state: 'true'
+    xss_protection_state: True
+    ssl_state: True
     ssl_certificate: '/etc/letsencrypt/live/example.com/cert.pem'
     ssl_certificate_key: '/etc/letsencrypt/live/example.com/privkey.pem'
     ssl_certificate_chain: '/etc/letsencrypt/live/example.com/chain.pem'

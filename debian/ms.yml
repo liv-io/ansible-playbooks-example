@@ -3,7 +3,7 @@
 # MONITORING SERVER
 
 - hosts: ms
-  become: 'yes'
+  become: True
   roles:
     - role: prometheus
     - role: nginx

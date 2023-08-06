@@ -3,7 +3,7 @@
 # LOGGING SERVER
 
 - hosts: ls
-  become: 'yes'
+  become: True
   roles:
     - role: loki
     - role: promtail

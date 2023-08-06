@@ -17,7 +17,7 @@ rsyslog_config_host:
 
 suricata_config:
   - name: 'liv'
-    state: 'true'
+    state: True
     comment: 'liv policies'
     rules:
       - {action: 'alert', protocol: 'ip', srcaddr: '$HOME_NET', srcport: 'any', direction: '->', dstaddr: '6.6.6.6', dstport: 'any', msg: 'LIV Potential Trojan Activity', options: 'threshold:type limit,track by_src,seconds 3600,count 1;', classtype: 'trojan-activity', reference: {'url,doc.liv.io/suricata/5000001', 'url,liv.io'}, metadata: 'created 20201008, updated 20201008', sid: '5000001', rev: '1'}
@@ -39,7 +39,7 @@ suricata_config:
 
 suricata_home_net: '[10.0.0.0/8]'
 
-suricata_monitor_monit_state: 'true'
+suricata_monitor_monit_state: True
 
 suricata_ruleset:
   - {state: 'enable', name: 'et/open'}

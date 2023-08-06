@@ -3,7 +3,7 @@
 # INTRUSION DETECTION SYSTEM
 
 - hosts: ids
-  become: 'yes'
+  become: True
   roles:
     - role: suricata
   environment:

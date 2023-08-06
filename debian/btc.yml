@@ -3,7 +3,7 @@
 # BTC
 
 - hosts: btc
-  become: 'yes'
+  become: True
   roles:
     - role: bitcoin_core
   environment:

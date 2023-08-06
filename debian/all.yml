@@ -4,7 +4,7 @@
 
 # Pre
 - hosts: all
-  become: yes
+  become: True
   roles:
     - role: hosts
     - role: apt
@@ -19,7 +19,7 @@
 
 # Main
 - hosts: all
-  become: yes
+  become: True
   roles:
     - role: auditd
     - role: chrony
@@ -48,7 +48,7 @@
 
 # Post
 - hosts: all
-  become: yes
+  become: True
   roles:
     - role: monit
     - role: monit_exporter
