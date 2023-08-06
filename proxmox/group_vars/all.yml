@@ -4,10 +4,10 @@
 
 apt_config_group:
   - path: '/etc/apt/sources.list.d/proxmox.list'
-    state: 'true'
+    state: True
     repositories:
       - url: 'http://download.proxmox.com/debian/pve'
-        state: 'true'
+        state: True
         comment: 'Debian - Security'
         distribution: 'buster'
         components: ['pve-no-subscription']
@@ -16,13 +16,13 @@ apt_http_proxy: 'http://fp.example.com:3128'
 
 apt_https_proxy: 'http://fp.example.com:3128'
 
-apt_monitor_prom_state: 'true'
+apt_monitor_prom_state: True
 
 # AUDITD
 
 auditd_config_all:
   - name: 'audit'
-    state: 'true'
+    state: True
     config: |
       # First rule - delete all
       -D
@@ -39,28 +39,28 @@ auditd_config_all:
       # Make config immutable - reboot required to change ruleset
       -e 2
 
-auditd_monitor_monit_state: 'true'
+auditd_monitor_monit_state: True
 
 # BASH
 
-bash_tmout: 'disable'
+bash_tmout: ''
 
 # FSTRIM
 
-fstrim_monitor_prom_state: 'true'
+fstrim_monitor_prom_state: True
 
 # MONIT
 
 monit_config_all:
   - name: 'pvedaemon'
-    state: 'true'
+    state: True
     comment: 'pvedaemon'
     config: |
       check process pvedaemon matching "pvedaemon"
         if failed host 127.0.0.1 port 85 type tcp with timeout 10 seconds then alert
 
   - name: 'pveproxy'
-    state: 'true'
+    state: True
     comment: 'pveproxy'
     config: |
       check process pveproxy matching "pveproxy"
@@ -73,7 +73,7 @@ monit_mail_to: []
 
 # MONIT_EXPORTER
 
-monit_exporter_monitor_monit_state: 'true'
+monit_exporter_monitor_monit_state: True
 
 # NFTABLES
 
@@ -98,11 +98,11 @@ nginx_log_format_main_ssl: |-
   '"$http_user_agent" http_x_forwarded_for:"$http_x_forwarded_for" '
   '$ssl_protocol/$ssl_cipher '
 
-nginx_monitor_monit_state: 'true'
+nginx_monitor_monit_state: True
 
 # NODE_EXPORTER
 
-node_exporter_monitor_monit_state: 'true'
+node_exporter_monitor_monit_state: True
 
 # OPENSMTPD
 
@@ -110,7 +110,7 @@ opensmtpd_action_all:
   - {config: {'action "local" mbox alias <aliases>'}, comment: 'Action: local'}
   - {config: {'action "relay" relay host smtp://mail.example.com:25'}, comment: 'Action: relay'}
 
-opensmtpd_monitor_monit_state: 'true'
+opensmtpd_monitor_monit_state: True
 
 opensmtpd_root_mail_address: 'admin@example.com'
 
@@ -118,46 +118,46 @@ opensmtpd_root_mail_address: 'admin@example.com'
 
 openssh_allow_users: ['example']
 
-openssh_monitor_monit_state: 'true'
+openssh_monitor_monit_state: True
 
-openssh_password_authentication: 'no'
+openssh_password_authentication: False
 
 # PACKAGE
 
 package_config_all:
-  - {name: 'bzip2', state: 'true'}
-  - {name: 'ca-certificates', state: 'true'}
-  - {name: 'colordiff', state: 'true'}
-  - {name: 'coreutils', state: 'true'}
-  - {name: 'curl', state: 'true'}
-  - {name: 'diffutils', state: 'true'}
-  - {name: 'dnsutils', state: 'true'}
-  - {name: 'dstat', state: 'true'}
-  - {name: 'file', state: 'true'}
-  - {name: 'findutils', state: 'true'}
-  - {name: 'gdisk', state: 'true'}
-  - {name: 'grep', state: 'true'}
-  - {name: 'gzip', state: 'true'}
-  - {name: 'htop', state: 'true'}
-  - {name: 'iproute2', state: 'true'}
-  - {name: 'iputils-ping', state: 'true'}
-  - {name: 'jq', state: 'true'}
-  - {name: 'ldnsutils', state: 'true'}
-  - {name: 'less', state: 'true'}
-  - {name: 'lowdown', state: 'true'}
-  - {name: 'man-db', state: 'true'}
-  - {name: 'net-tools', state: 'true'}
-  - {name: 'nload', state: 'true'}
-  - {name: 'openvswitch-switch', state: 'true'}
-  - {name: 'rsync', state: 'true'}
-  - {name: 'sed', state: 'true'}
-  - {name: 'sysstat', state: 'true'}
-  - {name: 'tar', state: 'true'}
-  - {name: 'tcpdump', state: 'true'}
-  - {name: 'telnet', state: 'true'}
-  - {name: 'unzip', state: 'true'}
-  - {name: 'wget', state: 'true'}
-  - {name: 'zip', state: 'true'}
+  - {name: 'bzip2', state: True}
+  - {name: 'ca-certificates', state: True}
+  - {name: 'colordiff', state: True}
+  - {name: 'coreutils', state: True}
+  - {name: 'curl', state: True}
+  - {name: 'diffutils', state: True}
+  - {name: 'dnsutils', state: True}
+  - {name: 'dstat', state: True}
+  - {name: 'file', state: True}
+  - {name: 'findutils', state: True}
+  - {name: 'gdisk', state: True}
+  - {name: 'grep', state: True}
+  - {name: 'gzip', state: True}
+  - {name: 'htop', state: True}
+  - {name: 'iproute2', state: True}
+  - {name: 'iputils-ping', state: True}
+  - {name: 'jq', state: True}
+  - {name: 'ldnsutils', state: True}
+  - {name: 'less', state: True}
+  - {name: 'lowdown', state: True}
+  - {name: 'man-db', state: True}
+  - {name: 'net-tools', state: True}
+  - {name: 'nload', state: True}
+  - {name: 'openvswitch-switch', state: True}
+  - {name: 'rsync', state: True}
+  - {name: 'sed', state: True}
+  - {name: 'sysstat', state: True}
+  - {name: 'tar', state: True}
+  - {name: 'tcpdump', state: True}
+  - {name: 'telnet', state: True}
+  - {name: 'unzip', state: True}
+  - {name: 'wget', state: True}
+  - {name: 'zip', state: True}
 
 # RESOLVER
 
@@ -175,7 +175,7 @@ root_password: '$2b$10$Jua/9rgOstNEVRKz11ncGO1EG.Z1krMLkOurJe4jNHVEU0UZV4fI6'
 
 # RSYSLOG
 
-rsyslog_monitor_monit_state: 'true'
+rsyslog_monitor_monit_state: True
 
 # SHELL
 
@@ -191,14 +191,14 @@ shell_no_proxy: ['localhost', '127.0.0.1', '::1', 'bs.example.com', 'backup.exam
 
 sudo_config_all:
   - name: 'root'
-    state: 'true'
+    state: True
     order: '10'
     config: |
       # root
       root ALL=(ALL) ALL
 
   - name: 'example'
-    state: 'true'
+    state: True
     order: '50'
     config: |
       # example
@@ -206,7 +206,7 @@ sudo_config_all:
 
 # SYSTEMD_TIMESYNCD
 
-systemd_timesyncd_monitor_monit_state: 'true'
+systemd_timesyncd_monitor_monit_state: True
 
 systemd_timesyncd_server:
   - 'ntp01.example.com'
@@ -226,18 +226,18 @@ timezone_timezone: 'Europe/Zurich'
 
 user_config_all:
   - name: 'example'
-    state: 'true'
+    state: True
     comment: 'example'
     uid: '1000'
     group: 'example'
     groups: ['wheel']
-    groups_append: 'true'
+    groups_append: True
     password: '$2b$10$6cmx3Y2CaKFoAwqWmKXxtOCD0FWgPZ.QWor2m9W8U.m5E7ygTCb..'
-    password_update: 'true'
+    password_update: True
     shell: '/bin/bash'
     authorized_keys:
       - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDR/DO2YFGGs7Qle7Dt2pxsqveVsiXeHVZd2vpjSqKFd7psEZ53BOmAdRoaK/VZvuj+RPjmfJCYDKAxoVxCIL9l2hkfv35e6YRDT0gh0wely37zIFrOineyufYEIOVtgHKKjr88ZP641z9oLgT7xNPKNqhTat5sOdB5cAEf+0q8uFLzcBEdQpTePQmigl4Cp7RL3YHtEDXfDRqlNiAsCd5/YKabDW1rVMksbGQSynOrFyjtkQw5Th+xUZe7uBU08wQEFWXGJacbCEME568UBzbOoqbsuxvD41QggGOI3CQC1QPtXUweFFtc0iwxfwSX4IpTuqIa/7RJRepzPpOf8PsHj135h1SYXZ5fxtnL2/yTfwmaCJb7iUqpJzfyJyndLgdbCtB/JccOUWxSBkA+hU4UVZS5AVN/n+oyGGB7hKt6vk2xRwV47iV+HPdcbaGPqxBOynpAKtWEtMXFxOa/rCh0i9ZDAkj7wxPaje8nbNdQS8O5yrLquXIwOSwyeyKN2yDFGRSiD3In+BilqbmA8N8o/2ZaRKSjjmH7Jpm+F+AR9lAi3M8aj4Ic444/zKO4EbzntyumzG59FPTO3KS67JemixJelKIJMFnOwSpoLMOSfpnVS0LTdVy3mkwQjwEgFXZtMeg4F3o0AO80E5/sjR9sd4zMTLwJHCO+tQVgQzSGYw== example@example.com'
 
 # ZFS
 
-zfs_monitor_prom_state: 'true'
+zfs_monitor_prom_state: True
