@@ -99,4 +99,4 @@ squid_domain_allowed:
   - {name: 'grafana.com', comment: 'Grafana Plugins'}
   - {name: 'packages.grafana.com', comment: 'Grafana Packages'}
 
-squid_monitor_monit_state: 'true'
+squid_monitor_monit_state: True

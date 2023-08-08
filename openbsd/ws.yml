@@ -3,7 +3,7 @@
 # WEB SERVER
 
 - hosts: ws
-  become: yes
+  become: True
   roles:
     - role: nginx
   environment:

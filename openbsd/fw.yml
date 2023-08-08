@@ -3,7 +3,7 @@
 # FIREWALL
 
 - hosts: fw
-  become: yes
+  become: True
   roles:
     - role: hostname_if
     - role: nsd

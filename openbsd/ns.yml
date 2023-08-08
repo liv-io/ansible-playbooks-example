@@ -3,7 +3,7 @@
 # NAME SERVER
 
 - hosts: ns
-  become: yes
+  become: True
   roles:
     - role: nsd
   environment:

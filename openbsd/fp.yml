@@ -3,7 +3,7 @@
 # FORWARD PROXY
 
 - hosts: fp
-  become: yes
+  become: True
   roles:
     - role: squid
   environment:

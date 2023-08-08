@@ -47,4 +47,4 @@ motd_host_description: 'Firewall (Passive)'
 
 # OPENNTPD
 
-openntpd_check_time_state: 'disable'
+openntpd_check_time_state: False

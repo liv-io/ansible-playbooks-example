@@ -5,11 +5,11 @@
 nsd_interface:
   - {address: '0.0.0.0', port: '53', comment: 'Any'}
 
-nsd_monitor_monit_state: 'true'
+nsd_monitor_monit_state: True
 
 nsd_zone:
   - name: 'example.com'
-    state: 'true'
+    state: True
     comment: 'example.com zone'
     ttl: '1d'
     origin: 'example.com.'
@@ -38,7 +38,7 @@ nsd_zone:
       - {name: 'www', type: 'CNAME', value: 'ws01'}
 
   - name: '3.2.1.in-addr.arpa'
-    state: 'true'
+    state: True
     comment: '3.2.1.in-addr.arpa zone'
     ttl: '1d'
     origin: '3.2.1.IN-ADDR.ARPA.'

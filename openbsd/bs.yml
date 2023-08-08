@@ -3,7 +3,7 @@
 # BACKUP SERVER
 
 - hosts: bs
-  become: 'yes'
+  become: True
   roles:
     - role: restic
     - role: httpd

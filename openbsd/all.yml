@@ -4,7 +4,7 @@
 
 # Pre
 - hosts: all
-  become: yes
+  become: True
   roles:
     - role: package
     - role: openbsd_syslogd
@@ -22,7 +22,7 @@
 
 # Main
 - hosts: all
-  become: yes
+  become: True
   roles:
     - role: hosts
     - role: hostname
@@ -44,7 +44,7 @@
 
 # Post
 - hosts: all
-  become: yes
+  become: True
   roles:
     - role: monit
     - role: monit_exporter

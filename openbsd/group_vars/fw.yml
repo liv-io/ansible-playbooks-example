@@ -275,7 +275,7 @@ openbsd_pf_filters_group:
 
 monit_config_group:
   - name: 'dhcpd'
-    state: 'true'
+    state: True
     comment: 'dhcpd'
     config: |
       check process dhcpd matching "/usr/sbin/dhcpd"
@@ -289,7 +289,7 @@ motd_host_description: 'Firewall'
 
 # NSD
 
-nsd_monitor_monit_state: 'true'
+nsd_monitor_monit_state: True
 
 nsd_zone:
   - name: 'example.com'
@@ -495,7 +495,7 @@ unbound_access_control:
   - {address: '10.1.4.0/24', action: 'allow', comment: 'n_tools'}
   - {address: '10.1.5.0/24', action: 'allow', comment: 'n_clients'}
 
-unbound_do_not_query_localhost: 'no'
+unbound_do_not_query_localhost: False
 
 unbound_include:
   - {file: '/data/unbound-adblock/adblock.conf', comment: 'Unbound AdBlock List'}
@@ -510,7 +510,7 @@ unbound_interface:
 unbound_local_zone:
   - {zone: '10.in-addr.arpa.', type: 'nodefault', comment: 'Enable reverse lookup for 10.0.0.0/8'}
 
-unbound_monitor_monit_state: 'true'
+unbound_monitor_monit_state: True
 
 unbound_stub_zone:
   - {name: 'example.com', address: '127.0.0.1', port: '53', comment: 'example.com zone'}
