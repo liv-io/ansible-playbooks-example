@@ -22,6 +22,7 @@
   become: True
   roles:
     - role: auditd
+    - role: chrony
     - role: fstrim
     - role: hostname
     - role: issue
@@ -37,7 +38,6 @@
     - role: sudo
     - role: sysctl
     - role: systemd
-    - role: systemd_timesyncd
     - role: timezone
     - role: tmux
     - role: vim

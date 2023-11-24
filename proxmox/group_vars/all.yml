@@ -9,12 +9,12 @@ apt_config_group:
       - url: 'http://download.proxmox.com/debian/pve'
         state: True
         comment: 'Debian - Security'
-        distribution: 'buster'
+        distribution: 'bookworm'
         components: ['pve-no-subscription']
 
-apt_http_proxy: 'http://fp.example.com:3128'
+apt_http_proxy: 'http://fp.liv.io:3128'
 
-apt_https_proxy: 'http://fp.example.com:3128'
+apt_https_proxy: 'http://fp.liv.io:3128'
 
 apt_monitor_prom_state: True
 
@@ -44,6 +44,16 @@ auditd_monitor_monit_state: True
 # BASH
 
 bash_tmout: ''
+
+# CHRONY
+
+chrony_monitor_monit_state: True
+
+chrony_server:
+  - {address: 'ntp01.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp01'}
+  - {address: 'ntp02.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp02'}
+  - {address: 'ntp03.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp03'}
+  - {address: 'ntp04.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp04'}
 
 # FSTRIM
 
@@ -203,20 +213,6 @@ sudo_config_all:
     config: |
       # example
       example ALL=(root) NOPASSWD: ALL
-
-# SYSTEMD_TIMESYNCD
-
-systemd_timesyncd_monitor_monit_state: True
-
-systemd_timesyncd_server:
-  - 'ntp01.example.com'
-  - 'ntp02.example.com'
-  - 'ntp03.example.com'
-  - 'ntp04.example.com'
-
-systemd_timesyncd_fallback:
-  - 'ntp05.example.com'
-  - 'ntp06.example.com'
 
 # TIMEZONE
 
