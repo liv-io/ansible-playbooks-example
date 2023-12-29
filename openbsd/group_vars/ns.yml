@@ -55,7 +55,7 @@ nsd_zone:
 
       - {name: '3', type: 'PTR', value: 'mail.example.com.'}
 
-# OPENBSD_PF
+# PF
 
-openbsd_pf_filters_host:
+pf_filters_host:
   - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'any'}, ports: {'53'}, comment: 'dns from any'}

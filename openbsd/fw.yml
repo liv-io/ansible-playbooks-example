@@ -11,7 +11,7 @@
     - role: unbound
     - role: unbound_adblock
     - role: sysctl
-    - role: openbsd_pf
+    - role: pf
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'

@@ -4,7 +4,7 @@
 
 motd_host_description: 'Web Server'
 
-# OPENBSD_PF
+# PF
 
-openbsd_pf_filters_host:
+pf_filters_host:
   - {action: 'pass', direction: 'in', version: 'inet', protocols: {'tcp'}, sources: {'$h_rp', '$n_clients'}, destinations: {'any'}, ports: {'80', '443'}, comment: 'http, https from h_rp, n_clients'}

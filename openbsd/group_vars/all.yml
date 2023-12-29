@@ -43,9 +43,9 @@ nginx_monitor_monit_state: True
 
 node_exporter_monitor_monit_state: True
 
-# OPENBSD_PF
+# PF
 
-openbsd_pf_macros_all:
+pf_macros_all:
   # n_base
   - {name: 'n_base', value: '10.1.1.0/24', comment: 'n_base'}
   - {name: 'h_fw', value: '10.1.1.1', comment: 'firewall'}
@@ -77,7 +77,7 @@ openbsd_pf_macros_all:
   - {name: 'n_clients', value: '10.1.5.0/24', common: 'n_clients'}
   - {name: 'h_nb', value: '10.1.5.11', comment: 'notebook'}
 
-openbsd_pf_filters_all:
+pf_filters_all:
 
   # ICMP
 
@@ -141,13 +141,13 @@ openbsd_pf_filters_all:
   # squid to h_fp
   - {action: 'pass', direction: 'out', version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$h_fp'}, ports: {'3128'} , comment: 'squid to h_fp'}
 
-# OPENBSD_SYSLOGD
+# SYSLOGD
 
-openbsd_syslogd_monitor_monit_state: True
+syslogd_monitor_monit_state: True
 
-# OPENBSD_SYSPATCH
+# SYSPATCH
 
-openbsd_syspatch_installurl:
+syspatch_installurl:
  - {url: 'https://ftp.OpenBSD.org/pub/OpenBSD', comment: 'OpenBSD Packages'}
 
 # OPENNTPD

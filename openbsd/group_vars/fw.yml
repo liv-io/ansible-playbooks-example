@@ -4,273 +4,6 @@
 
 hostname_if_mygate: '1.2.3.1'
 
-# OPENBSD_PF
-
-openbsd_pf_options_limits: [{name: 'states', value: '200000', comment: 'Limit: Maximum entries for state table'},
-                            {name: 'frags', value: '65536', comment: 'Limit: Maximum entries for fragment reassembly'},
-                            {name: 'src-nodes', value: '20000', comment: 'Limit: Maximum entries for tracking source IP addresses'},
-                            {name: 'tables', value: '2000', comment: 'Limit: Maximum of tables'},
-                            {name: 'table-entries', value: '200000', comment: 'Limit: Overall maximum of addresses'}]
-
-openbsd_pf_macros_group:
-  # INTERFACE
-
-  - {name: 'i_wan', value: 'em0', comment: 'i_wan'}
-  - {name: 'i_base', value: 'vlan11', comment: 'v_base'}
-  - {name: 'i_mgmt', value: 'vlan12', comment: 'v_mgmt'}
-  - {name: 'i_dmz', value: 'vlan13', comment: 'v_dmz'}
-  - {name: 'i_tools', value: 'vlan14', comment: 'v_tools'}
-  - {name: 'i_clients', value: 'vlan15', comment: 'v_clients'}
-  - {name: 'i_carp2', value: 'carp2', comment: 'i_carp2'}
-  - {name: 'i_carp3', value: 'carp3', comment: 'i_carp3'}
-  - {name: 'i_carp4', value: 'carp4', comment: 'i_carp4'}
-  - {name: 'i_carp5', value: 'carp5', comment: 'i_carp5'}
-  - {name: 'i_carp6', value: 'carp6', comment: 'i_carp6'}
-  - {name: 'i_pfsync', value: 'pfsync0', comment: 'i_pfsync'}
-
-  # ADDRESS
-
-  - {name: 'a_2', value: '1.2.3.2', comment: '1.2.3.2'}
-  - {name: 'a_3', value: '1.2.3.3', comment: '1.2.3.3'}
-  - {name: 'a_4', value: '1.2.3.4', comment: '1.2.3.4'}
-  - {name: 'a_5', value: '1.2.3.5', comment: '1.2.3.5'}
-  - {name: 'a_6', value: '1.2.3.5', comment: '1.2.3.6'}
-
-openbsd_pf_filters_all:
-
-  # pfsync from fw to fw
-  - {action: 'pass', direction: 'in', interfaces: {'$i_pfsync'}, protocols: {'pfsync'}, sources: {'any'}, destinations: {'any'}, comment: 'pfsync from fw to fw'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_pfsync'}, protocols: {'pfsync'}, sources: {'any'}, destinations: {'any'}, comment: 'pfsync from fw to fw'}
-
-  # carp from interface to interface
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz', '$i_base', '$i_carp2', '$i_carp3', '$i_carp4', '$i_carp5', '$i_carp6'}, protocols: {'carp'}, sources: {'any'}, destinations: {'any'}, comment: 'carp from interface to interface'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz', '$i_base', '$i_carp2', '$i_carp3', '$i_carp4', '$i_carp5', '$i_carp6'}, protocols: {'carp'}, sources: {'any'}, destinations: {'any'}, comment: 'carp from interface to interface'}
-
-  # ICMP
-
-  # icmp from any to any
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', comment: 'icmp echo request from any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', comment: 'icmp echo request to any'}
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', comment: 'icmp destination unreachable from any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', comment: 'icmp destination unreachable to any'}
-  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench from any'}
-  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench to any'}
-
-  # FTP
-
-  # ftp from n_clients to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'21'}, comment: 'ftp from n_clients to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'21'}, comment: 'ftp from n_clients to any'}
-
-  # SSH
-
-  # ssh from n_clients to n_dmz, n_base, n_tools
-  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from n_clients to internal-networks'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from n_clients to internal-networks'}
-
-  # NTP
-
-  # ntp from n_base to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_base'}, version: 'inet', protocols: {'udp'}, sources: {'10.0.0.0/8'}, destinations: {'! 10.0.0.0/8'}, ports: {'123'}, comment: 'ntp from n_base to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_base'}, version: 'inet', protocols: {'udp'}, sources: {'10.0.0.0/8'}, destinations: {'! 10.0.0.0/8'}, ports: {'123'}, comment: 'ntp from n_base to any'}
-
-  # HTTP
-
-  # http, https from n_clients to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'80', '443'}, comment: 'http, https from n_clients to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'80', '443'}, comment: 'http, https from n_clients to any'}
-
-  # SMTP
-
-  # smtps from n_clients to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'465'}, comment: 'smtps from n_clients to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'465'}, comment: 'smtps from n_clients to any'}
-
-  # imaps from n_clients to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'993'}, comment: 'imaps from n_clients to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'993'}, comment: 'imaps from n_clients to any'}
-
-  # JABBER
-
-  # jabber from n_clients to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'5222', '5223'}, comment: 'jabber from n_clients to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'5222', '5223'}, comment: 'jabber from n_clients to any'}
-
-  # IRC
-
-  # irc from n_clients to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'6665', '6666', '6667', '6697', '7000', '7070', '8000', '8001', '8002'}, comment: 'irc from n_clients to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'6665', '6666', '6667', '6697', '7000', '7070', '8000', '8001', '8002'}, comment: 'irc from n_clients to any'}
-
-  # DISCORD
-
-  # discord from n_clients to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'50000:65535'}, comment: 'discord from n_clients to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'50000:65535'}, comment: 'discord from n_clients to any'}
-
-openbsd_pf_filters_group:
-
-  # H_BTC
-
-  # dnat btc-network from any to h_btc
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'8333'}, dnat: '$h_btc', comment: 'dnat btc from any to h_btc'}
-
-  # btc-network from any to h_btc
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_btc'}, ports: {'8333'}, comment: 'btc-network from any to h_btc'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_btc'}, ports: {'8333'}, comment: 'btc-network from any to h_btc'}
-
-  # btc-network from h_btc to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_btc'}, destinations: {'! 10.0.0.0/8'}, ports: {'8333'}, comment: 'btc-network from h_btc to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_btc'}, destinations: {'! 10.0.0.0/8'}, ports: {'8333'}, comment: 'btc-network from h_btc to any'}
-
-  # H_CODE
-
-  # ssh from h_code to n_dmz, n_base, n_mgmt
-  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_code'}, destinations: {'10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from h_code to n_dmz, n_base, n_mgmt'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_code'}, destinations: {'10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from h_code to n_dmz, n_base, n_mgmt'}
-
-  # ssh from h_code to any (github.com)
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_tools'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_code'}, destinations: {'! 10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from h_code to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_tools'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_code'}, destinations: {'! 10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from h_code to any'}
-
-  # H_FP
-
-  # http, https from h_fp to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_fp'}, destinations: {'! 10.0.0.0/8'}, ports: {'80', '443'}, comment: 'http, https from h_fp to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_fp'}, destinations: {'! 10.0.0.0/8'}, ports: {'80', '443'}, comment: 'http, https from h_fp to any'}
-
-  # squid from internal-networks to h_fp
-  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fp'}, ports: {'3128'}, comment: 'squid from internal-networks to h_fp'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fp'}, ports: {'3128'}, comment: 'squid from internal-networks to h_fp'}
-
-  # H_FW
-
-  # dhcp to n_clients
-  - {action: 'pass', direction: 'in', interfaces: {'$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'$i_clients:network'}, destinations: {'$i_clients:network'}, ports: {'67', '68'}, comment: 'dhcp to n_clients'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'$i_clients:network'}, destinations: {'$i_clients:network'}, ports: {'67', '68'}, comment: 'dhcp to n_clients'}
-
-  # dns from h_fw to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'$a_3'}, destinations: {'! 10.0.0.0/8'}, ports: {'53'}, comment: 'dns from h_fw to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'$a_3'}, destinations: {'! 10.0.0.0/8'}, ports: {'53'}, comment: 'dns from h_fw to any'}
-
-  # dns from internal-networks to h_fw
-  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fw'}, ports: {'53'}, comment: 'dns from internal-networks to h_fw'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fw'}, ports: {'53'}, comment: 'dns from internal-networks to h_fw'}
-
-  # ntp from internal-networks to h_fw
-  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fw'}, ports: {'123'}, comment: 'ntp from internal-networks to h_fw'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fw'}, ports: {'123'}, comment: 'ntp from internal-networks to h_fw'}
-
-  # H_LS
-
-  # syslog from internal-networks to h_ls
-  - {action: 'pass', direction: 'in', interfaces: {'$i_base', '$i_mgmt', '$i_dmz', '$i_tools'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ls'}, ports: {'514'}, comment: 'syslog from internal-networks to h_ls'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_base', '$i_mgmt', '$i_dmz', '$i_tools'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ls'}, ports: {'514'}, comment: 'syslog from internal-networks to h_ls'}
-
-  # http, https from n_clients, n_wifi to h_ls
-  - {action: 'pass', direction: 'in', interfaces: {'$i_base', '$i_clients', '$i_wifi'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ls'}, ports: {'80', '443'}, comment: 'http, https from n_clients, n_wifi to h_ls'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_base', '$i_clients', '$i_wifi'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ls'}, ports: {'80', '443'}, comment: 'http, https from n_clients, n_wifi to h_ls'}
-
-  # H_MX
-
-  # dnat smtp from any to h_mx
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'25'}, dnat: '$h_mx', comment: 'dnat smtp from any to h_mx'}
-
-  # smtp from any to h_mx
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp from any to h_mx'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp from any to h_mx'}
-
-  # dnat smtps from any to h_mx
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'587'}, dnat: '$h_mx', comment: 'dnat smtps from any to h_mx'}
-
-  # smtps from any to h_mx
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'587'}, comment: 'smtps from any to h_mx'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'587'}, comment: 'smtps from any to h_mx'}
-
-  # dnat imaps from any to h_mx
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'993'}, dnat: '$h_mx', comment: 'dnat imaps from any to h_mx'}
-
-  # imaps from any to h_mx
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'993'}, comment: 'imaps from any to h_mx'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'993'}, comment: 'imaps from any to h_mx'}
-
-  # smtp from n_clients to h_mx
-  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp from n_clients to h_mx'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp from n_clients to h_mx'}
-
-  # smtps from n_clients to h_mx
-  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'587'}, comment: 'smtps from n_clients to h_mx'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'587'}, comment: 'smtps from n_clients to h_mx'}
-
-  # imaps from n_clients to h_mx
-  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'993'}, comment: 'imaps from n_clients to h_mx'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'993'}, comment: 'imaps from n_clients to h_mx'}
-
-  # smtp from h_mx to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_mx'}, destinations: {'! 10.0.0.0/8'}, ports: {'25'}, comment: 'smtp from h_mx to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_mx'}, destinations: {'! 10.0.0.0/8'}, ports: {'25'}, comment: 'smtp from h_mx to any'}
-
-  # smtps from h_mx to any
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_mx'}, destinations: {'! 10.0.0.0/8'}, ports: {'587'}, comment: 'smtps from h_mx to any'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_mx'}, destinations: {'! 10.0.0.0/8'}, ports: {'587'}, comment: 'smtps from h_mx to any'}
-
-  # H_NS01, H_NS02
-
-  # dnat dns from any to h_ns01
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$a_2'}, ports: {'53'}, dnat: '$h_ns01', comment: 'dnat dns from any to h_ns01'}
-
-  # dnat dns from any to h_ns02
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'53'}, dnat: '$h_ns02', comment: 'dnat dns from any to h_ns02'}
-
-  # dns from any to h_ns01, h_ns02
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'53'}, comment: 'dns from any to h_ns01, h_ns02'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'53'}, comment: 'dns from any to h_ns01, h_ns02'}
-
-  # dns from internal-networks to h_ns01, h_ns02
-  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'53'}, comment: 'dns from internal-networks to h_ns01, h_ns02'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'53'}, comment: 'dns from internal-networks to h_ns01, h_ns02'}
-
-  # H_RP
-
-  # dnat http, https from any to h_rp
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'80', '443'}, dnat: '$h_rp', comment: 'dnat http, https from any to h_rp'}
-
-  # http, https from any to h_rp
-  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_rp'}, ports: {'80', '443'}, comment: 'http, https from any to h_rp'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_rp'}, ports: {'80', '443'}, comment: 'http, https from any to h_rp'}
-
-  # http, https from h_rp to h_sw
-  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_rp'}, destinations: {'$h_sw'}, ports: {'80', '443'}, comment: 'http, https from h_rp to h_sw'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_rp'}, destinations: {'$h_sw'}, ports: {'80', '443'}, comment: 'http, https from h_rp to h_sw'}
-
-  # H_VT
-
-  # http, https from h_rp to h_vt
-  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_rp'}, destinations: {'$h_vt'}, ports: {'80', '443'}, comment: 'http, https from h_rp to h_vt'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_rp'}, destinations: {'$h_vt'}, ports: {'80', '443'}, comment: 'http, https from h_rp to h_vt'}
-
-  # H_WS
-
-  # http, https from n_clients to h_ws
-  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'$h_ws'}, ports: {'80', '443'}, comment: 'http, https from n_clients to h_ws'}
-  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'$h_ws'}, ports: {'80', '443'}, comment: 'http, https from n_clients to h_ws'}
-
-  # SNAT
-
-  # NOTE: SNAT rules have to be placed at the very end (!)
-
-  # snat from n_base via a_2
-  - {action: 'pass', direction: 'out', interfaces: {'em0'}, version: 'inet', protocols: {'tcp', 'udp', 'icmp'}, sources: {'$i_base:network'}, destinations: {'any'}, snat: '$i_carp2', comment: 'snat from n_base via a_2'}
-
-  # snat from n_base via a_3
-  - {action: 'pass', direction: 'out', interfaces: {'em0'}, version: 'inet', protocols: {'tcp', 'udp', 'icmp'}, sources: {'$i_dmz:network'}, destinations: {'any'}, snat: '$i_carp3', comment: 'snat from n_dmz via a_3'}
-
-  # snat from n_base via a_4
-  - {action: 'pass', direction: 'out', interfaces: {'em0'}, version: 'inet', protocols: {'tcp', 'udp', 'icmp'}, sources: {'$i_tools:network'}, destinations: {'any'}, snat: '$i_carp4', comment: 'snat from n_base via a_4'}
-
-  # snat from n_base via a_5
-  - {action: 'pass', direction: 'out', interfaces: {'em0'}, version: 'inet', protocols: {'tcp', 'udp', 'icmp'}, sources: {'$i_clients:network'}, destinations: {'any'}, snat: '$i_carp5', comment: 'snat from n_base via a_5'}
-
 # MONIT
 
 monit_config_group:
@@ -480,6 +213,275 @@ openntpd_listen:
   - {address: '10.1.3.1', comment: 'n_dmz'}
   - {address: '10.1.4.1', comment: 'n_tools'}
   - {address: '10.1.5.1', comment: 'n_clients'}
+
+# PF
+
+pf_options_limits: [{name: 'states', value: '200000', comment: 'Limit: Maximum entries for state table'},
+                            {name: 'frags', value: '65536', comment: 'Limit: Maximum entries for fragment reassembly'},
+                            {name: 'src-nodes', value: '20000', comment: 'Limit: Maximum entries for tracking source IP addresses'},
+                            {name: 'tables', value: '2000', comment: 'Limit: Maximum of tables'},
+                            {name: 'table-entries', value: '200000', comment: 'Limit: Overall maximum of addresses'}]
+
+pf_macros_group:
+  # INTERFACE
+
+  - {name: 'i_wan', value: 'em0', comment: 'i_wan'}
+  - {name: 'i_base', value: 'vlan11', comment: 'v_base'}
+  - {name: 'i_mgmt', value: 'vlan12', comment: 'v_mgmt'}
+  - {name: 'i_dmz', value: 'vlan13', comment: 'v_dmz'}
+  - {name: 'i_tools', value: 'vlan14', comment: 'v_tools'}
+  - {name: 'i_clients', value: 'vlan15', comment: 'v_clients'}
+  - {name: 'i_carp2', value: 'carp2', comment: 'i_carp2'}
+  - {name: 'i_carp3', value: 'carp3', comment: 'i_carp3'}
+  - {name: 'i_carp4', value: 'carp4', comment: 'i_carp4'}
+  - {name: 'i_carp5', value: 'carp5', comment: 'i_carp5'}
+  - {name: 'i_carp6', value: 'carp6', comment: 'i_carp6'}
+  - {name: 'i_pfsync', value: 'pfsync0', comment: 'i_pfsync'}
+
+  # ADDRESS
+
+  - {name: 'a_2', value: '1.2.3.2', comment: '1.2.3.2'}
+  - {name: 'a_3', value: '1.2.3.3', comment: '1.2.3.3'}
+  - {name: 'a_4', value: '1.2.3.4', comment: '1.2.3.4'}
+  - {name: 'a_5', value: '1.2.3.5', comment: '1.2.3.5'}
+  - {name: 'a_6', value: '1.2.3.5', comment: '1.2.3.6'}
+
+pf_filters_all:
+
+  # pfsync from fw to fw
+  - {action: 'pass', direction: 'in', interfaces: {'$i_pfsync'}, protocols: {'pfsync'}, sources: {'any'}, destinations: {'any'}, comment: 'pfsync from fw to fw'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_pfsync'}, protocols: {'pfsync'}, sources: {'any'}, destinations: {'any'}, comment: 'pfsync from fw to fw'}
+
+  # carp from interface to interface
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz', '$i_base', '$i_carp2', '$i_carp3', '$i_carp4', '$i_carp5', '$i_carp6'}, protocols: {'carp'}, sources: {'any'}, destinations: {'any'}, comment: 'carp from interface to interface'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz', '$i_base', '$i_carp2', '$i_carp3', '$i_carp4', '$i_carp5', '$i_carp6'}, protocols: {'carp'}, sources: {'any'}, destinations: {'any'}, comment: 'carp from interface to interface'}
+
+  # ICMP
+
+  # icmp from any to any
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', comment: 'icmp echo request from any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'echoreq', comment: 'icmp echo request to any'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', comment: 'icmp destination unreachable from any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'unreach', comment: 'icmp destination unreachable to any'}
+  - {action: 'pass', direction: 'in', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench from any'}
+  - {action: 'pass', direction: 'out', version: 'inet', protocols: {'icmp'}, type: 'icmp-inet', code: 'squench', comment: 'icmp source quench to any'}
+
+  # FTP
+
+  # ftp from n_clients to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'21'}, comment: 'ftp from n_clients to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'21'}, comment: 'ftp from n_clients to any'}
+
+  # SSH
+
+  # ssh from n_clients to n_dmz, n_base, n_tools
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from n_clients to internal-networks'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from n_clients to internal-networks'}
+
+  # NTP
+
+  # ntp from n_base to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_base'}, version: 'inet', protocols: {'udp'}, sources: {'10.0.0.0/8'}, destinations: {'! 10.0.0.0/8'}, ports: {'123'}, comment: 'ntp from n_base to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_base'}, version: 'inet', protocols: {'udp'}, sources: {'10.0.0.0/8'}, destinations: {'! 10.0.0.0/8'}, ports: {'123'}, comment: 'ntp from n_base to any'}
+
+  # HTTP
+
+  # http, https from n_clients to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'80', '443'}, comment: 'http, https from n_clients to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'80', '443'}, comment: 'http, https from n_clients to any'}
+
+  # SMTP
+
+  # smtps from n_clients to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'465'}, comment: 'smtps from n_clients to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'465'}, comment: 'smtps from n_clients to any'}
+
+  # imaps from n_clients to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'993'}, comment: 'imaps from n_clients to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'993'}, comment: 'imaps from n_clients to any'}
+
+  # JABBER
+
+  # jabber from n_clients to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'5222', '5223'}, comment: 'jabber from n_clients to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'5222', '5223'}, comment: 'jabber from n_clients to any'}
+
+  # IRC
+
+  # irc from n_clients to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'6665', '6666', '6667', '6697', '7000', '7070', '8000', '8001', '8002'}, comment: 'irc from n_clients to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'6665', '6666', '6667', '6697', '7000', '7070', '8000', '8001', '8002'}, comment: 'irc from n_clients to any'}
+
+  # DISCORD
+
+  # discord from n_clients to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'50000:65535'}, comment: 'discord from n_clients to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'$i_clients:network'}, destinations: {'! 10.0.0.0/8'}, ports: {'50000:65535'}, comment: 'discord from n_clients to any'}
+
+pf_filters_group:
+
+  # H_BTC
+
+  # dnat btc-network from any to h_btc
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'8333'}, dnat: '$h_btc', comment: 'dnat btc from any to h_btc'}
+
+  # btc-network from any to h_btc
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_btc'}, ports: {'8333'}, comment: 'btc-network from any to h_btc'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_btc'}, ports: {'8333'}, comment: 'btc-network from any to h_btc'}
+
+  # btc-network from h_btc to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_btc'}, destinations: {'! 10.0.0.0/8'}, ports: {'8333'}, comment: 'btc-network from h_btc to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_btc'}, destinations: {'! 10.0.0.0/8'}, ports: {'8333'}, comment: 'btc-network from h_btc to any'}
+
+  # H_CODE
+
+  # ssh from h_code to n_dmz, n_base, n_mgmt
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_code'}, destinations: {'10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from h_code to n_dmz, n_base, n_mgmt'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_code'}, destinations: {'10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from h_code to n_dmz, n_base, n_mgmt'}
+
+  # ssh from h_code to any (github.com)
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_tools'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_code'}, destinations: {'! 10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from h_code to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_tools'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_code'}, destinations: {'! 10.0.0.0/8'}, ports: {'22'}, comment: 'ssh from h_code to any'}
+
+  # H_FP
+
+  # http, https from h_fp to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_fp'}, destinations: {'! 10.0.0.0/8'}, ports: {'80', '443'}, comment: 'http, https from h_fp to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_fp'}, destinations: {'! 10.0.0.0/8'}, ports: {'80', '443'}, comment: 'http, https from h_fp to any'}
+
+  # squid from internal-networks to h_fp
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fp'}, ports: {'3128'}, comment: 'squid from internal-networks to h_fp'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fp'}, ports: {'3128'}, comment: 'squid from internal-networks to h_fp'}
+
+  # H_FW
+
+  # dhcp to n_clients
+  - {action: 'pass', direction: 'in', interfaces: {'$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'$i_clients:network'}, destinations: {'$i_clients:network'}, ports: {'67', '68'}, comment: 'dhcp to n_clients'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'$i_clients:network'}, destinations: {'$i_clients:network'}, ports: {'67', '68'}, comment: 'dhcp to n_clients'}
+
+  # dns from h_fw to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'$a_3'}, destinations: {'! 10.0.0.0/8'}, ports: {'53'}, comment: 'dns from h_fw to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'$a_3'}, destinations: {'! 10.0.0.0/8'}, ports: {'53'}, comment: 'dns from h_fw to any'}
+
+  # dns from internal-networks to h_fw
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fw'}, ports: {'53'}, comment: 'dns from internal-networks to h_fw'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fw'}, ports: {'53'}, comment: 'dns from internal-networks to h_fw'}
+
+  # ntp from internal-networks to h_fw
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fw'}, ports: {'123'}, comment: 'ntp from internal-networks to h_fw'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_fw'}, ports: {'123'}, comment: 'ntp from internal-networks to h_fw'}
+
+  # H_LS
+
+  # syslog from internal-networks to h_ls
+  - {action: 'pass', direction: 'in', interfaces: {'$i_base', '$i_mgmt', '$i_dmz', '$i_tools'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ls'}, ports: {'514'}, comment: 'syslog from internal-networks to h_ls'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_base', '$i_mgmt', '$i_dmz', '$i_tools'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ls'}, ports: {'514'}, comment: 'syslog from internal-networks to h_ls'}
+
+  # http, https from n_clients, n_wifi to h_ls
+  - {action: 'pass', direction: 'in', interfaces: {'$i_base', '$i_clients', '$i_wifi'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ls'}, ports: {'80', '443'}, comment: 'http, https from n_clients, n_wifi to h_ls'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_base', '$i_clients', '$i_wifi'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ls'}, ports: {'80', '443'}, comment: 'http, https from n_clients, n_wifi to h_ls'}
+
+  # H_MX
+
+  # dnat smtp from any to h_mx
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'25'}, dnat: '$h_mx', comment: 'dnat smtp from any to h_mx'}
+
+  # smtp from any to h_mx
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp from any to h_mx'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp from any to h_mx'}
+
+  # dnat smtps from any to h_mx
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'587'}, dnat: '$h_mx', comment: 'dnat smtps from any to h_mx'}
+
+  # smtps from any to h_mx
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'587'}, comment: 'smtps from any to h_mx'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'587'}, comment: 'smtps from any to h_mx'}
+
+  # dnat imaps from any to h_mx
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'993'}, dnat: '$h_mx', comment: 'dnat imaps from any to h_mx'}
+
+  # imaps from any to h_mx
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'993'}, comment: 'imaps from any to h_mx'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'993'}, comment: 'imaps from any to h_mx'}
+
+  # smtp from n_clients to h_mx
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp from n_clients to h_mx'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'25'}, comment: 'smtp from n_clients to h_mx'}
+
+  # smtps from n_clients to h_mx
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'587'}, comment: 'smtps from n_clients to h_mx'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'587'}, comment: 'smtps from n_clients to h_mx'}
+
+  # imaps from n_clients to h_mx
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'993'}, comment: 'imaps from n_clients to h_mx'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_mx'}, ports: {'993'}, comment: 'imaps from n_clients to h_mx'}
+
+  # smtp from h_mx to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_mx'}, destinations: {'! 10.0.0.0/8'}, ports: {'25'}, comment: 'smtp from h_mx to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_mx'}, destinations: {'! 10.0.0.0/8'}, ports: {'25'}, comment: 'smtp from h_mx to any'}
+
+  # smtps from h_mx to any
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_mx'}, destinations: {'! 10.0.0.0/8'}, ports: {'587'}, comment: 'smtps from h_mx to any'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_mx'}, destinations: {'! 10.0.0.0/8'}, ports: {'587'}, comment: 'smtps from h_mx to any'}
+
+  # H_NS01, H_NS02
+
+  # dnat dns from any to h_ns01
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$a_2'}, ports: {'53'}, dnat: '$h_ns01', comment: 'dnat dns from any to h_ns01'}
+
+  # dnat dns from any to h_ns02
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'53'}, dnat: '$h_ns02', comment: 'dnat dns from any to h_ns02'}
+
+  # dns from any to h_ns01, h_ns02
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'53'}, comment: 'dns from any to h_ns01, h_ns02'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'53'}, comment: 'dns from any to h_ns01, h_ns02'}
+
+  # dns from internal-networks to h_ns01, h_ns02
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'53'}, comment: 'dns from internal-networks to h_ns01, h_ns02'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base', '$i_mgmt', '$i_tools', '$i_clients'}, version: 'inet', protocols: {'tcp', 'udp'}, sources: {'10.0.0.0/8'}, destinations: {'$h_ns01', '$h_ns02'}, ports: {'53'}, comment: 'dns from internal-networks to h_ns01, h_ns02'}
+
+  # H_RP
+
+  # dnat http, https from any to h_rp
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan'}, version: 'inet', protocols: {'tcp'}, sources: {'any'}, destinations: {'$a_3'}, ports: {'80', '443'}, dnat: '$h_rp', comment: 'dnat http, https from any to h_rp'}
+
+  # http, https from any to h_rp
+  - {action: 'pass', direction: 'in', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_rp'}, ports: {'80', '443'}, comment: 'http, https from any to h_rp'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_wan', '$i_dmz'}, version: 'inet', protocols: {'tcp'}, sources: {'! 10.0.0.0/8'}, destinations: {'$h_rp'}, ports: {'80', '443'}, comment: 'http, https from any to h_rp'}
+
+  # http, https from h_rp to h_sw
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_rp'}, destinations: {'$h_sw'}, ports: {'80', '443'}, comment: 'http, https from h_rp to h_sw'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_rp'}, destinations: {'$h_sw'}, ports: {'80', '443'}, comment: 'http, https from h_rp to h_sw'}
+
+  # H_VT
+
+  # http, https from h_rp to h_vt
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_base'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_rp'}, destinations: {'$h_vt'}, ports: {'80', '443'}, comment: 'http, https from h_rp to h_vt'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_base'}, version: 'inet', protocols: {'tcp'}, sources: {'$h_rp'}, destinations: {'$h_vt'}, ports: {'80', '443'}, comment: 'http, https from h_rp to h_vt'}
+
+  # H_WS
+
+  # http, https from n_clients to h_ws
+  - {action: 'pass', direction: 'in', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'$h_ws'}, ports: {'80', '443'}, comment: 'http, https from n_clients to h_ws'}
+  - {action: 'pass', direction: 'out', interfaces: {'$i_dmz', '$i_clients'}, version: 'inet', protocols: {'tcp'}, sources: {'$i_clients:network'}, destinations: {'$h_ws'}, ports: {'80', '443'}, comment: 'http, https from n_clients to h_ws'}
+
+  #------------------------------------------------------------
+  # NOTE: SNAT FIREWALL RULES HAVE TO BE LISTED AT THE VERY END
+
+  # snat from n_base via a_2
+  - {action: 'pass', direction: 'out', interfaces: {'em0'}, version: 'inet', protocols: {'tcp', 'udp', 'icmp'}, sources: {'$i_base:network'}, destinations: {'any'}, snat: '$i_carp2', comment: 'snat from n_base via a_2'}
+
+  # snat from n_base via a_3
+  - {action: 'pass', direction: 'out', interfaces: {'em0'}, version: 'inet', protocols: {'tcp', 'udp', 'icmp'}, sources: {'$i_dmz:network'}, destinations: {'any'}, snat: '$i_carp3', comment: 'snat from n_dmz via a_3'}
+
+  # snat from n_base via a_4
+  - {action: 'pass', direction: 'out', interfaces: {'em0'}, version: 'inet', protocols: {'tcp', 'udp', 'icmp'}, sources: {'$i_tools:network'}, destinations: {'any'}, snat: '$i_carp4', comment: 'snat from n_base via a_4'}
+
+  # snat from n_base via a_5
+  - {action: 'pass', direction: 'out', interfaces: {'em0'}, version: 'inet', protocols: {'tcp', 'udp', 'icmp'}, sources: {'$i_clients:network'}, destinations: {'any'}, snat: '$i_carp5', comment: 'snat from n_base via a_5'}
+
+  # NOTE: DO NOT INSERT ANY FIREWALL RULES AFTER THIS LINE HERE
+  #------------------------------------------------------------
 
 # SYSCTL
 

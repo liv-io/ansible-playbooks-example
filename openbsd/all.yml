@@ -7,10 +7,10 @@
   become: True
   roles:
     - role: package
-    - role: openbsd_syslogd
-    - role: openbsd_syspatch
-    - role: openbsd_rc
-    - role: openbsd_periodic
+    - role: syslogd
+    - role: syspatch
+    - role: rc
+    - role: periodic
     - role: root
     - role: shell
     - role: bash
@@ -48,7 +48,7 @@
   roles:
     - role: monit
     - role: monit_exporter
-    - role: openbsd_pf
+    - role: pf
   environment:
     http_proxy: 'http://fp.example.com:3128'
     https_proxy: 'http://fp.example.com:3128'
