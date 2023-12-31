@@ -18,9 +18,7 @@
   * [Installation](#installation)
 * [Usage](#usage)
 * [Roadmap](#roadmap)
-* [Contributing](#contributing)
 * [License](#license)
-* [Contact](#contact)
 * [Credits](#credits)
 * [Appendix](#appendix)
 
@@ -56,19 +54,11 @@ The Ansible managed node depends on:
 
 ## Roadmap
 
-## Contributing
-
 ## License
 
 Distributed under the Simplified BSD License.
 
 See `LICENSE` file for more information.
-
-## Contact
-
-Author: l@liv.io
-
-Project: [ansible-playbooks-example](https://github.com/liv-io/ansible-playbooks-example)
 
 ## Credits
 
