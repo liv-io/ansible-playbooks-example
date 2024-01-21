@@ -1,7 +1,5 @@
 ---
 
-# ALL
-
 # Pre
 - hosts: all
   become: True
@@ -15,10 +13,11 @@
     - role: shell
     - role: bash
     - role: user
+    - role: ca_certificate
   environment:
-    http_proxy: 'http://fp.example.com:3128'
-    https_proxy: 'http://fp.example.com:3128'
-    ftp_proxy: 'http://fp.example.com:3128'
+    http_proxy: 'http://proxy.example.com:3128'
+    https_proxy: 'http://proxy.example.com:3128'
+    ftp_proxy: 'http://proxy.example.com:3128'
 
 # Main
 - hosts: all
@@ -38,9 +37,9 @@
     - role: tmux
     - role: vim
   environment:
-    http_proxy: 'http://fp.example.com:3128'
-    https_proxy: 'http://fp.example.com:3128'
-    ftp_proxy: 'http://fp.example.com:3128'
+    http_proxy: 'http://proxy.example.com:3128'
+    https_proxy: 'http://proxy.example.com:3128'
+    ftp_proxy: 'http://proxy.example.com:3128'
 
 # Post
 - hosts: all
@@ -50,6 +49,6 @@
     - role: monit_exporter
     - role: pf
   environment:
-    http_proxy: 'http://fp.example.com:3128'
-    https_proxy: 'http://fp.example.com:3128'
-    ftp_proxy: 'http://fp.example.com:3128'
+    http_proxy: 'http://proxy.example.com:3128'
+    https_proxy: 'http://proxy.example.com:3128'
+    ftp_proxy: 'http://proxy.example.com:3128'

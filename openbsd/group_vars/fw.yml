@@ -49,6 +49,7 @@ nsd_zone:
 
       - {name: 'fp01', type: 'A', value: '10.1.1.11'}
       - {name: 'fp', type: 'CNAME', value: 'fp01'}
+      - {name: 'proxy', type: 'CNAME', value: 'fp01'}
 
      # n_mgmt
       - {name: 'fw01', type: 'A', value: '10.1.2.2'}
@@ -244,7 +245,7 @@ pf_macros_group:
   - {name: 'a_3', value: '1.2.3.3', comment: '1.2.3.3'}
   - {name: 'a_4', value: '1.2.3.4', comment: '1.2.3.4'}
   - {name: 'a_5', value: '1.2.3.5', comment: '1.2.3.5'}
-  - {name: 'a_6', value: '1.2.3.5', comment: '1.2.3.6'}
+  - {name: 'a_6', value: '1.2.3.6', comment: '1.2.3.6'}
 
 pf_filters_all:
 
