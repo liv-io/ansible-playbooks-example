@@ -1,20 +1,39 @@
 ---
 
-# BITCOIN_CORE
+# MOTD
 
-bitcoin_core_rpc_allow_ip: '0.0.0.0/0'
-
-bitcoin_core_rpc_auth: 'satoshi:d7316644b50aa7ea8792daf5c6b897e4$54194677335fcb771aa39533ddc2833927de9626b0d8fcb7940a7f56aa8a9569'
-
-bitcoin_core_rpc_bind: '0.0.0.0'
-
-bitcoin_core_zeromq_bind: '0.0.0.0'
+motd_host_description: 'Bitcoin Core'
 
 # NFTABLES
 
 nftables_filter_rule_host: |
   add rule ip filter INPUT ct state new tcp dport 8333 counter accept comment "bitcoin network from any"
   add rule ip filter OUTPUT ct state new tcp dport 8333 counter accept comment "bitcoin network to any"
+
+# POD_BITCOIN_CORE
+
+pod_bitcoin_core_monitor_monit_state: True
+
+pod_bitcoin_core_proxy: 'http://proxy.example.com:3128'
+
+pod_bitcoin_core_registry_address: 'registry.example.com'
+pod_bitcoin_core_registry_password: 'sUlJr0kPZ1S0TX44aUdOVdQ90GbOBk6L'
+pod_bitcoin_core_registry_username: 'registry'
+
+pod_bitcoin_core_bitcoin_core_addnode: 'btc.example.com:8333 btc.example.org:8333'
+pod_bitcoin_core_bitcoin_core_rest: True
+pod_bitcoin_core_bitcoin_core_rpcallowip: '0.0.0.0/0'
+pod_bitcoin_core_bitcoin_core_rpcauth: 'satoshi:d7316644b50aa7ea8792daf5c6b897e4$54194677335fcb771aa39533ddc2833927de9626b0d8fcb7940a7f56aa8a9569'
+pod_bitcoin_core_bitcoin_core_rpcbind: '0.0.0.0'
+pod_bitcoin_core_bitcoin_core_version: '26.0-1'
+pod_bitcoin_core_bitcoin_core_zmqpubhashblock: 'tcp://0.0.0.0:5555'
+pod_bitcoin_core_bitcoin_core_zmqpubhashtx: 'tcp://0.0.0.0:5556'
+pod_bitcoin_core_bitcoin_core_zmqpubrawblock: 'tcp://0.0.0.0:5557'
+pod_bitcoin_core_bitcoin_core_zmqpubrawtx: 'tcp://0.0.0.0:5558'
+
+# RESTIC
+
+restic_state: 'remove'
 
 # SYSCTL
 

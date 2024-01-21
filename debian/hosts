@@ -2,7 +2,7 @@
 
 # Notice: 'all' is a preexisting built-in group and matches all managed nodes.
 
-# BTC
+# BITCOIN CORE
 
 [btc]
 btc[01:03].example.com

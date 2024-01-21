@@ -1,12 +1,12 @@
 ---
 
-# BTC
+# BITCOIN CORE
 
 - hosts: btc
   become: True
   roles:
-    - role: bitcoin_core
+    - role: pod_bitcoin_core
   environment:
-    http_proxy: 'http://fp.example.com:3128'
-    https_proxy: 'http://fp.example.com:3128'
-    ftp_proxy: 'http://fp.example.com:3128'
+    http_proxy: 'http://proxy.example.com:3128'
+    https_proxy: 'http://proxy.example.com:3128'
+    ftp_proxy: 'http://proxy.example.com:3128'

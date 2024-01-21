@@ -14,9 +14,9 @@ apache2_monitor_monit_state: True
 
 # APT
 
-apt_http_proxy: 'http://fp.example.com:3128'
+apt_http_proxy: 'http://proxy.example.com:3128'
 
-apt_https_proxy: 'http://fp.example.com:3128'
+apt_https_proxy: 'http://proxy.example.com:3128'
 
 apt_monitor_prom_state: True
 
@@ -46,6 +46,71 @@ auditd_monitor_monit_state: True
 # BASH
 
 bash_tmout: ''
+
+# CA_CERTIFICATE
+
+ca_certificate_config:
+  - name: 'ca.example.com.crt'
+    state: True
+    content: |
+      -----BEGIN CERTIFICATE-----
+      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
+      pH4Fm6eMW5parc8jfg==
+      -----END CERTIFICATE-----
 
 # CHRONY
 
@@ -225,11 +290,11 @@ rsyslog_monitor_monit_state: True
 
 # SHELL
 
-shell_ftp_proxy: 'http://fp.example.com:3128'
+shell_ftp_proxy: 'http://proxy.example.com:3128'
 
-shell_http_proxy: 'http://fp.example.com:3128'
+shell_http_proxy: 'http://proxy.example.com:3128'
 
-shell_https_proxy: 'http://fp.example.com:3128'
+shell_https_proxy: 'http://proxy.example.com:3128'
 
 shell_no_proxy: ['localhost', '127.0.0.1', '::1', 'bs.example.com', 'backup.example.com']
 
@@ -268,4 +333,4 @@ user_config_all:
     password_update: True
     shell: '/bin/bash'
     authorized_keys:
-      - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDR/DO2YFGGs7Qle7Dt2pxsqveVsiXeHVZd2vpjSqKFd7psEZ53BOmAdRoaK/VZvuj+RPjmfJCYDKAxoVxCIL9l2hkfv35e6YRDT0gh0wely37zIFrOineyufYEIOVtgHKKjr88ZP641z9oLgT7xNPKNqhTat5sOdB5cAEf+0q8uFLzcBEdQpTePQmigl4Cp7RL3YHtEDXfDRqlNiAsCd5/YKabDW1rVMksbGQSynOrFyjtkQw5Th+xUZe7uBU08wQEFWXGJacbCEME568UBzbOoqbsuxvD41QggGOI3CQC1QPtXUweFFtc0iwxfwSX4IpTuqIa/7RJRepzPpOf8PsHj135h1SYXZ5fxtnL2/yTfwmaCJb7iUqpJzfyJyndLgdbCtB/JccOUWxSBkA+hU4UVZS5AVN/n+oyGGB7hKt6vk2xRwV47iV+HPdcbaGPqxBOynpAKtWEtMXFxOa/rCh0i9ZDAkj7wxPaje8nbNdQS8O5yrLquXIwOSwyeyKN2yDFGRSiD3In+BilqbmA8N8o/2ZaRKSjjmH7Jpm+F+AR9lAi3M8aj4Ic444/zKO4EbzntyumzG59FPTO3KS67JemixJelKIJMFnOwSpoLMOSfpnVS0LTdVy3mkwQjwEgFXZtMeg4F3o0AO80E5/sjR9sd4zMTLwJHCO+tQVgQzSGYw== example@example.com'
+      - 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII4JgSg6a8MHOvpODaZhvkOnEdWHQSdbkFaGHRYHW3qH example@example.com'

@@ -30,7 +30,7 @@ apache2_config:
     ssl_certificate_chain: '/etc/letsencrypt/live/example.com/chain.pem'
     config: |
       SSLUseStapling  On
-      SSLOCSPProxyURL "http://fp.example.com:3128/"
+      SSLOCSPProxyURL "http://proxy.example.com:3128/"
 
       SSLProxyEngine On
 
@@ -63,9 +63,9 @@ nftables_filter_rule_host: |
 # RSYSLOG
 
 rsyslog_config_host:
-  - name: "apache2"
-    comment: "Apache HTTPD"
-    section: "input"
+  - name: 'apache2'
+    comment: 'Apache HTTPD'
+    section: 'input'
     config:
       - {type: imfile, File: '/var/log/apache2/*access_log', Tag: apache2, Severity: info, Facility: local6}
       - {type: imfile, File: '/var/log/apache2/*error_log', Tag: apache2, Severity: info, Facility: local6}
