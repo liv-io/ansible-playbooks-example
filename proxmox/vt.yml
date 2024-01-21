@@ -1,0 +1,12 @@
+---
+
+# VIRTUALIZATION
+
+- hosts: hypervisor
+  become: True
+  roles:
+    - role: nginx
+  environment:
+    http_proxy: 'http://proxy.example.com:3128'
+    https_proxy: 'http://proxy.example.com:3128'
+    ftp_proxy: 'http://proxy.example.com:3128'

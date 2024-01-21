@@ -1,5 +1,42 @@
 ---
 
+# NGINX
+
+nginx_config:
+  - name: "{{ansible_fqdn}}"
+    state: True
+    port: 80
+    hsts_state: True
+    xss_protection_state: True
+    config: |
+      return 301 https://$server_name$request_uri;
+
+  - name: "{{ansible_fqdn}}"
+    state: True
+    port: 443
+    hsts_state: True
+    xss_protection_state: True
+    ssl_state: True
+    ssl_ecdh_curve: 'secp384r1'
+    ssl_ciphers: 'AES256+EECDH:AES256+EDH'
+    ssl_certificate: '/etc/ssl/example/wildcard.example.com.crt'
+    ssl_certificate_key: '/etc/ssl/example/wildcard.example.com.pem'
+    config: |
+      proxy_redirect off;
+
+      location / {
+        proxy_pass            https://localhost:8006;
+        client_max_body_size  0;
+        proxy_buffering       off;
+        proxy_connect_timeout 3600s;
+        proxy_http_version    1.1;
+        proxy_read_timeout    3600s;
+        proxy_send_timeout    3600s;
+        proxy_set_header      Connection "upgrade";
+        proxy_set_header      Upgrade $http_upgrade;
+        send_timeout          3600s;
+      }
+
 # RSYSLOG
 
 rsyslog_config_host:
@@ -13,3 +50,4 @@ rsyslog_config_host:
 # ZFS
 
 zfs_scrub_pools_pools: ['data01', 'data02']
+zfs_trim_pools_pools: ['data01', 'data02']
