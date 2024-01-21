@@ -2,7 +2,7 @@
 
 # VIRTUALIZATION
 
-- hosts: hypervisor
+- hosts: vt
   become: True
   roles:
     - role: nginx
