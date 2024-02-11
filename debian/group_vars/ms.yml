@@ -2,40 +2,31 @@
 
 # ALERTMANAGER
 
-alertmanager_config:
-  - section: 'global'
-    config: |
-      smtp_from: 'ms@example.com'
-      smtp_hello: 'ms.example.com'
-      smtp_smarthost: 'mail.example.com:25'
-      smtp_auth_username: ''
-      smtp_auth_password: ''
-      smtp_require_tls: false
-
-  - section: 'route'
-    config: |
-      receiver: 'user'
-      group_by: ['instance', 'alert']
-      group_wait: 1m
-      group_interval: 30m
-      repeat_interval: 150m
-      routes:
-      - match:
-          severity: 'critical'
+alertmanager_config: |
+  global:
+    smtp_from: 'ms@example.com'
+    smtp_hello: 'ms.example.com'
+    smtp_smarthost: 'mail.example.com:25'
+    smtp_auth_username: ''
+    smtp_auth_password: ''
+    smtp_require_tls: false
+  route:
+    receiver: 'user'
+    group_by: ['instance', 'alert']
+    group_wait: 1m
+    group_interval: 30m
+    repeat_interval: 3h
+    routes:
+      - matchers:
+          - severity='critical'
         receiver: 'user'
-
-  - section: 'inhibit_rules'
-    config: |
-      - source_match:
-          severity: 'critical'
-        target_match:
-          severity: 'warning'
-        equal: ['alertname']
-
-  - section: 'receivers'
-    config: |
-      - name: 'user'
-        email_configs:
+  inhibit_rules:
+    - source_matchers: [severity='critical']
+      target_matchers: [severity='warning']
+      equal: ['alertname']
+  receivers:
+    - name: 'user'
+      email_configs:
         - to: 'user@example.com'
 
 alertmanager_monitor_monit_state: True
