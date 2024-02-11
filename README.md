@@ -13,18 +13,13 @@
   * [Features](#features)
   * [Support](#support)
   * [Dependencies](#dependencies)
-* [Setup](#setup)
-  * [Requirements](#requirements)
-  * [Installation](#installation)
-* [Usage](#usage)
-* [Roadmap](#roadmap)
 * [License](#license)
 * [Credits](#credits)
 * [Appendix](#appendix)
 
 ## About
 
-`ansible-playbooks-example` gives an example on how to utilize the Ansible roles. All Ansible roles are licensed under the Simplified BSD License.
+`ansible-playbooks-example` provides an illustration of how to employ the Ansible roles.
 
 ### Features
 
@@ -43,16 +38,6 @@ The Ansible control machine depends on:
 
 The Ansible managed node depends on:
 * [Python](https://github.com/python/cpython) >= 3.10.0
-
-## Setup
-
-### Requirements
-
-### Installation
-
-## Usage
-
-## Roadmap
 
 ## License
 
