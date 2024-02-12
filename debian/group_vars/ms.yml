@@ -158,12 +158,6 @@ nftables_filter_rule_host: |
 
 # PROMETHEUS
 
-prometheus_alertmanager_url: 'https://alert.example.com'
-
-prometheus_grafana_url: 'https://mon.example.com'
-
-prometheus_prometheus_url: 'https://metric.example.com'
-
 prometheus_blackbox_exporter_http_ip4_basic_manual_hosts:
   - {address: 'https://web.example.com', hostname: 'web'}
   - {address: 'https://wiki.example.com', hostname: 'wiki'}
