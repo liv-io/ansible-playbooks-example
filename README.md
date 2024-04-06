@@ -28,8 +28,8 @@
 The following operating systems are supported:
 * Debian 11
 * Debian 12
-* OpenBSD 7.3
 * OpenBSD 7.4
+* OpenBSD 7.5
 
 ### Dependencies
 
