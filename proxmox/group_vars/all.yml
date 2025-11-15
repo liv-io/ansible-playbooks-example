@@ -13,10 +13,8 @@ apt_config_group:
         components: ['pve-no-subscription']
 
 apt_http_proxy: 'http://proxy.example.com:3128'
-
 apt_https_proxy: 'http://proxy.example.com:3128'
-
-apt_monitor_prom_state: True
+apt_prometheus_state: True
 
 # AUDITD
 
@@ -39,7 +37,7 @@ auditd_config_all:
       # Make config immutable - reboot required to change ruleset
       -e 2
 
-auditd_monitor_monit_state: True
+auditd_monit_state: True
 
 # BASH
 
@@ -112,17 +110,23 @@ ca_certificate_config:
 
 # CHRONY
 
-chrony_monitor_monit_state: True
-
+chrony_monit_state: True
+chrony_prometheus_state: True
 chrony_server:
-  - {address: 'ntp01.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp01'}
-  - {address: 'ntp02.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp02'}
-  - {address: 'ntp03.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp03'}
-  - {address: 'ntp04.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp04'}
+  - {address: 'ntp1.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp1'}
+  - {address: 'ntp2.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp2'}
+  - {address: 'ntp3.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp3'}
+  - {address: 'ntp4.example.com', options: {'burst', 'prefer', 'minpoll 4', 'maxpoll 6'}, comment: 'h_ntp4'}
 
 # FSTRIM
 
-fstrim_monitor_prom_state: True
+fstrim_prometheus_state: True
+
+# LEGO
+
+lego_email: 'admin@example.com'
+lego_prometheus_state: True
+lego_server: 'https://ca.example.com/acme/acme/directory'
 
 # MONIT
 
@@ -148,17 +152,28 @@ monit_mail_to: []
 
 # MONIT_EXPORTER
 
-monit_exporter_monitor_monit_state: True
+monit_exporter_monit_state: True
 
 # NFTABLES
 
 nftables_filter_rule_all: |
-  add rule ip filter INPUT ip saddr { 10.0.0.0/8 } ct state new tcp dport 22 counter accept comment "ssh from internal-networks"
-  add rule ip filter OUTPUT ip daddr { 10.0.0.11, 10.0.0.12 } ct state new tcp dport 53 counter accept comment "dns to h_ns01, h_ns02"
-  add rule ip filter OUTPUT ip daddr { 10.0.0.11, 10.0.0.12 } ct state new udp dport 53 counter accept comment "dns to h_ns01, h_ns02"
-  add rule ip filter OUTPUT ip daddr { 10.0.0.13', 10.0.0.14, 10.0.0.15, 10.0.0.16 } 10.1.1.1 ct state new udp dport 123 counter accept comment "ntp to h_ntp01, h_ntp02, h_ntp03, h_ntp04"
-  add rule ip filter OUTPUT ip daddr 10.0.0.17 ct state new tcp dport 25 counter accept comment "smtp to h_mail"
-  add rule ip filter OUTPUT ip daddr 10.0.0.18 ct state new tcp dport 3128 counter accept comment "squid to h_proxy"
+  add rule ip filter INPUT ip saddr 10.0.0.0/8 ct state new tcp dport 22 counter accept comment "ssh from internal-networks"
+  add rule ip filter INPUT ip saddr 10.1.11.18 ct state new tcp dport 9100 counter accept comment "node_exporter from h_ms1"
+  add rule ip filter INPUT ip saddr 10.1.11.18 ct state new tcp dport 9101 counter accept comment "haproxy_exporter from h_ms1"
+  add rule ip filter INPUT ip saddr 10.1.11.18 ct state new tcp dport 9104 counter accept comment "mysqld_exporter from h_ms1"
+  add rule ip filter INPUT ip saddr 10.1.11.18 ct state new tcp dport 9115 counter accept comment "blackbox_exporter from h_ms1"
+  add rule ip filter INPUT ip saddr 10.1.11.18 ct state new tcp dport 9290 counter accept comment "ipmi_exporter from h_ms1"
+  add rule ip filter INPUT ip saddr 10.1.11.18 ct state new tcp dport 9388 counter accept comment "monit_exporter from h_ms1"
+  add rule ip filter INPUT ip saddr 10.1.11.20 ct state new tcp dport 80 counter accept comment "acme from h_ca1"
+  add rule ip filter OUTPUT ip daddr { 10.1.11.11, 10.1.11.12 } ct state new tcp dport 53 counter accept comment "dns to h_ns1, h_ns2"
+  add rule ip filter OUTPUT ip daddr { 10.1.11.11, 10.1.11.12 } ct state new udp dport 53 counter accept comment "dns to h_ns1, h_ns2"
+  add rule ip filter OUTPUT ip daddr { 10.1.11.13, 10.1.11.14, 10.0.0.15, 10.0.0.16 } 10.1.1.1 ct state new udp dport 123 counter accept comment "ntp to h_ntp1, h_ntp2, h_ntp3, h_ntp4"
+  add rule ip filter OUTPUT ip daddr 10.1.11.17 ct state new tcp dport 25 counter accept comment "smtp to h_mx1"
+  add rule ip filter OUTPUT ip daddr 10.1.11.20 ct state new tcp dport 443 counter accept comment "acme to h_ca1"
+  add rule ip filter OUTPUT ip daddr 10.1.11.21 ct state new tcp dport 443 counter accept comment "https to h_bs1"
+  add rule ip filter OUTPUT ip daddr 10.1.11.19 ct state new tcp dport 514 counter accept comment "syslog to h_ls1"
+  add rule ip filter OUTPUT ip daddr 10.1.11.19 ct state new udp dport 514 counter accept comment "syslog to h_ls1"
+  add rule ip filter OUTPUT ip daddr 10.1.11.10 ct state new tcp dport 3128 counter accept comment "squid to h_fp1"
 
 # NGINX
 
@@ -173,28 +188,28 @@ nginx_log_format_main_ssl: |-
   '"$http_user_agent" http_x_forwarded_for:"$http_x_forwarded_for" '
   '$ssl_protocol/$ssl_cipher '
 
-nginx_monitor_monit_state: True
+nginx_monit_state: True
+nginx_rsyslog_state: True
 
 # NODE_EXPORTER
 
-node_exporter_monitor_monit_state: True
+node_exporter_monit_state: True
 
 # OPENSMTPD
 
 opensmtpd_action_all:
   - {config: {'action "local" mbox alias <aliases>'}, comment: 'Action: local'}
   - {config: {'action "relay" relay host smtp://mail.example.com:25'}, comment: 'Action: relay'}
-
-opensmtpd_monitor_monit_state: True
-
+opensmtpd_monit_state: True
 opensmtpd_root_mail_address: 'admin@example.com'
 
 # OPENSSH
 
 openssh_allow_users: ['example']
-
-openssh_monitor_monit_state: True
-
+openssh_host_key: ['/etc/ssh/ssh_host_ed25519_key']
+openssh_host_key_algorithms: ['ssh-ed25519']
+openssh_pubkey_accepted_algorithms: ['ssh-ed25519']
+openssh_monit_state: True
 openssh_password_authentication: False
 
 # PACKAGE
@@ -237,11 +252,9 @@ package_config_all:
 # RESOLVER
 
 resolver_domain: 'example.com'
-
 resolver_nameserver:
   - {address: '10.0.0.11', comment: 'Server: h_ns01'}
   - {address: '10.0.0.12', comment: 'Server: h_ns02'}
-
 resolver_search: ['example.com']
 
 # ROOT
@@ -250,16 +263,13 @@ root_password: '$2b$10$Jua/9rgOstNEVRKz11ncGO1EG.Z1krMLkOurJe4jNHVEU0UZV4fI6'
 
 # RSYSLOG
 
-rsyslog_monitor_monit_state: True
+rsyslog_monit_state: True
 
 # SHELL
 
 shell_ftp_proxy: 'http://proxy.example.com:3128'
-
 shell_http_proxy: 'http://proxy.example.com:3128'
-
 shell_https_proxy: 'http://proxy.example.com:3128'
-
 shell_no_proxy: ['localhost', '127.0.0.1', '::1', 'bs.example.com', 'backup.example.com']
 
 # SUDO
@@ -281,7 +291,7 @@ sudo_config_all:
 
 # TIMEZONE
 
-timezone_timezone: 'Europe/Zurich'
+timezone_timezone: 'UTC'
 
 # USER
 
@@ -301,4 +311,4 @@ user_config_all:
 
 # ZFS
 
-zfs_monitor_prom_state: True
+zfs_prometheus_state: True

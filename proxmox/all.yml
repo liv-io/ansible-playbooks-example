@@ -1,6 +1,7 @@
 ---
 
-# Pre
+# PRE
+
 - hosts: all
   become: True
   roles:
@@ -9,6 +10,7 @@
     - role: package
     - role: shell
     - role: bash
+    - role: sudo
     - role: user
     - role: ca_certificate
   environment:
@@ -16,7 +18,8 @@
     https_proxy: 'http://proxy.example.com:3128'
     ftp_proxy: 'http://proxy.example.com:3128'
 
-# Main
+# MAIN
+
 - hosts: all
   become: True
   roles:
@@ -35,7 +38,6 @@
     - role: resolver
     - role: root
     - role: rsyslog
-    - role: sudo
     - role: sysctl
     - role: systemd
     - role: timezone
@@ -47,13 +49,14 @@
     https_proxy: 'http://proxy.example.com:3128'
     ftp_proxy: 'http://proxy.example.com:3128'
 
-# Post
+# POST
+
 - hosts: all
   become: True
   roles:
     - role: monit
     - role: monit_exporter
-#    - role: nftables
+    - role: nftables
   environment:
     http_proxy: 'http://proxy.example.com:3128'
     https_proxy: 'http://proxy.example.com:3128'

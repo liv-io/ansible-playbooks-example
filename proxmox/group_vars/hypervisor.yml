@@ -1,0 +1,51 @@
+---
+
+# MOTD
+
+motd_host_description: 'Hypervisor'
+
+# NFTABLES
+
+nftables_filter_rule_host: |
+  add rule ip filter INPUT ip saddr { 10.0.0.0/8 } ct state new tcp dport { 80, 443 } counter accept comment "http, https from internal-networks"
+
+# NGINX
+
+nginx_config:
+  - name: "{{ansible_fqdn}}"
+    state: True
+    port: 443
+    hsts_state: True
+    xss_protection_state: True
+    ssl_state: True
+    ssl_certificate: "/etc/lego/certificates/{{ansible_fqdn}}.crt"
+    ssl_certificate_key: "/etc/lego/certificates/{{ansible_fqdn}}.key"
+    config: |
+      location / {
+          proxy_pass                         https://localhost:8006;
+
+          proxy_http_version                 1.1;
+          proxy_redirect                     off;
+          proxy_set_header Connection        "Upgrade";
+          proxy_set_header Host              $host;
+          proxy_set_header Upgrade           $http_upgrade;
+          proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Host  $http_host;
+          proxy_set_header X-Forwarded-Port  443;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Real-IP         $remote_addr;
+
+          chunked_transfer_encoding          off;
+          proxy_buffering                    off;
+          proxy_connect_timeout              3600s;
+          proxy_read_timeout                 3600s;
+          proxy_send_timeout                 3600s;
+          send_timeout                       3600s;
+
+          client_max_body_size               0;
+      }
+
+# ZFS
+
+zfs_scrub_pools_pools: ['data1', 'data2']
+zfs_trim_pools_pools: ['data1', 'data2']

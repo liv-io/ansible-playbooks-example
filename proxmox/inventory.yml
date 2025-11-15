@@ -1,0 +1,7 @@
+all:
+  children:
+    hypervisor:
+      hosts:
+        hv1.example.com:
+        hv2.example.com:
+        hv3.example.com:

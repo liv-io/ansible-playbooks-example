@@ -1,5 +1,9 @@
 ---
 
+# LEGO
+
+lego_domains: ['hv02.liv.io']
+
 # NETWORK
 
 network_config:
